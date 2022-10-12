@@ -1,0 +1,406 @@
+openapi: 3.0.3
+info:
+  title: SmartBearCoin - Payees API
+  description: |
+    The **Customer Managment - Payees API** - allows retrieval of payees and payee transactions. The Payees API allows consumers to search, identify and retrieve payee information in one specified country.
+
+    Customer centricity is part of the DNA of SmartBearCoin. Therefore, Customer Management (CM) is considered a core business capability. The focus of CM is outward focused on enabling a consistent, digital customer experience, throughout the customer journey and across channels (omnichannel). This leads to measurable improvements of customer satisfaction and the increase of sales volume and/or margin.
+
+    Value exposed through Customer Management capabilities is build upon an API-First strategy at SmartBearCoin.
+  termsOfService: http://swagger.io/terms/
+  contact: 
+    email: customer.management.apiteam@smartbearcoin.com
+  license: 
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+
+tags:
+  - name: Customer Management - Payees
+    description: Customer Management Payee Capability APIs
+  - name: Customer Management - Payee Transactions
+    description: Customer Management Payee Transactions APIs
+
+servers:
+  - url: 'https://api.smartbearcoin.com/customer-management/v1/payees'    
+
+paths:
+  /:
+    get:
+      summary: Get a list of Payees based on specified country and additional criteria
+      description: |
+        This API method supports searching and identifying payees within a specified country.
+        Search results will be sorted on highest confidence matching level.
+
+        #### Search/Filter criteria
+
+        The following search criteria are supported to identify an payee registered within our customer management domain and within a specified country:
+        - search based on the 9 digit unique duns number; DUNS is abbreviation of data universal numbering system issued by Dun & Bradstreet
+        - search based on jurisdiction identifier and type (e.g. company identifier in a specific country); examples are chamber of commerce number or KVK (NL), Siret (FR), CIF (ES), VAT Number (BE), Tax Number (US) and Company Registration Number (GB)
+        - search based on name
+        - search based on name and address
+          - address search criteria are postalCode, city, region and address line (street, house number, house number addition, building name)
+
+        The following validation rules apply while providing the search criteria:
+        - the `country_of_registration` is required
+          - at least one of the other search criteria must be provided
+        - if `duns_number` is provided, no other criteria are allowed
+        - if `jurisdiction_identifier` is provided, no other criteria are allowed
+        - the `name` is required if either of `duns_number` or `jurisdiction_identifier` is not provided
+
+        #### Jurisdiction Identifier types  
+        The jurisdiction identifier types that are supported per country, and default applied if not explicitly provided are as detailed below. 
+
+        | Country Code | Country  | Supported | Default |
+        |--------------|----------|-----------|---------|        
+        |   BE    |Belgium|vat-number|vat-number|        
+        |   ES    |Spain|cif, nif|cif|
+        |   FR    |France|siret|siret|
+        |   GB    |United Kingdom|organization-number|organization-number|
+        |   IE    |Ireland|organization-number|organization-number|
+        |   IT    |Italy|fiscal-code|fiscal-code|
+        |   NL    |Netherlands|chamber-of-commerce-number|chamber-of-commerce-number|
+        |   PT    |Portugal|cif, nif|cif|
+        |   US    |United States|tax-number, ssn|tax-number|
+      
+        #### Pagination & Sorting
+        This resource collection API supports both pagination and sorting of returned resources. Please refer to the our [**API Standards & Guidelines**](https://github.com/SmartBear/api-standards-and-guidelines#pagination) to find out how to use the `page`, `page_size`, and `sort` request parameters to sort or paginate the returned payees.
+
+      operationId: getPayees
+      tags:
+        - Customer Management - Payees
+      parameters: 
+        - name: country_of_registration
+          in: query
+          description: 'The country in which the legalentity is registered, expressed in official (ISO) two-letter country code.'
+          required: true
+          schema:
+            type: string
+            pattern: '^[a-zA-Z]{2}$'       
+        - name: jurisdiction_identifier
+          in: query
+          description: 'Search with unique jurisdiction identifier. The complete identifier value must be provided.'
+          required: false
+          schema:
+            type: string
+            example: '06488522'
+        - name: jurisdiction_identifier_type
+          in: query
+          description: |
+            Filter by jurisdiction type, if not provided the type will be defaulted based upon the `country_of_registration`.            
+          required: false
+          schema:
+            type: string
+            enum:
+              - chamber-of-commerce-number
+              - siret
+              - fiscal-code
+              - vat-number
+              - cif
+              - nif
+              - tax-number
+              - ssn
+              - company-number
+        - name: name
+          in: query
+          description: | 
+            Search with company/trading name (_Like_ Search). Required if `jurisdiction_identifier` is not provided. At least 2 characters must be provided.
+          required: false
+          schema:
+            type: string
+            minLength: 2
+        - name: page
+          in: query
+          description: Requests a specific page number to retrieve.
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+        - name: sort
+          in: query
+          description: |
+            List attribute names that must be sorted, separated by commas. 
+            Sorting in ascending order by default; field names appended with the minus sign (-) are sorted in descending order.
+            Attributes that can be used for sorting are:
+              - name
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: Authorization
+          in: header
+          description: Contains the OAuth 2.0 ClientCredentials or AuthorizationCode Bearer Token to make authenticated/authorized API calls.
+          required: true
+          schema:
+            type: string                             
+      responses:
+        '200':
+          description: Successful Response - TODO - add domain schema
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          description: 401 Unauthorized       
+        '405':
+          description: 405 Method Not Allowed
+        '429':
+          description: 429 Too Many Requests
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          description: 503 Service Not Available
+  /{payeeId}:
+    get:
+      summary: Get the details for a specific payee
+      description: Retrieve the full detailed response of a known payee based on it's SmartBearCoin customer managemenent reference identifier.
+      operationId: getPayeeById
+      tags:
+        - Customer Management - Payees       
+      parameters: 
+        - name: payeeId
+          description: the SmartBearCoin customer managemenent reference identifier for the payee
+          in: path
+          schema:
+            type: string
+            example: 1e331a0f-29bd-4b6b-8b21-8b87ed653c6b
+          required: true
+        - name: Authorization
+          in: header
+          description: Contains the OAuth 2.0 ClientCredentials or AuthorizationCode Bearer Token to make authenticated/authorized API calls.
+          required: true
+          schema:
+            type: string              
+      responses:
+        '200':
+          description: Successful Response - TODO - add domain schema
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          description: 401 Unauthorized       
+        '405':
+          description: 405 Method Not Allowed
+        '429':
+          description: 429 Too Many Requests
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          description: 503 Service Not Available
+  /{payeeId}/transactions:
+    get:
+      summary: Get the transaction history for a specific payee
+      description: Retrieve the payment history transactions for a particular payee
+      operationId: getPayeeTransactions
+      tags: 
+        - Customer Management - Payee Transactions
+      parameters: 
+        - name: payeeId
+          description: the SmartBearCoin customer managemenent reference identifier for the payee
+          in: path
+          schema:
+            type: string
+            example: 1e331a0f-29bd-4b6b-8b21-8b87ed653c6b
+          required: true
+        - name: transaction_from     
+          description: 'Retrieve only transaction that were completed since a given date. The value is a `date-time`. The ISO 8601 is applied.: time is in UTC, Example: `2017-04-08T19:05:36Z`'
+          in: query
+          schema: 
+            type: string
+            format: date-time
+            pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[012][0-9]:[0-5][0-9]:[0-5][0-9]Z$'
+            example: '2021-04-08T19:05:36Z'
+        - name: transaction_until     
+          description: 'Retrieve only transaction that were completed since a given date. The value is a `date-time`. The ISO 8601 is applied.: time is in UTC, Example: `2017-04-08T19:05:36Z`'
+          in: query
+          schema: 
+            type: string
+            format: date-time
+            pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[012][0-9]:[0-5][0-9]:[0-5][0-9]Z$'
+            example: '2021-12-31T23:59:59Z'
+        - name: Authorization
+          in: header
+          description: Contains the OAuth 2.0 ClientCredentials or AuthorizationCode Bearer Token to make authenticated/authorized API calls.
+          required: true
+          schema:
+            type: string                
+      responses:
+        '200':
+          description: Successful Response - TODO - add domain schema
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          description: 401 Unauthorized       
+        '405':
+          description: 405 Method Not Allowed
+        '429':
+          description: 429 Too Many Requests
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          description: 503 Service Not Available            
+components:
+  schemas:
+    Problem:
+      title: Problem
+      type: object
+      description: |
+        Problem object provides detailed information about an errors that occurred during an api call execution.
+        This problem object is conform the standard specifications, see https://tools.ietf.org/html/rfc7807.
+        The extensions on the standard are the `contextData` providing context data and `details` arrays.
+      properties:
+        code:
+          type: string
+          description: an application-specific error code
+        status:
+          type: integer
+          description: The HTTP status code generated by the origin server for this occurrence of the problem
+        type:
+          type: string
+          format: uri
+          description: A URI reference that identifies the problem type.
+          enum:
+            - 'https://api.smartbearcoin.com/problems/missing-request-header'
+            - 'https://api.smartbearcoin.com/problems/missing-request-parameter'
+            - 'https://api.smartbearcoin.com/problems/invalid-request-header-format'
+            - 'https://api.smartbearcoin.com/problems/invalid-request-parameter-format'
+            - 'https://api.smartbearcoin.com/problems/invalid-request-parameter-value'
+            - 'https://api.smartbearcoin.com/problems/internal-server-error'
+        title:
+          type: string
+          description: 'a short, human-readable summary of the problem that SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization'
+          enum:
+            - missing-request-header
+            - missing-request-parameter
+            - invalid-request-header-format
+            - invalid-request-parameter-format
+            - invalid-request-parameter-value
+            - internal-server-error
+        instance:
+          type: string
+          format: uri
+          description: A URI reference that identifies the specific occurrence of the problem
+        details:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                format: uri
+                description: A URI reference that identifies the problem type.
+                enum:
+                  - 'https://api.smartbearcoin.com/problems/missing-request-header'
+                  - 'https://api.smartbearcoin.com/problems/missing-request-parameter'
+                  - 'https://api.smartbearcoin.com/problems/invalid-request-header-format'
+                  - 'https://api.smartbearcoin.com/problems/invalid-request-parameter-format'
+                  - 'https://api.smartbearcoin.com/problems/invalid-request-parameter-value'
+                  - 'https://api.smartbearcoin.com/problems/internal-server-error'
+              title:
+                type: string
+                description: 'a short, human-readable summary of the problem that SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization'
+                enum:
+                  - missing-request-header
+                  - missing-request-parameter
+                  - invalid-request-header-format
+                  - invalid-request-parameter-format
+                  - invalid-request-parameter-value
+                  - internal-server-error
+              detail:
+                type: string
+                description: 'A human-readable explanation specific to this occurrence of the problem. Like title, this field value can be localized.'
+              contextData:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    path:
+                      type: string
+                    providedValue:
+                      type: string
+                    allowedValues:
+                      type: array
+                      items:
+                        type: string
+                    allowedFormat:
+                      type: string
+                    condition:
+                      type: string
+                  required:
+                    - path
+            required:
+              - type
+              - title
+              - detail
+      required:
+        - code
+        - status
+        - type
+        - title    
+  responses:
+    400BadRequest:
+      description: 400 Bad Request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            Missing conditionally required request parameter:
+              value:
+                code: '4000020'
+                status: 400
+                type: 'https://api.smartbearcoin.com/problems/missing-request-parameter'
+                title: missing-request-parameter
+                details:
+                  - type: 'https://api.smartbearcoin.com/problems/missing-request-parameter'
+                    title: missing-request-parameter
+                    detail: 'The request does not contain the conditionally required parameter ''name'', when ''jurisdiction_identifier'' is not provided.'
+                    contextData:
+                      - path: /name
+                        condition: jurisdiction_identifier == null
+            Invalid request parameter format:
+              value:
+                code: '4000022'
+                status: 400
+                type: 'https://api.smartbearcoin.com/problems/invalid-request-parameter-format'
+                title: invalid-request-parameter-format
+                details:
+                  - type: 'https://api.smartbearcoin.com/problems/invalid-request-parameter-format'
+                    title: invalid-request-parameter-format
+                    detail: 'The provided value [Ireland] for parameter ''country_of_registration'' does not have the expected format.'
+                    contextData:
+                      - path: /country_of_registration
+                        providedValue: 'Ireland'
+                        allowedFormat: '^[a-zA-Z]{2}$'
+            Invalid request parameter value:
+              value:
+                code: '4000023'
+                status: 400
+                type: 'https://api.smartbearcoin.com/problems/invalid-request-parameter-value'
+                title: invalid-request-parameter-value
+                details:
+                  - type: 'https://api.smartbearcoin.com/problems/invalid-request-parameter-value'
+                    title: invalid-request-parameter-value
+                    detail: 'The provided value [vat-number] for parameter ''jurisdiction_identifier_type'' in country_of_registration [IT] is not allowed. The allowed values are [fiscal-code].'
+                    contextData:
+                      - path: /jurisdiction_identifier_type
+                        providedValue: 'vat-number'
+                        allowedValues:
+                          - 'fiscal-code'   
+    500InternalServerError:
+      description: 500 Internal Server Error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            Internal Server Error due to a technical failure:
+              value:
+                code: '5000001'
+                status: 500
+                type: 'https://api.smartbearcoin.com/problems/internal-server-error'
+                title: internal-server-error
+                details:
+                  - type: 'https://api.smartbearcoin.com/problems/internal-server-error'
+                    title: internal-server-error
+                    detail: The server encountered an internal error and was unable to complete your request.
+                           
