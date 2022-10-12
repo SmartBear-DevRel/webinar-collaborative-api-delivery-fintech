@@ -46,11 +46,12 @@ jobs:
   pact-can-i-deploy:
     needs: pact-publish-oas-action
     runs-on: ubuntu-latest
-    env:
-      to_environment: ${{ env.environment }}
-      version: ${{ needs.pact-publish-oas-action.outputs.version }}
+
     steps:
       - uses: pactflow/actions/can-i-deploy@v1.0.1
+        env:
+          to_environment: ${{ env.environment }}
+          version: ${{ needs.pact-publish-oas-action.outputs.version }}
       - if: success() && github.ref == 'refs/heads/main'
         name: record-deployment
         run: |
@@ -67,4 +68,5 @@ jobs:
           --broker-base-url=$PACT_BROKER_BASE_URL \
           --broker-token=$PACT_BROKER_TOKEN \
           --version=$version
-
+        env:
+          version: ${{ needs.pact-publish-oas-action.outputs.version }}
