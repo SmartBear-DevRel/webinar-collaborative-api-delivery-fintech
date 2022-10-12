@@ -1,0 +1,20 @@
+{
+  "name": "smartbearcoin-payees-api",
+  "version": "1.0.0",
+  "description": "The **Customer Managment - Payees API** - allows retrieval of payees and payee transactions. The Payees API allows consumers to search, identify and retrieve payee information in one specified country.  Customer centricity is part of the DNA of SmartBearCoin. Therefore, Customer Management (CM) is considered a core business capability. The focus of CM is outward focused on enabling a consistent, digital customer experience, throughout the customer journey and across channels (omnichannel). This leads to measurable improvements of customer satisfaction and the increase of sales volume and/or margin.  Value exposed through Customer Management capabilities is build upon an API-First strategy at SmartBearCoin. ",
+  "main": "index.js",
+  "scripts": {
+	"prestart": "npm install",
+	"start": "node index.js"
+  },
+  "keywords": [
+    "swagger"
+  ],
+  "license": "Unlicense",
+  "private": true,
+  "dependencies": {
+    "connect": "^3.2.0",
+    "js-yaml": "^3.3.0",
+    "oas3-tools": "^2.2.3"
+  }
+}
