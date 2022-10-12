@@ -1,4 +1,4 @@
-docker run --rm --network="host" \
+mkdir -p ${PWD}/ReadyAPI_Tests/reports && docker run --rm --network="host" \
     -v=${PWD}/ReadyAPI_Tests:/ReadyAPI_Tests \
     -e SLM_LICENSE_SERVER="https://api.slm.manage.smartbear.com:443" \
     -e API_KEY=${SLM_API_KEY} \
