@@ -176,7 +176,9 @@ paths:
         '400':
           $ref: '#/components/responses/400BadRequest'
         '401':
-          description: 401 Unauthorized       
+          description: 401 Unauthorized    
+        '404':
+          description: 404 Not Found              
         '405':
           description: 405 Method Not Allowed
         '429':
@@ -228,7 +230,9 @@ paths:
         '400':
           $ref: '#/components/responses/400BadRequest'
         '401':
-          description: 401 Unauthorized       
+          description: 401 Unauthorized    
+        '404':
+          description: 404 Not Found           
         '405':
           description: 405 Method Not Allowed
         '429':
@@ -340,7 +344,7 @@ components:
     400BadRequest:
       description: 400 Bad Request
       content:
-        application/problem+json:
+        application/json:
           schema:
             $ref: '#/components/schemas/Problem'
           examples:
@@ -389,7 +393,7 @@ components:
     500InternalServerError:
       description: 500 Internal Server Error
       content:
-        application/problem+json:
+        application/json:
           schema:
             $ref: '#/components/schemas/Problem'
           examples:
