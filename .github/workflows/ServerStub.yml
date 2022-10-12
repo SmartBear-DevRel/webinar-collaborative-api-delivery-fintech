@@ -1,0 +1,103 @@
+name: API Server CodeGen - tested for Provider Drift
+
+on:
+  push:
+    branches: ['main', 'swaggerhub*', 'server-stub']
+    paths:
+      - 'server-stub/**'
+  pull_request:
+    branches: ['main']
+    paths:
+      - 'server-stub/**'
+
+  workflow_dispatch:
+
+env:
+  version: ${{ github.sha }}
+  environment: test
+  application_name: SmartBearCoin-Payee-Provider
+  PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
+  PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
+  SLM_API_KEY: ${{ secrets.SLM_API_KEY }}
+  ENDPOINT: http://localhost:8080/customer-management/v1/payees
+#   ENDPOINT: http://host.docker.internal:8080/customer-management/v1/payees  # For mac or windows runners
+
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: get version of OAS
+        run: |
+          sudo snap install yq && 
+          OAS_VERSION=$(yq '.info.version' server-stub/api/openapi.yaml)
+          echo "OAS_VERSION=${OAS_VERSION}" >> $GITHUB_ENV 
+          UNIQUE_VERSION=${OAS_VERSION}-${{ github.sha }}-server-stub
+          echo "version=${UNIQUE_VERSION}" >> $GITHUB_ENV
+    outputs:
+      version: ${{ env.version }}
+
+  test:
+    needs: [setup]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm install -g concurrently
+      - run: cd server-stub && npm i
+      - run:
+          cd server-stub && concurrently -k -s "first" "npm start" "sleep 3 && \
+          docker run --rm --network="host" \
+          -v=${PWD}/ReadyAPI_Tests:/ReadyAPI_Tests \
+          -e SLM_LICENSE_SERVER="https://api.slm.manage.smartbear.com:443" \
+          -e API_KEY=${SLM_API_KEY} \
+          -e ENDPOINT=${ENDPOINT} \
+          -e COMMAND_LINE="'-e${ENDPOINT}' '-f/ReadyAPI_Tests/reports' '-RJUnit-Style HTML Report' /ReadyAPI_Tests/SmartBearCoin-Payee-Provider-readyapi-project.xml" \
+          smartbear/ready-api-soapui-testrunner:latest"
+      - uses: pactflow/actions/publish-provider-contract@v1.0.0
+        if: success()
+        env:
+          oas_file: api/openapi.yaml
+          results_file: ReadyAPI_Tests/reports/report.xml
+          version: ${{ needs.setup.outputs.version }}
+          VERIFIER_TOOL: readyapi-github-actions
+      - uses: pactflow/actions/publish-provider-contract@v1.0.0
+        if: failure()
+        env:
+          oas_file: api/openapi.yaml
+          results_file: ReadyAPI_Tests/reports/report.xml
+          version: ${{ needs.setup.outputs.version }}
+          VERIFIER_TOOL: readyapi-github-actions
+          # ensure we set the EXIT_CODE to ensure we upload a failing self-verification result
+          EXIT_CODE: 1
+
+  pact-can-i-deploy:
+    needs: [setup, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: pactflow/actions/can-i-deploy@v1.0.0
+        env:
+          to_environment: ${{ env.environment }}
+          version: ${{ needs.setup.outputs.version }}
+  pact-record-deployment:
+    needs: [setup, pact-can-i-deploy]
+    if: github.ref == 'refs/heads/main'
+    env:
+      version: ${{ needs.setup.outputs.version }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          docker run --rm -v /${PWD}:/${PWD} -w ${PWD} \
+          -e PACT_BROKER_BASE_URL \
+          -e PACT_BROKER_TOKEN \
+          -e application_name \
+          -e version \
+          -e environment \
+          pactfoundation/pact-cli:latest \
+          broker record-deployment \
+          --environment=$environment \
+          --pacticipant=$application_name \
+          --broker-base-url=$PACT_BROKER_BASE_URL \
+          --broker-token=$PACT_BROKER_TOKEN \
+          --version=$version
