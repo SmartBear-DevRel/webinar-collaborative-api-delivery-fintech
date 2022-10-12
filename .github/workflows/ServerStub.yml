@@ -19,7 +19,7 @@ env:
   PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
   PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
   SLM_API_KEY: ${{ secrets.SLM_API_KEY }}
-  ENDPOINT: http://localhost:8080/customer-management/v1/payees
+  ENDPOINT: http://localhost:8080/customer-management/v1/payee
 #   ENDPOINT: http://host.docker.internal:8080/customer-management/v1/payees  # For mac or windows runners
 
 jobs:
