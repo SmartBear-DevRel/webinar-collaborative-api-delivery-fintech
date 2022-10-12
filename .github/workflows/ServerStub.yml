@@ -49,14 +49,14 @@ jobs:
       - uses: pactflow/actions/publish-provider-contract@v1.0.0
         if: success()
         env:
-          oas_file: api/openapi.yaml
+          oas_file: server-stub/api/openapi.yaml
           results_file: ReadyAPI_Tests/reports/report.xml
           version: ${{ needs.setup.outputs.version }}
           VERIFIER_TOOL: readyapi-github-actions
       - uses: pactflow/actions/publish-provider-contract@v1.0.0
         if: failure()
         env:
-          oas_file: api/openapi.yaml
+          oas_file: server-stub/api/openapi.yaml
           results_file: ReadyAPI_Tests/reports/report.xml
           version: ${{ needs.setup.outputs.version }}
           VERIFIER_TOOL: readyapi-github-actions
