@@ -34,12 +34,12 @@ jobs:
       - name: get version of OAS
         run: |
           sudo snap install yq 
-          UNIQUE_VERSION=$(yq '.info.version' oas/swagger.yaml)-${{ github.sha }}-design
+          UNIQUE_VERSION=$(yq '.info.version' oas/openapi.yaml)-${{ github.sha }}-design
           echo "version=${UNIQUE_VERSION}" >> $GITHUB_ENV
       - uses: pactflow/actions/publish-provider-contract@v1.0.1
         env:
-          oas_file: oas/swagger.yaml
-          results_file: oas/swagger.yaml
+          oas_file: oas/openapi.yaml
+          results_file: oas/openapi.yaml
     outputs:
       version: ${{ env.version }}
 
