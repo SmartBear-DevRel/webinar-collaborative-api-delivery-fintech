@@ -75,7 +75,7 @@ describe('tests with Pact', () => {
 
   it('tests consumer a', () => {
     const expectedError = {
-      success: false,
+      // success: false, // uncomment this to see a failure in this consumer
       details: [
         {
           title: 'missing-request-parameter',
