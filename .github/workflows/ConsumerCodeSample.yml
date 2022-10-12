@@ -1,0 +1,82 @@
+name: API Consumer Pact Tests
+
+on:
+  push:
+    branches: ['main', 'consumer_code_sample*']
+    paths:
+      - 'consumer_code_sample/**'
+  pull_request:
+    branches: ['main']
+    paths:
+      - 'consumer_code_sample/**'
+
+  workflow_dispatch:
+
+env:
+  version: ${{ github.sha }}-consumer-code-sample
+  PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
+  PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
+  environment: test
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+      - run: cd consumer_code_sample && npm i
+      - run: cd consumer_code_sample && npm test
+      - uses: pactflow/actions/publish-pact-files@v1.0.1
+        env:
+          pactfiles: consumer_code_sample/pacts
+
+  pact-can-i-deploy_consumer-a:
+    needs: [test]
+    runs-on: ubuntu-latest
+    env:
+      application_name: swaggerhub-pactflow-consumer-a
+    steps:
+      - uses: pactflow/actions/can-i-deploy@v1.0.1
+        env:
+          to_environment: 'test'
+      - if: success()
+        name: record-release
+        run: |
+          docker run --rm -v /${PWD}:/${PWD} -w ${PWD} \
+          -e PACT_BROKER_BASE_URL \
+          -e PACT_BROKER_TOKEN \
+          -e application_name \
+          -e version \
+          -e environment \
+          pactfoundation/pact-cli:latest \
+          broker record-release \
+          --environment=$environment \
+          --pacticipant=$application_name \
+          --broker-base-url=$PACT_BROKER_BASE_URL \
+          --broker-token=$PACT_BROKER_TOKEN \
+          --version=$version
+  pact-can-i-deploy_consumer-b:
+    needs: [test]
+    runs-on: ubuntu-latest
+    env:
+      application_name: swaggerhub-pactflow-consumer-b
+    steps:
+      - uses: pactflow/actions/can-i-deploy@v1.0.0
+        env:
+          to_environment: 'test'
+      - if: success() && github.ref == 'refs/heads/main'
+        name: record-release
+        run: |
+          docker run --rm -v /${PWD}:/${PWD} -w ${PWD} \
+          -e PACT_BROKER_BASE_URL \
+          -e PACT_BROKER_TOKEN \
+          -e application_name \
+          -e version \
+          -e environment \
+          pactfoundation/pact-cli:latest \
+          broker record-release \
+          --environment=$environment \
+          --pacticipant=$application_name \
+          --broker-base-url=$PACT_BROKER_BASE_URL \
+          --broker-token=$PACT_BROKER_TOKEN \
+          --version=$version

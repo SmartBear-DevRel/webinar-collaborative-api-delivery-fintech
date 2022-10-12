@@ -1,0 +1,16 @@
+{
+  "name": "consumer_code_sample",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Yousaf Nabi",
+  "license": "ISC",
+  "devDependencies": {
+    "@pact-foundation/pact": "^10.1.4",
+    "axios": "^1.1.2",
+    "jest": "^29.1.2"
+  }
+}
