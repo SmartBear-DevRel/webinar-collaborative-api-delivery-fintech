@@ -34,7 +34,7 @@ jobs:
     needs: [test]
     runs-on: ubuntu-latest
     env:
-      application_name: SmartBearCoin-Payee-Consumer-B
+      application_name: SmartBearCoin-Payee-Consumer-A
     steps:
       - uses: pactflow/actions/can-i-deploy@v1.0.1
         env:
