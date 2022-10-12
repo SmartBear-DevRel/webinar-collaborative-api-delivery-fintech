@@ -20,12 +20,12 @@ const api = (baseUrl = defaultBaseUrl) => ({
 const { PactV3, MatchersV3 } = require('@pact-foundation/pact');
 
 const providerWithConsumerA = new PactV3({
-  consumer: 'SmartBearCoin-Payee-Provider-A',
+  consumer: 'SmartBearCoin-Payee-Consumer-A',
   provider: 'SmartBearCoin-Payee-Provider'
 });
 
 const providerWithConsumerB = new PactV3({
-  consumer: 'SmartBearCoin-Payee-Provider-B',
+  consumer: 'SmartBearCoin-Payee-Consumer-B',
   provider: 'SmartBearCoin-Payee-Provider'
 });
 

@@ -34,7 +34,7 @@ jobs:
     needs: [test]
     runs-on: ubuntu-latest
     env:
-      application_name: swaggerhub-pactflow-consumer-a
+      application_name: SmartBearCoin-Payee-Consumer-B
     steps:
       - uses: pactflow/actions/can-i-deploy@v1.0.1
         env:
@@ -59,7 +59,7 @@ jobs:
     needs: [test]
     runs-on: ubuntu-latest
     env:
-      application_name: swaggerhub-pactflow-consumer-b
+      application_name: SmartBearCoin-Payee-Consumer-B
     steps:
       - uses: pactflow/actions/can-i-deploy@v1.0.0
         env:
