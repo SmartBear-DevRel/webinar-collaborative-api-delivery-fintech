@@ -340,7 +340,7 @@ components:
     400BadRequest:
       description: 400 Bad Request
       content:
-        application/problem+json:
+        application/json:
           schema:
             $ref: '#/components/schemas/Problem'
           examples:
@@ -389,7 +389,7 @@ components:
     500InternalServerError:
       description: 500 Internal Server Error
       content:
-        application/problem+json:
+        application/json:
           schema:
             $ref: '#/components/schemas/Problem'
           examples:
