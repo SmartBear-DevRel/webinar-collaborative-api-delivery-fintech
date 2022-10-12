@@ -49,7 +49,7 @@ jobs:
           -e version \
           -e environment \
           pactfoundation/pact-cli:latest \
-          broker record-release \
+          broker record-deployment \
           --environment=$environment \
           --pacticipant=$application_name \
           --broker-base-url=$PACT_BROKER_BASE_URL \
@@ -74,7 +74,7 @@ jobs:
           -e version \
           -e environment \
           pactfoundation/pact-cli:latest \
-          broker record-release \
+          broker record-deployment \
           --environment=$environment \
           --pacticipant=$application_name \
           --broker-base-url=$PACT_BROKER_BASE_URL \
