@@ -1,0 +1,53 @@
+name: Consumer Insight
+
+# Edit OpenAPI Document in SwaggerHub
+# Sync OpenAPI -> SCM with Github Sync - https://support.smartbear.com/swaggerhub/docs/integrations/github-sync.html
+# Version number = OpenAPI SemVer Version + GitHub Commit Sha for traceability on change
+# OpenAPI + Provider Test Report = Provider Contract Uploaded to Pactflow
+# *** Test Report is just OAS file, as the design will not be tested against an API mock or real implementation at this stage ***
+# Pactflow compares OpenAPI against any registered consumers
+# Visiblity into affected consumers visible via can-i-deploy
+
+on:
+  push:
+    branches: ["swaggerhub*", "main"]
+    paths:
+      - "oas/**"
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "oas/**"
+
+  workflow_dispatch:
+
+env:
+  application_name: SmartBearCoin-Payee-Provider
+  PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
+  PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
+  environment: test
+
+jobs:
+  pact-publish-oas-action:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: get version of OAS
+        run: |
+          sudo snap install yq 
+          UNIQUE_VERSION=$(yq '.info.version' oas/swagger.yaml)-${{ github.sha }}-design
+          echo "version=${UNIQUE_VERSION}" >> $GITHUB_ENV
+      - uses: pactflow/actions/publish-provider-contract@v1.0.1
+        env:
+          oas_file: oas/swagger.yaml
+          results_file: oas/swagger.yaml
+    outputs:
+      version: ${{ env.version }}
+
+  pact-can-i-deploy:
+    needs: pact-publish-oas-action
+    runs-on: ubuntu-latest
+    steps:
+      - uses: pactflow/actions/can-i-deploy@v1.0.1
+        env:
+          to_environment: ${{ env.environment }}
+          version: ${{ needs.pact-publish-oas-action.outputs.version }}
