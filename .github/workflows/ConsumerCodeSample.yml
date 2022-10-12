@@ -38,9 +38,9 @@ jobs:
     steps:
       - uses: pactflow/actions/can-i-deploy@v1.0.1
         env:
-          to_environment: 'test'
-      - if: success()
-        name: record-release
+          to_environment: ${{ env.environment }}
+      - if: success() && github.ref == 'refs/heads/main'
+        name: record-deployment
         run: |
           docker run --rm -v /${PWD}:/${PWD} -w ${PWD} \
           -e PACT_BROKER_BASE_URL \
@@ -61,11 +61,11 @@ jobs:
     env:
       application_name: SmartBearCoin-Payee-Consumer-B
     steps:
-      - uses: pactflow/actions/can-i-deploy@v1.0.0
+      - uses: pactflow/actions/can-i-deploy@v1.0.1
         env:
-          to_environment: 'test'
+          to_environment: ${{ env.environment }}
       - if: success() && github.ref == 'refs/heads/main'
-        name: record-release
+        name: record-deployment
         run: |
           docker run --rm -v /${PWD}:/${PWD} -w ${PWD} \
           -e PACT_BROKER_BASE_URL \
