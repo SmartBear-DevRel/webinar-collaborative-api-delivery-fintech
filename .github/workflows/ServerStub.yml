@@ -22,7 +22,6 @@ env:
   ENDPOINT: http://localhost:8080/customer-management/v1/payees
 #   ENDPOINT: http://host.docker.internal:8080/customer-management/v1/payees  # For mac or windows runners
 
-
 jobs:
   setup:
     runs-on: ubuntu-latest
@@ -46,15 +45,7 @@ jobs:
       - uses: actions/setup-node@v3
       - run: npm install -g concurrently
       - run: cd server-stub && npm i
-      - run:
-          cd server-stub && concurrently -k -s "first" "npm start" "sleep 3 && \
-          docker run --rm --network="host" \
-          -v=${PWD}/ReadyAPI_Tests:/ReadyAPI_Tests \
-          -e SLM_LICENSE_SERVER="https://api.slm.manage.smartbear.com:443" \
-          -e API_KEY=${SLM_API_KEY} \
-          -e ENDPOINT=${ENDPOINT} \
-          -e COMMAND_LINE="'-e${ENDPOINT}' '-f/ReadyAPI_Tests/reports' '-RJUnit-Style HTML Report' /ReadyAPI_Tests/SmartBearCoin-Payee-Provider-readyapi-project.xml" \
-          smartbear/ready-api-soapui-testrunner:latest"
+      - run: cd server-stub && concurrently -k -s "first" "npm start" "sleep 3 && ./runTests.sh"
       - uses: pactflow/actions/publish-provider-contract@v1.0.0
         if: success()
         env:
