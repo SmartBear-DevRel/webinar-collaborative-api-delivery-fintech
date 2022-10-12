@@ -1,5 +1,5 @@
 docker run --rm --network="host" \
-    -v=${PWD}/../ReadyAPI_Tests:/ReadyAPI_Tests \
+    -v=${PWD}/ReadyAPI_Tests:/ReadyAPI_Tests \
     -e SLM_LICENSE_SERVER="https://api.slm.manage.smartbear.com:443" \
     -e API_KEY=${SLM_API_KEY} \
     -e ENDPOINT=${ENDPOINT} \
