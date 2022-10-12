@@ -10,13 +10,13 @@ name: Consumer Insight
 
 on:
   push:
-    branches: ["swaggerhub*", "main"]
+    branches: ['swaggerhub*', 'main']
     paths:
-      - "oas/**"
+      - 'oas/**'
   pull_request:
-    branches: ["main"]
+    branches: ['main']
     paths:
-      - "oas/**"
+      - 'oas/**'
 
   workflow_dispatch:
 
@@ -52,21 +52,23 @@ jobs:
         env:
           to_environment: ${{ env.environment }}
           version: ${{ needs.pact-publish-oas-action.outputs.version }}
-      - if: success() && github.ref == 'refs/heads/main'
-        name: record-deployment
-        run: |
-          docker run --rm -v /${PWD}:/${PWD} -w ${PWD} \
-          -e PACT_BROKER_BASE_URL \
-          -e PACT_BROKER_TOKEN \
-          -e application_name \
-          -e version \
-          -e environment \
-          pactfoundation/pact-cli:latest \
-          broker record-deployment \
-          --environment=$environment \
-          --pacticipant=$application_name \
-          --broker-base-url=$PACT_BROKER_BASE_URL \
-          --broker-token=$PACT_BROKER_TOKEN \
-          --version=$version
-        env:
-          version: ${{ needs.pact-publish-oas-action.outputs.version }}
+      # #  You may want to record the deployment of a design-candidate, if you do not
+      # #  have a provider mock, or implementation ready to go. We do, so this is skipped
+      # - if: success() && github.ref == 'refs/heads/main'
+      #   name: record-deployment
+      #   run: |
+      #     docker run --rm -v /${PWD}:/${PWD} -w ${PWD} \
+      #     -e PACT_BROKER_BASE_URL \
+      #     -e PACT_BROKER_TOKEN \
+      #     -e application_name \
+      #     -e version \
+      #     -e environment \
+      #     pactfoundation/pact-cli:latest \
+      #     broker record-deployment \
+      #     --environment=$environment \
+      #     --pacticipant=$application_name \
+      #     --broker-base-url=$PACT_BROKER_BASE_URL \
+      #     --broker-token=$PACT_BROKER_TOKEN \
+      #     --version=$version
+      #   env:
+      #     version: ${{ needs.pact-publish-oas-action.outputs.version }}
