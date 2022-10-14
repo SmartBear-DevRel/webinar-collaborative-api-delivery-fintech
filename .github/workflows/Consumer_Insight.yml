@@ -44,31 +44,15 @@ jobs:
       version: ${{ env.version }}
 
   pact-can-i-deploy:
+    strategy:
+      matrix:
+        environment: [test, production]
+      fail-fast: false
     needs: pact-publish-oas-action
     runs-on: ubuntu-latest
-
     steps:
-      - uses: pactflow/actions/can-i-deploy@v1.0.1
+      - name: can-i-deploy ${{ env.application_name }} to ${{ matrix.environment }}
+        uses: pactflow/actions/can-i-deploy@v1.0.1
         env:
-          to_environment: ${{ env.environment }}
+          to_environment: ${{ matrix.environment }}
           version: ${{ needs.pact-publish-oas-action.outputs.version }}
-      # #  You may want to record the deployment of a design-candidate, if you do not
-      # #  have a provider mock, or implementation ready to go. We do, so this is skipped
-      # - if: success() && github.ref == 'refs/heads/main'
-      #   name: record-deployment
-      #   run: |
-      #     docker run --rm -v /${PWD}:/${PWD} -w ${PWD} \
-      #     -e PACT_BROKER_BASE_URL \
-      #     -e PACT_BROKER_TOKEN \
-      #     -e application_name \
-      #     -e version \
-      #     -e environment \
-      #     pactfoundation/pact-cli:latest \
-      #     broker record-deployment \
-      #     --environment=$environment \
-      #     --pacticipant=$application_name \
-      #     --broker-base-url=$PACT_BROKER_BASE_URL \
-      #     --broker-token=$PACT_BROKER_TOKEN \
-      #     --version=$version
-      #   env:
-      #     version: ${{ needs.pact-publish-oas-action.outputs.version }}

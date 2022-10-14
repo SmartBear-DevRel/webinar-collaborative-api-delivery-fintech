@@ -37,9 +37,9 @@ export class API {
     return axios
       .get(this.withPath('/'), {
         headers: {
-          Authorization: this.generateAuthToken(),
-          params
-        }
+          Authorization: this.generateAuthToken()
+        },
+        params
       })
       .then((r: { data: any }) => r.data);
   }
