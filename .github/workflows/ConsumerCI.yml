@@ -1,14 +1,14 @@
-name: API Consumer Pact Tests
+name: ConsumerCI
 
 on:
   push:
     branches: ['main', 'frontend*']
     paths:
-      - 'consumer_code_sample/**'
+      - 'smartbearcoin-payments-ui/**'
   pull_request:
     branches: ['main']
     paths:
-      - 'consumer_code_sample/**'
+      - 'smartbearcoin-payments-ui/**'
 
   workflow_dispatch:
 
