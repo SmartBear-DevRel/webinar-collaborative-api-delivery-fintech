@@ -40,6 +40,7 @@ jobs:
     # use ARM templates to set up the Azure Infra
   
   deploy-infrastructure-prd:
+    needs: [build-and-deploy-acc]
     runs-on: ubuntu-latest
     environment: prd
 
