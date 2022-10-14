@@ -34,29 +34,53 @@ export const App = () => {
     });
   };
   return (
-    <form onSubmit={submitForm}>
-      <table style={inputStyle}>
-        <tbody>
-          <tr>
-            <td>Name:</td>
-            <td>
-              <input
-                type="text"
-                name="name"
-                value={payee.name}
-                onChange={(e) => onChangeHandler(e.target)}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <button type="submit">Submit</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      {response?.data && response.data}
-    </form>
+    <>
+      <header className="header">
+        <div className="wrapper">
+          <div className="logo">
+            <img src="smartbearlogo.png" alt="a logo" />
+          </div>
+          <div className="header-text">SmartBearCoin | Payments Service</div>
+        </div>
+      </header>
+      <br />
+
+      <form onSubmit={submitForm}>
+        <table style={inputStyle}>
+          <tbody>
+            <tr>
+              <td>Please enter Payee ID:</td>
+              <td>
+                <input
+                  type="text"
+                  name="name"
+                  value={payee.name}
+                  size={36}
+                  onChange={(e) => onChangeHandler(e.target)}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td align="right">
+                <button type="submit">Submit</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+      <br />
+      {response?.data && (
+        <table style={inputStyle}>
+          <tbody>
+            <tr>
+              <td>Results:</td>
+              <td>{response.data}</td>
+            </tr>
+          </tbody>
+        </table>
+      )}
+    </>
   );
 };
 export default App;
