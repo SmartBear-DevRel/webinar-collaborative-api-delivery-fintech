@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SmartBearCoin.CustomerManagement.Services;
+using SmartBearCoin.CustomerManagement.Models;
 
 namespace SmartBearCoin.CustomerManagement
 {
@@ -27,20 +28,18 @@ namespace SmartBearCoin.CustomerManagement
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string name = req.Query["name"];
-            string countryOfReg = req.Query["country_of_registration"];
-
             var validationResult = _validationService.ValidateQueryParameters(req.Query);
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            //string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            //dynamic data = JsonConvert.DeserializeObject(requestBody);
 
-            //string responseMessage = string.IsNullOrEmpty(name)
-            //    ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-            //    : $"Hello, {name}. This HTTP triggered function executed successfully.";
+            if (validationResult.Result == false)
+            {
+                var problemResponse = _validationService.GenerateValidationProblem(validationResult, "400");
+                return new BadRequestObjectResult(problemResponse);
+            }
 
-            string responseMessage = validationResult.Details;
+            string responseMessage = "Payees will soon be returned here!";
 
             return new OkObjectResult(responseMessage);
         }

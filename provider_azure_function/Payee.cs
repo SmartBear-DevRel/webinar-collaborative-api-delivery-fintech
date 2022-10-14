@@ -27,7 +27,7 @@ namespace SmartBearCoin.CustomerManagement
         {
             log.LogInformation("C# HTTP trigger to /payees/{payeeId}");
 
-            var message = string.Format($"payeeId: {payeeId}");
+            var message = string.Format($"Details on payeeId: {payeeId} will be available shortly");
             log.LogInformation($"message: {message}");
 
             if(string.IsNullOrEmpty(payeeId))

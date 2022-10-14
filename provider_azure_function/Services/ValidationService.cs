@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using SmartBearCoin.CustomerManagement.Models;
+using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace SmartBearCoin.CustomerManagement.Services
@@ -29,7 +31,7 @@ namespace SmartBearCoin.CustomerManagement.Services
                 return new SimpleValidationResult()
                 {
                     Result = false,
-                    ErrorType = "missing_request_parameter",
+                    ErrorType = "missing-request-parameter",
                     Details = "The request does not contain the mandatory [country_of_registration] query parameter"
                 };                
             }
@@ -51,7 +53,7 @@ namespace SmartBearCoin.CustomerManagement.Services
                 return new SimpleValidationResult()
                 {
                     Result = false,
-                    ErrorType = "missing_request_parameter",
+                    ErrorType = "missing-request-parameter",
                     Details = "The request does not contain the conditionally mandatory [name] query parameter. [name] is mandatory if [jurisdiction_identifier] is not supplied"
                 }; 
             }
@@ -74,7 +76,7 @@ namespace SmartBearCoin.CustomerManagement.Services
                 return new SimpleValidationResult()
                 {
                     Result = false,
-                    ErrorType = "missing_request_parameter",
+                    ErrorType = "missing-request-parameter",
                     Details = "If either [jurisdiction_identifier] or [jurisdiction_identifier_type] are provided, then both must be provided"
                 }; 
             }
@@ -93,7 +95,7 @@ namespace SmartBearCoin.CustomerManagement.Services
             return new SimpleValidationResult(){ Result = true, Details = "success!" };
         }
 
-        public bool IsJurisdictionIdentifierTypeValid(string identifierType)
+        private bool IsJurisdictionIdentifierTypeValid(string identifierType)
         {
             switch(identifierType.ToLowerInvariant())
             {
@@ -112,5 +114,33 @@ namespace SmartBearCoin.CustomerManagement.Services
             }
         }
 
+        private Problem.TitleEnum ConvertErrorToProblemType(string errorType)
+        {
+            return (Problem.TitleEnum)Enum.Parse(typeof(Problem.TitleEnum), errorType, true);
+        }
+
+        public Problem GenerateValidationProblem(SimpleValidationResult validationResults, string code)
+        {
+            string enumValue = string.Concat(validationResults.ErrorType.Replace("-",""), "Enum");
+
+            return new Problem() 
+            { 
+                Code = code, 
+                Status = 400, 
+                Title = ConvertErrorToProblemType(enumValue),
+                Instance = $"https://api.smartbearcoin.com/problems/{validationResults.ErrorType}",
+                Details = new List<ProblemDetails>()
+                {
+                    new ProblemDetails() 
+                    {
+                        Type = (ProblemDetails.TypeEnum)Enum.Parse(typeof(ProblemDetails.TypeEnum), enumValue, true),
+                        Title = (ProblemDetails.TitleEnum)Enum.Parse(typeof(ProblemDetails.TitleEnum), enumValue, true),
+                        Detail = validationResults.Details
+                    }
+                }
+            };
+
+
+        }
     }
 }
