@@ -6,7 +6,7 @@ export const App = () => {
     name: string;
   }
   interface Response {
-    response: string | 'No Response';
+    data: string | 'No Response';
   }
   let initialState: Payee = {
     name: '592b4ece-c7a2-46ff-b380-96fd1638852a'
@@ -19,7 +19,7 @@ export const App = () => {
     e.preventDefault();
     API.getPayeeById(payee.name)
       .then((response) => {
-        setResponse(response);
+        setResponse({ data: response });
         console.log(response);
       })
       .catch(function (error: any) {
@@ -52,13 +52,13 @@ export const App = () => {
               <button type="submit">Submit</button>
             </td>
           </tr>
-          {response?.response && (
-            <tr>
-              <td colSpan={2}>{response.response}</td>
-            </tr>
-          )}
         </tbody>
       </table>
+      {response?.data && (
+        <tr>
+          <td colSpan={2}>{response.data}</td>
+        </tr>
+      )}
     </form>
   );
 };
