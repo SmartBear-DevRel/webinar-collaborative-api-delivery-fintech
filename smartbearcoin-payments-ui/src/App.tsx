@@ -23,6 +23,7 @@ export const App = () => {
         console.log(response);
       })
       .catch(function (error: any) {
+        setResponse({ data: 'An error occurred, please try again later' });
         console.log(error);
       });
   };
@@ -54,11 +55,7 @@ export const App = () => {
           </tr>
         </tbody>
       </table>
-      {response?.data && (
-        <tr>
-          <td colSpan={2}>{response.data}</td>
-        </tr>
-      )}
+      {response?.data && response.data}
     </form>
   );
 };
