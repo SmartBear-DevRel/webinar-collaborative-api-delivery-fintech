@@ -45,7 +45,7 @@ jobs:
         env:
           to_environment: ${{ matrix.environment }}
       - name: record-deployment ${{ env.application_name }} to ${{ matrix.environment }}
-        if: github.ref == 'refs/heads/main'
+        if: success() && github.ref == 'refs/heads/main'
         uses: pactflow/actions/record-deployment@v1.0.1
         env:
           environment: ${{ matrix.environment }}
