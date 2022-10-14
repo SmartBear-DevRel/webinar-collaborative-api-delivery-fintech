@@ -1,0 +1,92 @@
+on: [workflow_dispatch]     # change the triggering mechanism to suit your needs (manual run by default)
+
+name: Provider-API-AzureFunction-CI
+
+env:
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'provider_azure_function'   # set this to the path to your web app project, defaults to the repository root
+  DOTNET_VERSION: '6.0.402'                                   # set this to the dotnet version to use
+
+jobs:
+
+  # use ARM templates to set up the Azure Infra
+  deploy-infrastructure:
+    runs-on: ubuntu-latest
+
+    # set outputs needed by subsequent jobs
+    outputs:
+      azFunctionAppName: ${{ steps.armdeploy.outputs.functionAppName }}
+    
+    steps:
+
+    # check out code
+    - uses: actions/checkout@main
+
+    # login to Azure
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    # deploy ARM template to setup azure resources (group & sub defined in credentials)
+    - name: Run ARM deploy
+      id: armdeploy
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+        resourceGroupName: ${{ secrets.AZURE_RG }}
+        template: ./provider_azure_function/azuredeploy.json
+        parameters: ./provider_azure_function/azuredeploy.parameters.json
+  
+
+  # build and deploy our Azure functions for SwaggerHub + Azure AD user mgmt
+  build-and-deploy:
+    needs: [deploy-infrastructure]
+    runs-on: windows-latest
+    environment: prd
+    steps:
+    # check out code
+    - name: 'Checkout code'
+      uses: actions/checkout@main
+
+    # login to Azure
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        enable-AzPSSession: true      
+
+    # get publish profile
+    - name: Get publish profile
+      id: fncapp
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          $profile = ""
+          $profile = Get-AzWebAppPublishingProfile -ResourceGroupName ${{ secrets.AZURE_RG }} -Name ${{ needs.deploy-infrastructure.outputs.azFunctionAppName }}
+          $profile = $profile.Replace("`r", "").Replace("`n", "")
+          Write-Output "::set-output name=profile::$profile"
+        azPSVersion: "latest"
+
+    # setup donet environments
+    - name: Setup DotNet Environments
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: |
+          6.0.x
+          ${{ env.DOTNET_VERSION }}
+
+    # build project
+    - name: 'Resolve dependencies and build'
+      shell: pwsh
+      run: |
+        pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+        dotnet restore
+        dotnet build --configuration Release --output ./output
+        popd
+
+    # publish azure function
+    - name: 'Run Azure Functions Action'
+      uses: Azure/functions-action@v1
+      id: fa
+      with:
+        app-name: ${{ needs.deploy-infrastructure.outputs.azFunctionAppName }}
+        package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+        publish-profile: ${{ steps.fncapp.outputs.profile }}
