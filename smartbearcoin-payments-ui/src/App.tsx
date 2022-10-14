@@ -2,25 +2,25 @@ import { useState } from 'react';
 import API from './Api';
 
 export const App = () => {
-  interface payee {
+  interface Payee {
     name: string;
   }
-  interface response {
+  interface Response {
     response: string | 'No Response';
   }
-  let initialState: payee = {
+  let initialState: Payee = {
     name: '592b4ece-c7a2-46ff-b380-96fd1638852a'
   };
   const inputStyle = { border: '1px solid black', height: 75, padding: 10 };
-  const [payee, setPayee] = useState<payee>(initialState);
-  const [response, setResponse] = useState<response>();
+  const [payee, setPayee] = useState<Payee>(initialState);
+  const [response, setResponse] = useState<Response>();
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     API.getPayeeById(payee.name)
       .then((response) => {
-        setResponse(response.data);
-        console.log(response.data);
+        setResponse(response);
+        console.log(response);
       })
       .catch(function (error: any) {
         console.log(error);
@@ -54,7 +54,7 @@ export const App = () => {
           </tr>
           {response?.response && (
             <tr>
-              <td colSpan={0}>{response.response}</td>
+              <td colSpan={2}>{response.response}</td>
             </tr>
           )}
         </tbody>
