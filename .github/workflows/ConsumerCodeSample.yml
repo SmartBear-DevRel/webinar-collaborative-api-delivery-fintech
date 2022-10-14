@@ -2,7 +2,7 @@ name: API Consumer Pact Tests
 
 on:
   push:
-    branches: ['main', 'consumer_code_sample*']
+    branches: ['main', 'frontend*']
     paths:
       - 'consumer_code_sample/**'
   pull_request:
@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
 
 env:
-  version: ${{ github.sha }}-consumer-code-sample
+  version: ${{ github.sha }}-smartbearcoin-payments-ui
   PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
   PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
   environment: test
@@ -24,59 +24,28 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v3
-      - run: cd consumer_code_sample && npm i
-      - run: cd consumer_code_sample && npm test
+      - run: cd smartbearcoin-payments-ui && npm ci
+      - run: cd smartbearcoin-payments-ui && npm test
       - uses: pactflow/actions/publish-pact-files@v1.0.1
         env:
-          pactfiles: consumer_code_sample/pacts
+          pactfiles: smartbearcoin-payments-ui/pacts
 
-  pact-can-i-deploy_consumer-a:
+  deploy:
+    strategy:
+      matrix:
+        environment: [test, production]
+      fail-fast: false
     needs: [test]
     runs-on: ubuntu-latest
     env:
-      application_name: SmartBearCoin-Payee-Consumer-A
+      application_name: SmartBearCoin-Payments-UI
     steps:
-      - uses: pactflow/actions/can-i-deploy@v1.0.1
+      - name: can-i-deploy ${{ env.application_name }} to ${{ matrix.environment }}
+        uses: pactflow/actions/can-i-deploy@v1.0.1
         env:
-          to_environment: ${{ env.environment }}
-      - if: success() && github.ref == 'refs/heads/main'
-        name: record-deployment
-        run: |
-          docker run --rm -v /${PWD}:/${PWD} -w ${PWD} \
-          -e PACT_BROKER_BASE_URL \
-          -e PACT_BROKER_TOKEN \
-          -e application_name \
-          -e version \
-          -e environment \
-          pactfoundation/pact-cli:latest \
-          broker record-deployment \
-          --environment=$environment \
-          --pacticipant=$application_name \
-          --broker-base-url=$PACT_BROKER_BASE_URL \
-          --broker-token=$PACT_BROKER_TOKEN \
-          --version=$version
-  pact-can-i-deploy_consumer-b:
-    needs: [test]
-    runs-on: ubuntu-latest
-    env:
-      application_name: SmartBearCoin-Payee-Consumer-B
-    steps:
-      - uses: pactflow/actions/can-i-deploy@v1.0.1
+          to_environment: ${{ matrix.environment }}
+      - name: record-deployment ${{ env.application_name }} to ${{ matrix.environment }}
+        if: success() && github.ref == 'refs/heads/main'
+        uses: pactflow/actions/record-deployment@v1.0.1
         env:
-          to_environment: ${{ env.environment }}
-      - if: success() && github.ref == 'refs/heads/main'
-        name: record-deployment
-        run: |
-          docker run --rm -v /${PWD}:/${PWD} -w ${PWD} \
-          -e PACT_BROKER_BASE_URL \
-          -e PACT_BROKER_TOKEN \
-          -e application_name \
-          -e version \
-          -e environment \
-          pactfoundation/pact-cli:latest \
-          broker record-deployment \
-          --environment=$environment \
-          --pacticipant=$application_name \
-          --broker-base-url=$PACT_BROKER_BASE_URL \
-          --broker-token=$PACT_BROKER_TOKEN \
-          --version=$version
+          environment: ${{ matrix.environment }}
