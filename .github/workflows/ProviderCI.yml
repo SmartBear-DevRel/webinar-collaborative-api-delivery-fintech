@@ -97,7 +97,7 @@ jobs:
     # use ARM templates to set up the Azure Infra
 
   can-i-deploy-production:
-    needs: [test, can-i-deploy-test]
+    needs: [test]
     runs-on: ubuntu-latest
     env:
       deploy_target: production
@@ -109,7 +109,7 @@ jobs:
           version: ${{ needs.test.outputs.version }}
 
   deploy-infrastructure-prd:
-    needs: [test, build-and-deploy-acc, can-i-deploy-production]
+    needs: [test, can-i-deploy-production, record-deploy-acc]
     runs-on: ubuntu-latest
     environment: prd
     if: github.ref == 'refs/heads/main'
@@ -139,7 +139,7 @@ jobs:
 
   # build and deploy our Azure functions for Fintech Webinar
   build-and-deploy-acc:
-    needs: [test, deploy-infrastructure-acc, can-i-deploy-test]
+    needs: [test, can-i-deploy-test, deploy-infrastructure-acc]
     runs-on: windows-latest
     environment: acc
     steps:
@@ -193,12 +193,7 @@ jobs:
 
   record-deploy-acc:
     needs:
-      [
-        test,
-        deploy-infrastructure-acc,
-        can-i-deploy-production,
-        build-and-deploy-acc
-      ]
+      [test, deploy-infrastructure-acc, can-i-deploy-test, build-and-deploy-acc]
     runs-on: ubuntu-latest
     env:
       deployed_env: test
@@ -212,7 +207,7 @@ jobs:
 
   # build and deploy our Azure functions for Fintech Webinar
   build-and-deploy-prd:
-    needs: [test, deploy-infrastructure-prd, can-i-deploy-production]
+    needs: [test, can-i-deploy-production, record-deploy-acc]
     runs-on: windows-latest
     environment: prd
     steps:
