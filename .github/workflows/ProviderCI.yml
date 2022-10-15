@@ -51,17 +51,9 @@ jobs:
     outputs:
       version: ${{ env.version }}
 
-  # use ARM templates to set up the Azure Infra
-  deploy-infrastructure-acc:
+  can-i-deploy-test:
+    needs: test
     runs-on: ubuntu-latest
-    environment: acc
-    needs: [test]
-
-    # set outputs needed by subsequent jobs
-
-    outputs:
-      azFunctionAppName: ${{ steps.armdeploy.outputs.functionAppName }}
-
     env:
       deploy_target: test
     steps:
@@ -70,6 +62,20 @@ jobs:
         env:
           to_environment: ${{ env.deploy_target }}
           version: ${{ needs.test.outputs.version }}
+
+  # use ARM templates to set up the Azure Infra
+  deploy-infrastructure-acc:
+    runs-on: ubuntu-latest
+    environment: acc
+    needs: [test, can-i-deploy-test]
+    if: github.ref == 'refs/heads/main'
+
+    # set outputs needed by subsequent jobs
+
+    outputs:
+      azFunctionAppName: ${{ steps.armdeploy.outputs.functionAppName }}
+
+    steps:
       # check out code
       - uses: actions/checkout@main
 
@@ -90,15 +96,9 @@ jobs:
 
     # use ARM templates to set up the Azure Infra
 
-  deploy-infrastructure-prd:
-    needs: [test, build-and-deploy-acc]
+  can-i-deploy-production:
+    needs: [test, can-i-deploy-test]
     runs-on: ubuntu-latest
-    environment: prd
-
-    # set outputs needed by subsequent jobs
-    outputs:
-      azFunctionAppName: ${{ steps.armdeploy.outputs.functionAppName }}
-
     env:
       deploy_target: production
     steps:
@@ -108,6 +108,17 @@ jobs:
           to_environment: ${{ env.deploy_target }}
           version: ${{ needs.test.outputs.version }}
 
+  deploy-infrastructure-prd:
+    needs: [test, build-and-deploy-acc, can-i-deploy-production]
+    runs-on: ubuntu-latest
+    environment: prd
+    if: github.ref == 'refs/heads/main'
+
+    # set outputs needed by subsequent jobs
+    outputs:
+      azFunctionAppName: ${{ steps.armdeploy.outputs.functionAppName }}
+
+    steps:
       # check out code
       - uses: actions/checkout@main
 
@@ -128,11 +139,9 @@ jobs:
 
   # build and deploy our Azure functions for Fintech Webinar
   build-and-deploy-acc:
-    needs: [test, deploy-infrastructure-acc]
+    needs: [test, deploy-infrastructure-acc, can-i-deploy-test]
     runs-on: windows-latest
     environment: acc
-    env:
-      deploy_target: test
     steps:
       # check out code
       - name: 'Checkout code'
@@ -182,20 +191,30 @@ jobs:
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
           publish-profile: ${{ steps.fncapp.outputs.profile }}
 
-      - name: record-deployment ${{ env.application_name }} to ${{ env.deploy_target }}
-        if: success() && github.ref == 'refs/heads/main'
+  record-deploy-acc:
+    needs:
+      [
+        test,
+        deploy-infrastructure-acc,
+        can-i-deploy-production,
+        build-and-deploy-acc
+      ]
+    runs-on: ubuntu-latest
+    env:
+      deployed_env: test
+    steps:
+      - name: record-deployment ${{ env.application_name }} to ${{ env.deployed_env }}
+        if: github.ref == 'refs/heads/main'
         uses: pactflow/actions/record-deployment@v1.0.1
         env:
-          environment: ${{ env.deploy_target }}
+          environment: ${{ env.deployed_env }}
           version: ${{ needs.test.outputs.version }}
 
   # build and deploy our Azure functions for Fintech Webinar
   build-and-deploy-prd:
-    needs: [test, deploy-infrastructure-prd, build-and-deploy-acc]
+    needs: [test, deploy-infrastructure-prd, can-i-deploy-production]
     runs-on: windows-latest
     environment: prd
-    env:
-      deploy_target: production
     steps:
       # check out code
       - name: 'Checkout code'
@@ -245,9 +264,21 @@ jobs:
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
           publish-profile: ${{ steps.fncapp.outputs.profile }}
 
-      - name: record-deployment ${{ env.application_name }} to ${{ env.deploy_target }}
-        if: success() && github.ref == 'refs/heads/main'
+  record-deploy-production:
+    needs:
+      [
+        test,
+        deploy-infrastructure-prd,
+        can-i-deploy-production,
+        build-and-deploy-prd
+      ]
+    runs-on: ubuntu-latest
+    env:
+      deployed_env: production
+    steps:
+      - name: record-deployment ${{ env.application_name }} to ${{ env.deployed_env }}
+        if: github.ref == 'refs/heads/main'
         uses: pactflow/actions/record-deployment@v1.0.1
         env:
-          environment: ${{ env.deploy_target }}
+          environment: ${{ env.deployed_env }}
           version: ${{ needs.test.outputs.version }}
