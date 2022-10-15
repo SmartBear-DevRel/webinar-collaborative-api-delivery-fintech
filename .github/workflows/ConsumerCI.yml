@@ -6,11 +6,13 @@ on:
     paths:
       - 'smartbearcoin-payments-ui/**'
       - '.github/workflows/ConsumerCI.yml'
+      - 'oas/**'
   pull_request:
     branches: ['main']
     paths:
       - 'smartbearcoin-payments-ui/**'
       - '.github/workflows/ConsumerCI.yml'
+      - 'oas/**'
 
 env:
   version: ${{ github.sha }}
