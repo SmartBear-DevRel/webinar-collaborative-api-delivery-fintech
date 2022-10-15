@@ -144,6 +144,11 @@ paths:
       responses:
         "200":
           description: Successful Response - TODO - add domain schema
+          content:
+            text/plain:
+              examples:
+                TODO:
+                  value: '"Successful Response - TODO - add domain schema"'
         "400":
           description: 400 Bad Request
           content:
@@ -255,6 +260,11 @@ paths:
       responses:
         "200":
           description: Successful Response - TODO - add domain schema
+          content:
+            text/plain:
+              examples:
+                TODO:
+                  value: '"Successful Response - TODO - add domain schema"'
         "400":
           description: 400 Bad Request
           content:
@@ -393,6 +403,11 @@ paths:
       responses:
         "200":
           description: Successful Response - TODO - add domain schema
+          content:
+            text/plain:
+              examples:
+                A request to get a personalised message:
+                  value: Successful Response - TODO - add domain schema
         "400":
           description: 400 Bad Request
           content:
