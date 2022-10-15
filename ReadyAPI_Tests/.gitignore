@@ -1,1 +1,3 @@
-reports
+*.html
+*.css
+report.xml

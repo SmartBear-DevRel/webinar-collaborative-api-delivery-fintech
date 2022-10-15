@@ -18,10 +18,9 @@ env:
   application_name: SmartBearCoin-Payee-Provider
   PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
   PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
-  SLM_API_KEY: ${{ secrets.SLM_API_KEY }}
 
 jobs:
-  test:
+  test-local:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -35,6 +34,14 @@ jobs:
           sudo apt-get install azure-functions-core-tools-4
       - name: Test
         run: chmod ugo+rwx ReadyAPI_Tests && ./startServerAndTest.sh
+        env:
+          PROJECT_FOLDER: ReadyAPI_Tests
+          PROJECT_FILE: 'SmartBearCoin-Payee-Provider-readyapi-project.xml'
+          SLM_API_KEY: ${{ secrets.SLM_API_KEY }}
+          SERVER_DIR: provider_azure_function
+          SERVER_COMMAND: 'func start --csharp'
+          WAIT_FOR: 'http://localhost:7071'
+          ENDPOINT: http://localhost:7071/api/payees
       - name: get version of OAS
         run: |
           sudo snap install yq && 
@@ -52,7 +59,7 @@ jobs:
       version: ${{ env.version }}
 
   can-i-deploy-acc:
-    needs: test
+    needs: test-local
     runs-on: ubuntu-latest
     env:
       deploy_target: test
@@ -61,13 +68,13 @@ jobs:
         uses: pactflow/actions/can-i-deploy@v1.0.1
         env:
           to_environment: ${{ env.deploy_target }}
-          version: ${{ needs.test.outputs.version }}
+          version: ${{ needs.test-local.outputs.version }}
 
   # use ARM templates to set up the Azure Infra
   deploy-infrastructure-acc:
     runs-on: ubuntu-latest
     environment: acc
-    needs: [test, can-i-deploy-acc]
+    needs: [test-local, can-i-deploy-acc]
     if: github.ref == 'refs/heads/main'
 
     # set outputs needed by subsequent jobs
@@ -97,7 +104,7 @@ jobs:
     # use ARM templates to set up the Azure Infra
 
   can-i-deploy-prd:
-    needs: [test]
+    needs: [test-local, test-acc]
     runs-on: ubuntu-latest
     env:
       deploy_target: production
@@ -106,10 +113,10 @@ jobs:
         uses: pactflow/actions/can-i-deploy@v1.0.1
         env:
           to_environment: ${{ env.deploy_target }}
-          version: ${{ needs.test.outputs.version }}
+          version: ${{ needs.test-local.outputs.version }}
 
   deploy-infrastructure-prd:
-    needs: [test, can-i-deploy-prd, record-deploy-acc]
+    needs: [test-local, can-i-deploy-prd, record-deploy-acc]
     runs-on: ubuntu-latest
     environment: prd
     if: github.ref == 'refs/heads/main'
@@ -139,7 +146,7 @@ jobs:
 
   # build and deploy our Azure functions for Fintech Webinar
   build-and-deploy-acc:
-    needs: [test, can-i-deploy-acc, deploy-infrastructure-acc]
+    needs: [test-local, can-i-deploy-acc, deploy-infrastructure-acc]
     runs-on: windows-latest
     environment: acc
     steps:
@@ -191,9 +198,31 @@ jobs:
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
           publish-profile: ${{ steps.fncapp.outputs.profile }}
 
+  # test our Azure functions for Fintech Webinar
+  test-acc:
+    needs: [record-deploy-acc]
+    runs-on: ubuntu-latest
+    environment: acc
+    steps:
+      # check out code
+      - name: 'Checkout code'
+        uses: actions/checkout@main
+      - name: Test
+        run: chmod ugo+rwx ReadyAPI_Tests && ./launchReadyAPITestRunner.sh
+        env:
+          PROJECT_FOLDER: ReadyAPI_Tests
+          PROJECT_FILE: 'SmartBearCoin-Payee-Provider-readyapi-project.xml'
+          SLM_API_KEY: ${{ secrets.SLM_API_KEY }}
+          ENDPOINT: https://sbdevrel-fua-smartbearcoin-acc.azurewebsites.net/api/payees
+
   record-deploy-acc:
     needs:
-      [test, deploy-infrastructure-acc, can-i-deploy-acc, build-and-deploy-acc]
+      [
+        test-local,
+        deploy-infrastructure-acc,
+        can-i-deploy-acc,
+        build-and-deploy-acc
+      ]
     runs-on: ubuntu-latest
     env:
       deployed_env: test
@@ -203,12 +232,17 @@ jobs:
         uses: pactflow/actions/record-deployment@v1.0.1
         env:
           environment: ${{ env.deployed_env }}
-          version: ${{ needs.test.outputs.version }}
+          version: ${{ needs.test-local.outputs.version }}
 
   # build and deploy our Azure functions for Fintech Webinar
   build-and-deploy-prd:
     needs:
-      [test, can-i-deploy-prd, record-deploy-acc, deploy-infrastructure-prd]
+      [
+        test-local,
+        can-i-deploy-prd,
+        record-deploy-acc,
+        deploy-infrastructure-prd
+      ]
     runs-on: windows-latest
     environment: prd
     steps:
@@ -260,9 +294,14 @@ jobs:
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
           publish-profile: ${{ steps.fncapp.outputs.profile }}
 
-  record-deploy-production:
+  record-deploy-prd:
     needs:
-      [test, deploy-infrastructure-prd, can-i-deploy-prd, build-and-deploy-prd]
+      [
+        test-local,
+        deploy-infrastructure-prd,
+        can-i-deploy-prd,
+        build-and-deploy-prd
+      ]
     runs-on: ubuntu-latest
     env:
       deployed_env: production
@@ -272,4 +311,21 @@ jobs:
         uses: pactflow/actions/record-deployment@v1.0.1
         env:
           environment: ${{ env.deployed_env }}
-          version: ${{ needs.test.outputs.version }}
+          version: ${{ needs.test-local.outputs.version }}
+
+  # test our Azure functions for Fintech Webinar
+  test-prd:
+    needs: [record-deploy-prd]
+    runs-on: ubuntu-latest
+    environment: acc
+    steps:
+      # check out code
+      - name: 'Checkout code'
+        uses: actions/checkout@main
+      - name: Test
+        run: chmod ugo+rwx ReadyAPI_Tests && ./launchReadyAPITestRunner.sh
+        env:
+          PROJECT_FOLDER: ReadyAPI_Tests
+          PROJECT_FILE: 'SmartBearCoin-Payee-Provider-readyapi-project.xml'
+          SLM_API_KEY: ${{ secrets.SLM_API_KEY }}
+          ENDPOINT: https://sbdevrel-fua-smartbearcoin-prd.azurewebsites.net/api/payees

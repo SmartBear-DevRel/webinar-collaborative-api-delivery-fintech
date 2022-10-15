@@ -1,9 +1,8 @@
 #!/bin/bash
 
-SERVER_DIR=provider_azure_function
-SERVER_DIR=${SERVER_DIR:-'LocalFunctionProj'}
+SERVER_DIR=${SERVER_DIR:-'provider_azure_function'}
 SERVER_COMMAND=${SERVER_COMMAND:-'func start --csharp'}
-WAIT_FOR=http://localhost:7071
+WAIT_FOR=${WAIT_FOR:-'http://localhost:7071'}
 
 BASE_DIR=$PWD
 SERVER_DIR=${SERVER_DIR:-$PWD}
