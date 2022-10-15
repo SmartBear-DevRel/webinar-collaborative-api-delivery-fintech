@@ -1,51 +1,121 @@
 name: ConsumerCI
 
 on:
+  workflow_dispatch:
   push:
-    branches: ['main', 'frontend*']
     paths:
       - 'smartbearcoin-payments-ui/**'
+      - '.github/workflows/ConsumerCI.yml'
   pull_request:
     branches: ['main']
     paths:
       - 'smartbearcoin-payments-ui/**'
-
-  workflow_dispatch:
+      - '.github/workflows/ConsumerCI.yml'
 
 env:
-  version: ${{ github.sha }}-smartbearcoin-payments-ui
+  version: ${{ github.sha }}
   PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
   PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
-  environment: test
+  application_name: SmartBearCoin-Payments-UI
+  application_folder: smartbearcoin-payments-ui
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-      - run: cd smartbearcoin-payments-ui && npm ci
-      - run: cd smartbearcoin-payments-ui && npm test
+      - run: cd ${{ env.application_folder }} && npm ci
+      - run: cd ${{ env.application_folder }} && npm test
       - uses: pactflow/actions/publish-pact-files@v1.0.1
         env:
-          pactfiles: smartbearcoin-payments-ui/pacts
+          pactfiles: ${{ env.application_folder }}/pacts
 
-  deploy:
-    strategy:
-      matrix:
-        environment: [test, production]
-      fail-fast: false
+  can-i-deploy-to-test:
     needs: [test]
     runs-on: ubuntu-latest
     env:
-      application_name: SmartBearCoin-Payments-UI
+      deploy_target: test
     steps:
-      - name: can-i-deploy ${{ env.application_name }} to ${{ matrix.environment }}
+      - name: can-i-deploy ${{ env.application_name }} to ${{ env.deploy_target }}
         uses: pactflow/actions/can-i-deploy@v1.0.1
         env:
-          to_environment: ${{ matrix.environment }}
-      - name: record-deployment ${{ env.application_name }} to ${{ matrix.environment }}
-        if: success() && github.ref == 'refs/heads/main'
+          to_environment: ${{ env.deploy_target }}
+
+  can-i-deploy-to-production:
+    needs: [test]
+    runs-on: ubuntu-latest
+    env:
+      deploy_target: production
+    steps:
+      - name: can-i-deploy ${{ env.application_name }} to ${{ env.deploy_target }}
+        uses: pactflow/actions/can-i-deploy@v1.0.1
+        env:
+          to_environment: ${{ env.deploy_target }}
+
+  deploy-to-test:
+    if: github.ref == 'refs/heads/main'
+    needs: [can-i-deploy-to-test]
+    runs-on: ubuntu-latest
+    env:
+      deploy_target: test
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - name: Build site
+        run: |
+          cd ${{ env.application_folder }}
+          npm ci
+          npm run build
+      - name: Deploy website to ${{ env.deploy_target }} environment
+        uses: nwtgck/actions-netlify@v1.2
+        with:
+          publish-dir: './${{ env.application_folder }}/build'
+          alias: ${{ env.deploy_target }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: 'Deploy from GitHub Actions'
+          enable-pull-request-comment: false
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 1
+      - name: record-deployment ${{ env.application_name }} to ${{ env.deploy_target }}
         uses: pactflow/actions/record-deployment@v1.0.1
         env:
-          environment: ${{ matrix.environment }}
+          environment: ${{ env.deploy_target }}
+
+  deploy-to-production:
+    if: github.ref == 'refs/heads/main'
+    needs: [can-i-deploy-to-production, deploy-to-test]
+    runs-on: ubuntu-latest
+    env:
+      deploy_target: production
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - name: Build site
+        run: |
+          cd ${{ env.application_folder }}
+          npm ci
+          npm run build
+      - name: Deploy website to ${{ env.deploy_target }} environment
+        uses: nwtgck/actions-netlify@v1.2
+        with:
+          publish-dir: './${{ env.application_folder }}/build'
+          production-branch: main
+          production-deploy: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: 'Deploy from GitHub Actions'
+          enable-pull-request-comment: false
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 1
+      - name: record-deployment ${{ env.application_name }} to ${{ env.deploy_target }}
+        uses: pactflow/actions/record-deployment@v1.0.1
+        env:
+          environment: ${{ env.deploy_target }}
