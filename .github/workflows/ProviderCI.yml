@@ -51,7 +51,7 @@ jobs:
     outputs:
       version: ${{ env.version }}
 
-  can-i-deploy-test:
+  can-i-deploy-acc:
     needs: test
     runs-on: ubuntu-latest
     env:
@@ -67,7 +67,7 @@ jobs:
   deploy-infrastructure-acc:
     runs-on: ubuntu-latest
     environment: acc
-    needs: [test, can-i-deploy-test]
+    needs: [test, can-i-deploy-acc]
     if: github.ref == 'refs/heads/main'
 
     # set outputs needed by subsequent jobs
@@ -96,7 +96,7 @@ jobs:
 
     # use ARM templates to set up the Azure Infra
 
-  can-i-deploy-production:
+  can-i-deploy-prd:
     needs: [test]
     runs-on: ubuntu-latest
     env:
@@ -109,7 +109,7 @@ jobs:
           version: ${{ needs.test.outputs.version }}
 
   deploy-infrastructure-prd:
-    needs: [test, can-i-deploy-production, record-deploy-acc]
+    needs: [test, can-i-deploy-prd, record-deploy-acc]
     runs-on: ubuntu-latest
     environment: prd
     if: github.ref == 'refs/heads/main'
@@ -139,7 +139,7 @@ jobs:
 
   # build and deploy our Azure functions for Fintech Webinar
   build-and-deploy-acc:
-    needs: [test, can-i-deploy-test, deploy-infrastructure-acc]
+    needs: [test, can-i-deploy-acc, deploy-infrastructure-acc]
     runs-on: windows-latest
     environment: acc
     steps:
@@ -193,7 +193,7 @@ jobs:
 
   record-deploy-acc:
     needs:
-      [test, deploy-infrastructure-acc, can-i-deploy-test, build-and-deploy-acc]
+      [test, deploy-infrastructure-acc, can-i-deploy-acc, build-and-deploy-acc]
     runs-on: ubuntu-latest
     env:
       deployed_env: test
@@ -207,7 +207,7 @@ jobs:
 
   # build and deploy our Azure functions for Fintech Webinar
   build-and-deploy-prd:
-    needs: [test, can-i-deploy-production, record-deploy-acc]
+    needs: [test, can-i-deploy-prd, record-deploy-acc]
     runs-on: windows-latest
     environment: prd
     steps:
@@ -261,12 +261,7 @@ jobs:
 
   record-deploy-production:
     needs:
-      [
-        test,
-        deploy-infrastructure-prd,
-        can-i-deploy-production,
-        build-and-deploy-prd
-      ]
+      [test, deploy-infrastructure-prd, can-i-deploy-prd, build-and-deploy-prd]
     runs-on: ubuntu-latest
     env:
       deployed_env: production
