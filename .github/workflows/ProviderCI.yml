@@ -207,7 +207,8 @@ jobs:
 
   # build and deploy our Azure functions for Fintech Webinar
   build-and-deploy-prd:
-    needs: [test, can-i-deploy-prd, record-deploy-acc]
+    needs:
+      [test, can-i-deploy-prd, record-deploy-acc, deploy-infrastructure-prd]
     runs-on: windows-latest
     environment: prd
     steps:
