@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SERVER_DIR=ReadyAPI_Tests
+SERVER_DIR=provider_azure_function
 SERVER_DIR=${SERVER_DIR:-'LocalFunctionProj'}
 SERVER_COMMAND=${SERVER_COMMAND:-'func start --csharp'}
 WAIT_FOR=http://localhost:7071
