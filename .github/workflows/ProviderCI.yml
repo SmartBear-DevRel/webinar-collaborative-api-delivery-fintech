@@ -35,8 +35,6 @@ jobs:
           sudo apt-get install azure-functions-core-tools-4
       - name: Test
         run: chmod ugo+rwx ReadyAPI_Tests && ./startServerAndTest.sh
-        env:
-          SLM_API_KEY: ${{ secrets.SLM_API_KEY }}
       - name: get version of OAS
         run: |
           sudo snap install yq && 
