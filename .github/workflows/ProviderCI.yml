@@ -58,10 +58,18 @@ jobs:
     needs: [test]
 
     # set outputs needed by subsequent jobs
+
     outputs:
       azFunctionAppName: ${{ steps.armdeploy.outputs.functionAppName }}
 
+    env:
+      deploy_target: test
     steps:
+      - name: can-i-deploy ${{ env.application_name }} to ${{ env.deploy_target }}
+        uses: pactflow/actions/can-i-deploy@v1.0.1
+        env:
+          to_environment: ${{ env.deploy_target }}
+          version: ${{ needs.test.outputs.version }}
       # check out code
       - uses: actions/checkout@main
 
@@ -91,7 +99,15 @@ jobs:
     outputs:
       azFunctionAppName: ${{ steps.armdeploy.outputs.functionAppName }}
 
+    env:
+      deploy_target: production
     steps:
+      - name: can-i-deploy ${{ env.application_name }} to ${{ env.deploy_target }}
+        uses: pactflow/actions/can-i-deploy@v1.0.1
+        env:
+          to_environment: ${{ env.deploy_target }}
+          version: ${{ needs.test.outputs.version }}
+
       # check out code
       - uses: actions/checkout@main
 
@@ -118,11 +134,6 @@ jobs:
     env:
       deploy_target: test
     steps:
-      - name: can-i-deploy ${{ env.application_name }} to ${{ env.deploy_target }}
-        uses: pactflow/actions/can-i-deploy@v1.0.1
-        env:
-          to_environment: ${{ env.deploy_target }}
-          version: ${{ needs.test.outputs.version }}
       # check out code
       - name: 'Checkout code'
         uses: actions/checkout@main
@@ -186,11 +197,6 @@ jobs:
     env:
       deploy_target: production
     steps:
-      - name: can-i-deploy ${{ env.application_name }} to ${{ env.deploy_target }}
-        uses: pactflow/actions/can-i-deploy@v1.0.1
-        env:
-          to_environment: ${{ env.deploy_target }}
-          version: ${{ needs.test.outputs.version }}
       # check out code
       - name: 'Checkout code'
         uses: actions/checkout@main
