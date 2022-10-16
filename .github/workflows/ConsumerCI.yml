@@ -119,6 +119,8 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NODE_ENV: development
+          REACT_APP_API_BASE_URL: https://sbdevrel-fua-smartbearcoin-acc.azurewebsites.net/api/payees
         timeout-minutes: 1
       - name: record-deployment ${{ needs.setup.outputs.PACT_CONSUMER }} to ${{ env.deploy_target }}
         uses: pactflow/actions/record-deployment@v2
@@ -157,6 +159,8 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NODE_ENV: production
+          REACT_APP_API_BASE_URL: https://sbdevrel-fua-smartbearcoin-prd.azurewebsites.net/api/payees
         timeout-minutes: 1
       - name: record-deployment ${{ needs.setup.outputs.PACT_CONSUMER }} to ${{ env.deploy_target }}
         uses: pactflow/actions/record-deployment@v2

@@ -3,6 +3,8 @@ import API from './Api';
 import { PayeeInterface } from './Payee';
 import { Dropdown, Option } from './Dropdown';
 import { StyledButton, StyledSelect } from './Styles';
+import React from 'react';
+import Bugsnag from '@bugsnag/js';
 
 export const App = () => {
   const [optionValue, setOptionValue] = useState('');
@@ -58,6 +60,7 @@ export const App = () => {
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     API.getPayeeById(payee.name)
       .then((response) => {
         setResponse({ data: [response] });
@@ -76,6 +79,12 @@ export const App = () => {
       })
       .catch(function (error: any) {
         setResponse({ data: 'No Response' });
+        Bugsnag.notify({
+          errorMessage: error,
+          message: 'error occurred making request to server',
+          name: 'payeeRequest'
+        });
+        console.log(error);
       });
   };
   const onChangeHandler = (event: HTMLInputElement) => {
