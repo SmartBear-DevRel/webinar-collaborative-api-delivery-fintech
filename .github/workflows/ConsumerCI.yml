@@ -56,7 +56,7 @@ jobs:
           to_environment: ${{ env.deploy_target }}
 
   deploy-to-test:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/bugsnag'
     needs: [can-i-deploy-to-test]
     runs-on: ubuntu-latest
     env:
