@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import API from './Api';
+import React from 'react';
+import Bugsnag from '@bugsnag/js';
 
 export const App = () => {
   interface Payee {
@@ -17,6 +19,7 @@ export const App = () => {
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     API.getPayeeById(payee.name)
       .then((response) => {
         setResponse({ data: response });
@@ -24,6 +27,11 @@ export const App = () => {
       })
       .catch(function (error: any) {
         setResponse({ data: 'An error occurred, please try again later' });
+        Bugsnag.notify({
+          errorMessage: error,
+          message: 'error occurred making request to server',
+          name: 'payeeRequest'
+        });
         console.log(error);
       });
   };
