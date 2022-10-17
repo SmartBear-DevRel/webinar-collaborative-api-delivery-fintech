@@ -60,7 +60,7 @@ export const App = () => {
     e.preventDefault();
     API.getPayeeById(payee.name)
       .then((response) => {
-        setResponse({ data: response });
+        setResponse({ data: [response] });
       })
       .catch(function (error: any) {
         setResponse({ data: 'No Response' });
