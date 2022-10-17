@@ -14,7 +14,7 @@ export const App = () => {
     bank_name: 'AAAA Bank',
     bank_code: 'string',
     id: 'string',
-    name: '592b4ece-c7a2-46ff-b380-96fd1638852a'
+    name: '1e331a0f-29bd-4b6b-8b21-8b87ed653c6b'
   };
   const inputStyle = { border: '1px solid black', height: 75, padding: 10 };
   const [payee, setPayee] = useState<PayeeInterface>(initialState);

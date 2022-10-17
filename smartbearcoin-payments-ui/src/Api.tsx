@@ -6,7 +6,10 @@ const adapter = require('axios/lib/adapters/http');
 axios.defaults.adapter = adapter;
 const defaultBaseUrl =
   process.env.REACT_APP_API_BASE_URL ||
-  'https://virtserver.swaggerhub.com/mhiggins-sa/payee-api/1.0.0/';
+  // 'https://sbdevrel-fua-smartbearcoin-prd.azurewebsites.net/api';
+  // 'https://sbdevrel-fua-smartbearcoin-acc.azurewebsites.net/api';
+  'https://virtserver.swaggerhub.com/mhiggins-sa/payee-api/1.0.0';
+// 'http://localhost:7071/api/';
 
 export class API {
   url: string;
