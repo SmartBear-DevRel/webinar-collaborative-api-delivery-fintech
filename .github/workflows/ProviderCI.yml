@@ -53,6 +53,11 @@ jobs:
           echo "OAS_VERSION=${OAS_VERSION}" >> $GITHUB_ENV 
           UNIQUE_VERSION=${OAS_VERSION}-${{ github.sha }}-service
           echo "version=${UNIQUE_VERSION}" >> $GITHUB_ENV
+      - name: merge openapi spec
+        run: |
+          cd spec-merge
+          npm install
+          npm run merge-ref-allof
       - uses: pactflow/actions/publish-provider-contract@v1.0.0
         if: success()
       - uses: pactflow/actions/publish-provider-contract@v1.0.0
