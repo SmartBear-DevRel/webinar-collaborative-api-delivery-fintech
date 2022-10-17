@@ -222,7 +222,7 @@ jobs:
           PROJECT_FOLDER: ReadyAPI_Tests
           PROJECT_FILE: 'SmartBearCoin-Payee-Provider-readyapi-project.xml'
           SLM_API_KEY: ${{ secrets.SLM_API_KEY }}
-          ENDPOINT: https://sbdevrel-fua-smartbearcoin-acc.azurewebsites.net/api/payees
+          ENDPOINT: https://sbdevrel-fua-smartbearcoin-acc.azurewebsites.net/api
 
   record-deploy-acc:
     needs:
@@ -337,4 +337,4 @@ jobs:
           PROJECT_FOLDER: ReadyAPI_Tests
           PROJECT_FILE: 'SmartBearCoin-Payee-Provider-readyapi-project.xml'
           SLM_API_KEY: ${{ secrets.SLM_API_KEY }}
-          ENDPOINT: https://sbdevrel-fua-smartbearcoin-prd.azurewebsites.net/api/payees
+          ENDPOINT: https://sbdevrel-fua-smartbearcoin-prd.azurewebsites.net/api
