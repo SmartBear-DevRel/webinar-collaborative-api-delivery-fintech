@@ -1,10 +1,12 @@
+import { Payee } from './Payee';
+
 const axios = require('axios').default;
 const adapter = require('axios/lib/adapters/http');
 
 axios.defaults.adapter = adapter;
 const defaultBaseUrl =
   process.env.REACT_APP_API_BASE_URL ||
-  'https://sbdevrel-fua-smartbearcoin-acc.azurewebsites.net/api/payees';
+  'https://virtserver.swaggerhub.com/mhiggins-sa/payee-api/1.0.0/';
 
 export class API {
   url: string;
@@ -41,7 +43,7 @@ export class API {
         },
         params
       })
-      .then((r: { data: any }) => r.data);
+      .then((r: { data: Payee[] }) => r.data.map((p) => new Payee(p)));
   }
 
   async getPayeeById(id: string) {
@@ -51,7 +53,7 @@ export class API {
           Authorization: this.generateAuthToken()
         }
       })
-      .then((r: { data: any }) => r.data);
+      .then((r: { data: Payee }) => new Payee(r.data));
   }
 }
 

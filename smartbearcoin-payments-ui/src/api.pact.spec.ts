@@ -6,11 +6,20 @@ const providerWithConsumerA = new PactV3({
   provider: 'SmartBearCoin-Payee-Provider'
 });
 
-const { like } = MatchersV3;
+const { like, eachLike } = MatchersV3;
 
 describe('test with pact', () => {
   it('should return all payees', () => {
-    const expectedMessage = 'Payees will soon be returned here!';
+    const expectedPayees = {
+      account_name: 'account_name',
+      any_bic: 'any_bic',
+      bank_account_currency: 'bank_account_currency',
+      bank_code: 'bank_code',
+      bank_name: 'bank_name',
+      iban: 'iban',
+      id: 'id',
+      name: 'name'
+    };
     providerWithConsumerA
       .given('server is up')
       .given('is authenticated')
@@ -25,19 +34,28 @@ describe('test with pact', () => {
       })
       .willRespondWith({
         status: 200,
-        body: expectedMessage,
-        contentType: 'text/plain'
+        body: eachLike(expectedPayees),
+        contentType: 'application/json'
       });
     return providerWithConsumerA.executeTest((mockserver) => {
       const client = new API(mockserver.url);
       return client.getPayees('DE', 'foo').then((res) => {
-        expect(res).toEqual(expectedMessage);
+        expect(res).toEqual([expectedPayees]);
       });
     });
   });
   it('should return a particular payee', () => {
     const id = '592b4ece-c7a2-46ff-b380-96fd1638852a';
-    const expectedMessage = `Details on payeeId: ${id} will be available shortly`;
+    const expectedPayee = {
+      account_name: 'account_name',
+      any_bic: 'any_bic',
+      bank_account_currency: 'bank_account_currency',
+      bank_code: 'bank_code',
+      bank_name: 'bank_name',
+      iban: 'iban',
+      id,
+      name: 'name'
+    };
     providerWithConsumerA
       .given('server is up')
       .given('is authenticated')
@@ -52,13 +70,13 @@ describe('test with pact', () => {
       })
       .willRespondWith({
         status: 200,
-        body: expectedMessage,
-        contentType: 'text/plain'
+        body: like(expectedPayee),
+        contentType: 'application/json'
       });
     return providerWithConsumerA.executeTest((mockserver) => {
       const client = new API(mockserver.url);
       return client.getPayeeById(id).then((res) => {
-        expect(res).toEqual(expectedMessage);
+        expect(res).toEqual(expectedPayee);
       });
     });
   });
