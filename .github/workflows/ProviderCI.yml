@@ -17,13 +17,68 @@ on:
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'provider_azure_function' # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '6.0.402' # set this to the dotnet version to use
-  oas_file: oas/openapi.yaml
+  oas_file: oas/openapi-transformed.json
   results_file: ReadyAPI_Tests/report.xml
   application_name: SmartBearCoin-Payee-Provider
   PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
   PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
 
 jobs:
+  test-local:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Install core tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install azure-functions-core-tools-4
+      - name: get version of OAS
+        run: |
+          sudo snap install yq && 
+          OAS_VERSION=$(yq '.info.version' oas/openapi.yaml)
+          echo "OAS_VERSION=${OAS_VERSION}" >> $GITHUB_ENV 
+          UNIQUE_VERSION=${OAS_VERSION}-${{ github.sha }}-service
+          echo "version=${UNIQUE_VERSION}" >> $GITHUB_ENV
+      - name: merge openapi spec
+        run: |
+          cd spec-merge
+          npm install
+          npm run merge-ref-allof
+      - name: Test
+        run: chmod ugo+rwx ReadyAPI_Tests && ./startServerAndTest.sh
+        env:
+          PROJECT_FOLDER: ReadyAPI_Tests
+          PROJECT_FILE: 'SmartBearCoin-Payee-Provider-readyapi-project.xml'
+          SLM_API_KEY: ${{ secrets.SLM_API_KEY }}
+          SERVER_DIR: provider_azure_function
+          SERVER_COMMAND: 'func start --csharp'
+          WAIT_FOR: 'http://localhost:7071'
+          ENDPOINT: http://localhost:7071/api/payees
+      - uses: pactflow/actions/publish-provider-contract@v1.0.0
+        if: success()
+      - uses: pactflow/actions/publish-provider-contract@v1.0.0
+        if: failure()
+        env:
+          EXIT_CODE: 1
+    outputs:
+      version: ${{ env.version }}
+
+  can-i-deploy-acc:
+    needs: test-local
+    runs-on: ubuntu-latest
+    env:
+      deploy_target: test
+    steps:
+      - name: can-i-deploy ${{ env.application_name }} to ${{ env.deploy_target }}
+        uses: pactflow/actions/can-i-deploy@v1.0.1
+        env:
+          to_environment: ${{ env.deploy_target }}
+          version: ${{ needs.test-local.outputs.version }}
+
   # use ARM templates to set up the Azure Infra
   deploy-infrastructure-acc:
     runs-on: ubuntu-latest

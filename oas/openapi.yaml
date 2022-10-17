@@ -15,18 +15,18 @@ info:
 servers:
 - url: https://virtserver.swaggerhub.com/mhiggins-sa/payee-api/1.0.0
   description: SwaggerHub API Auto Mocking
-- url: https://api.smartbearcoin.com/customer-management/v1/payees
+- url: https://api.smartbearcoin.com/customer-management/v1
 tags:
 - name: Customer Management - Payees
   description: Customer Management Payee Capability APIs
 - name: Customer Management - Payee Transactions
   description: Customer Management Payee Transactions APIs
 paths:
-  /:
+  /payees:
     get:
       tags:
       - Customer Management - Payees
-      summary: Get a list of Payees based on specified country and additional criteria
+      summary: Get a list of Payees based on specified country and additional criteria.
       description: "This API method supports searching and identifying payees within\
         \ a specified country.\nSearch results will be sorted on highest confidence\
         \ matching level.\n#### Search/Filter criteria\nThe following search criteria\
@@ -66,11 +66,10 @@ paths:
         description: "The country in which the legalentity is registered, expressed\
           \ in official (ISO) two-letter country code."
         required: true
-        style: form
-        explode: true
         schema:
           pattern: "^[a-zA-Z]{2}$"
           type: string
+          example: IE
       - name: jurisdiction_identifier
         in: query
         description: Search with unique jurisdiction identifier. The complete identifier
@@ -132,23 +131,21 @@ paths:
           type: array
           items:
             type: string
-      - name: Authorization
+      - name: x-Authorization
         in: header
         description: Contains the OAuth 2.0 ClientCredentials or AuthorizationCode
           Bearer Token to make authenticated/authorized API calls.
         required: true
-        style: simple
-        explode: false
         schema:
           type: string
+          example: "34534534664456444"
       responses:
         "200":
-          description: Successful Response - TODO - add domain schema
+          description: Successful response
           content:
-            text/plain:
-              examples:
-                TODO:
-                  value: '"Successful Response - TODO - add domain schema"'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
         "400":
           description: 400 Bad Request
           content:
@@ -229,11 +226,11 @@ paths:
                         to complete your request.
         "503":
           description: 503 Service Not Available
-  /{payeeId}:
+  /payees/{payeeId}:
     get:
       tags:
       - Customer Management - Payees
-      summary: Get the details for a specific payee
+      summary: Get the details for a specific payee.
       description: Retrieve the full detailed response of a known payee based on it's
         SmartBearCoin customer managemenent reference identifier.
       operationId: getPayeeById
@@ -248,23 +245,21 @@ paths:
         schema:
           type: string
           example: 1e331a0f-29bd-4b6b-8b21-8b87ed653c6b
-      - name: Authorization
+      - name: x-Authorization
         in: header
         description: Contains the OAuth 2.0 ClientCredentials or AuthorizationCode
           Bearer Token to make authenticated/authorized API calls.
         required: true
-        style: simple
-        explode: false
         schema:
           type: string
+          example: "34534534664456444"
       responses:
         "200":
           description: Successful Response - TODO - add domain schema
           content:
-            text/plain:
-              examples:
-                TODO:
-                  value: '"Successful Response - TODO - add domain schema"'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payee'
         "400":
           description: 400 Bad Request
           content:
@@ -347,11 +342,11 @@ paths:
                         to complete your request.
         "503":
           description: 503 Service Not Available
-  /{payeeId}/transactions:
+  /payees/{payeeId}/transactions:
     get:
       tags:
       - Customer Management - Payee Transactions
-      summary: Get the transaction history for a specific payee
+      summary: Get the transaction history for a specific payee.
       description: Retrieve the payment history transactions for a particular payee
       operationId: getPayeeTransactions
       parameters:
@@ -391,23 +386,21 @@ paths:
           type: string
           format: date-time
           example: 2021-12-31T23:59:59Z
-      - name: Authorization
+      - name: x-Authorization
         in: header
         description: Contains the OAuth 2.0 ClientCredentials or AuthorizationCode
           Bearer Token to make authenticated/authorized API calls.
         required: true
-        style: simple
-        explode: false
         schema:
           type: string
+          example: "34534534664456444"
       responses:
         "200":
-          description: Successful Response - TODO - add domain schema
+          description: Successful response
           content:
-            text/plain:
-              examples:
-                A request to get a personalised message:
-                  value: Successful Response - TODO - add domain schema
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
         "400":
           description: 400 Bad Request
           content:
@@ -492,6 +485,70 @@ paths:
           description: 503 Service Not Available
 components:
   schemas:
+    SWIFT_Payee:
+      required:
+      - account_name
+      - any_bic
+      - bank_code
+      - bank_name
+      - iban
+      - payee_type
+      - remittance_email_address
+      type: object
+      properties:
+        account_name:
+          maxLength: 35
+          minLength: 3
+          type: string
+        iban:
+          $ref: '#/components/schemas/IBAN2007Identifier'
+        any_bic:
+          $ref: '#/components/schemas/AnyBICDec2014Identifier'
+        bank_account_currency:
+          maxLength: 3
+          minLength: 3
+          pattern: "^[A-Z]{3,3}$"
+          type: string
+          description: ""
+        bank_name:
+          $ref: '#/components/schemas/FinancialInstitutioIdentification'
+        bank_code:
+          type: string
+        bank_address:
+          $ref: '#/components/schemas/SWIFT_Payee_bank_address'
+        payee_type:
+          pattern: ^Person|Organization$
+          type: string
+          enum:
+          - Person
+          - Organizastion
+          default: Person
+        personal_information:
+          $ref: '#/components/schemas/SWIFT_Payee_personal_information'
+        organization_name:
+          type: string
+        payee_address:
+          $ref: '#/components/schemas/SWIFT_Payee_bank_address'
+        remittance_email_address:
+          pattern: "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
+          type: string
+      additionalProperties: false
+    Payee:
+      allOf:
+      - $ref: '#/components/schemas/SWIFT_Payee'
+      - type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+        additionalProperties: false
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          description: transactionId
     Problem:
       title: Problem
       required:
@@ -543,6 +600,95 @@ components:
         Problem object provides detailed information about an errors that occurred during an api call execution.
         This problem object is conform the standard specifications, see https://tools.ietf.org/html/rfc7807.
         The extensions on the standard are the `contextData` providing context data and `details` arrays.
+    Pagination:
+      required:
+      - page
+      - pageCount
+      - pageSize
+      - recordCount
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number.
+        pageSize:
+          type: integer
+          description: "Number of records provided on a single page, page size."
+        recordCount:
+          type: integer
+          description: Total number of records found in the search result.
+        pageCount:
+          type: integer
+          description: "Total number of pages found in the search result, based on\
+            \ the `pageSize`."
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pagination_links'
+      description: paginate schema for use across plural resources
+    IBAN2007Identifier:
+      pattern: "^[A-Z]{2,2}[0-9]{2,2}[a-zA-Z0-9]{1,30}$"
+      type: string
+      description: "An identifier used internationally by financial institutions to\
+        \ uniquely identify the account of a customer at a financial institution,\
+        \ as described in the latest edition of the international standard ISO 13616:\
+        \ 2007 - \"Banking and related financial services - International Bank Account\
+        \ Number (IBAN)\"."
+      example: IE01AIBK935955939393
+    AnyBICDec2014Identifier:
+      pattern: "^[A-Z0-9]{4,4}[A-Z]{2,2}[A-Z0-9]{2,2}([A-Z0-9]{3,3}){0,1}$"
+      type: string
+      description: "Code allocated to a financial or non-financial institution by\
+        \ the ISO 9362 Registration Authority, as described in ISO 9362: 2014 - \"\
+        Banking - Banking telecommunication messages - Business identifier code (BIC)\"\
+        ."
+      example: AIBKIE2D
+    FinancialInstitutioIdentification:
+      type: string
+      example: AAAA Bank
+    inline_response_200:
+      required:
+      - data
+      - links
+      type: object
+      properties:
+        data:
+          minItems: 0
+          type: array
+          items:
+            $ref: '#/components/schemas/Payee'
+        links:
+          $ref: '#/components/schemas/Pagination'
+    inline_response_200_1:
+      required:
+      - data
+      - links
+      type: object
+      properties:
+        data:
+          minimum: 0
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        links:
+          $ref: '#/components/schemas/Pagination'
+    SWIFT_Payee_bank_address:
+      type: object
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        country:
+          pattern: "^[a-zA-Z]{2}$"
+          type: string
+    SWIFT_Payee_personal_information:
+      type: object
+      properties:
+        family_name:
+          type: string
+        first_name:
+          type: string
     Problem_contextData:
       required:
       - path
@@ -597,6 +743,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Problem_contextData'
+    Pagination_links:
+      required:
+      - last
+      - self
+      type: object
+      properties:
+        self:
+          type: string
+          description: The canonical URL for the current page
+          format: url
+        next:
+          type: string
+          description: "The canonical URL for the next page, if available"
+          format: url
+        previous:
+          type: string
+          description: "The canonical URL for the previous page, if available"
+          format: url
+        last:
+          type: string
+          description: The canonical URL for the last page
+          format: url
   responses:
     "400BadRequest":
       description: 400 Bad Request
@@ -669,3 +837,23 @@ components:
                   title: internal-server-error
                   detail: The server encountered an internal error and was unable
                     to complete your request.
+  parameters:
+    country_of_registration:
+      name: country_of_registration
+      in: query
+      description: "The country in which the legalentity is registered, expressed\
+        \ in official (ISO) two-letter country code."
+      required: true
+      schema:
+        pattern: "^[a-zA-Z]{2}$"
+        type: string
+        example: IE
+    x-Authorization:
+      name: x-Authorization
+      in: header
+      description: Contains the OAuth 2.0 ClientCredentials or AuthorizationCode Bearer
+        Token to make authenticated/authorized API calls.
+      required: true
+      schema:
+        type: string
+        example: "34534534664456444"
