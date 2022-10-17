@@ -36,6 +36,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install azure-functions-core-tools-4
+      - name: get version of OAS
+        run: |
+          sudo snap install yq && 
+          OAS_VERSION=$(yq '.info.version' oas/openapi.yaml)
+          echo "OAS_VERSION=${OAS_VERSION}" >> $GITHUB_ENV 
+          UNIQUE_VERSION=${OAS_VERSION}-${{ github.sha }}-service
+          echo "version=${UNIQUE_VERSION}" >> $GITHUB_ENV
       - name: Test
         run: chmod ugo+rwx ReadyAPI_Tests && ./startServerAndTest.sh
         env:
@@ -46,13 +53,6 @@ jobs:
           SERVER_COMMAND: 'func start --csharp'
           WAIT_FOR: 'http://localhost:7071'
           ENDPOINT: http://localhost:7071/api/payees
-      - name: get version of OAS
-        run: |
-          sudo snap install yq && 
-          OAS_VERSION=$(yq '.info.version' oas/openapi.yaml)
-          echo "OAS_VERSION=${OAS_VERSION}" >> $GITHUB_ENV 
-          UNIQUE_VERSION=${OAS_VERSION}-${{ github.sha }}-service
-          echo "version=${UNIQUE_VERSION}" >> $GITHUB_ENV
       - name: merge openapi spec
         run: |
           cd spec-merge
