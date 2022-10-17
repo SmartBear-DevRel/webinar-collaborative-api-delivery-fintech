@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@apidevtools/json-schema-ref-parser": "^9.0.9",
+    "js-yaml": "^4.1.0",
+    "json-schema-merge-allof": "^0.8.1",
+    "json-schema-resolve-allof": "^1.5.0"
+  },
+  "scripts": {
+    "merge-ref-allof": "node merge.js ../oas/openapi.yaml",
+    "test": "./test.sh"
+  }
+}

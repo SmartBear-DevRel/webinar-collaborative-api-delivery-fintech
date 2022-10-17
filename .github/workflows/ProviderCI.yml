@@ -17,7 +17,7 @@ on:
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'provider_azure_function' # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '6.0.402' # set this to the dotnet version to use
-  oas_file: oas/openapi.yaml
+  oas_file: oas/openapi-transformed.json
   results_file: ReadyAPI_Tests/report.xml
   application_name: SmartBearCoin-Payee-Provider
   PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
