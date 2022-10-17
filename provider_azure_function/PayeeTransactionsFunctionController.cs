@@ -11,36 +11,38 @@ using SmartBearCoin.CustomerManagement.Services;
 
 namespace SmartBearCoin.CustomerManagement
 {
-    public class Payee
+    public class PayeeTransactionsFunctionController
     {
         private readonly IValidationService _validationService;
+        private readonly IPayeeService _payeeService;
 
-        public Payee(IValidationService validationService)
+        public PayeeTransactionsFunctionController(IValidationService validationService, IPayeeService payeeService)
         {
             _validationService = validationService;
+            _payeeService = payeeService;
         }
         
-        [FunctionName("payee")]
+        [FunctionName("payeeTransactions")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "payees/{payeeId:guid}")] HttpRequest req, string payeeId,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "payees/{payeeId:guid}/transactions")] HttpRequest req, string payeeId,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger to /payees/{payeeId}");
 
-            var message = string.Format($"Details on payeeId: {payeeId} will be available shortly");
-            log.LogInformation($"message: {message}");
+            var message = string.Format($"payeeId: {payeeId}");
+            log.LogInformation($"message: no transactions");
 
             if(string.IsNullOrEmpty(payeeId))
             {
                 return new BadRequestObjectResult("[payeeId] must be supplied in the request");
             }
 
-            //string responseMessage = string.IsNullOrEmpty(name)
-            //    ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-            //    : $"Hello, {name}. This HTTP triggered function executed successfully.";
-
-
-            return new OkObjectResult(message);
+            if(_payeeService.IsPayeeKnown(payeeId))
+            {
+                return new OkObjectResult(_payeeService.GetPayeeTransactions(payeeId));
+            }
+            
+            return new NotFoundResult();
         }
     
     }

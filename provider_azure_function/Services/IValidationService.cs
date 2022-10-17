@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using SmartBearCoin.CustomerManagement.Models;
+using SmartBearCoin.CustomerManagement.Models.OpenAPI;
 
 namespace SmartBearCoin.CustomerManagement.Services
 {

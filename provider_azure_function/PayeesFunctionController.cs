@@ -12,13 +12,15 @@ using SmartBearCoin.CustomerManagement.Models;
 
 namespace SmartBearCoin.CustomerManagement
 {
-    public class Payees
+    public class FunctionController
     {
         private readonly IValidationService _validationService;
+        private readonly IPayeeService _payeeService;
 
-        public Payees(IValidationService validationService)
+        public FunctionController(IValidationService validationService, IPayeeService payeeService)
         {
             _validationService = validationService;
+            _payeeService = payeeService;
         }
         
         [FunctionName("payees")]
@@ -39,9 +41,9 @@ namespace SmartBearCoin.CustomerManagement
                 return new BadRequestObjectResult(problemResponse);
             }
 
-            string responseMessage = "Payees will soon be returned here!";
+            //string responseMessage = "Payees will soon be returned here!";
 
-            return new OkObjectResult(responseMessage);
+            return new OkObjectResult(_payeeService.GetPayees(req.Query["country_of_registration"], req.Query["jurisdiction_identifier"], req.Query["jurisdiction_identifier_type"], req.Query["name"]));
         }
     
     }
