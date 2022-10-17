@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using SmartBearCoin.CustomerManagement.Models;
+using SmartBearCoin.CustomerManagement.Models.OpenAPI;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;

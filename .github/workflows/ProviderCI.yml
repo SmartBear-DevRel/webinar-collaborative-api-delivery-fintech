@@ -17,7 +17,7 @@ on:
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'provider_azure_function' # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '6.0.402' # set this to the dotnet version to use
-  oas_file: oas/openapi.yaml
+  oas_file: oas/openapi-transformed.json
   results_file: ReadyAPI_Tests/report.xml
   application_name: SmartBearCoin-Payee-Provider
   PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
@@ -36,6 +36,18 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install azure-functions-core-tools-4
+      - name: get version of OAS
+        run: |
+          sudo snap install yq && 
+          OAS_VERSION=$(yq '.info.version' oas/openapi.yaml)
+          echo "OAS_VERSION=${OAS_VERSION}" >> $GITHUB_ENV 
+          UNIQUE_VERSION=${OAS_VERSION}-${{ github.sha }}-service
+          echo "version=${UNIQUE_VERSION}" >> $GITHUB_ENV
+      - name: merge openapi spec
+        run: |
+          cd spec-merge
+          npm install
+          npm run merge-ref-allof
       - name: Test
         run: chmod ugo+rwx ReadyAPI_Tests && ./startServerAndTest.sh
         env:
@@ -46,13 +58,6 @@ jobs:
           SERVER_COMMAND: 'func start --csharp'
           WAIT_FOR: 'http://localhost:7071'
           ENDPOINT: http://localhost:7071/api/payees
-      - name: get version of OAS
-        run: |
-          sudo snap install yq && 
-          OAS_VERSION=$(yq '.info.version' oas/openapi.yaml)
-          echo "OAS_VERSION=${OAS_VERSION}" >> $GITHUB_ENV 
-          UNIQUE_VERSION=${OAS_VERSION}-${{ github.sha }}-service
-          echo "version=${UNIQUE_VERSION}" >> $GITHUB_ENV
       - uses: pactflow/actions/publish-provider-contract@v1.0.0
         if: success()
       - uses: pactflow/actions/publish-provider-contract@v1.0.0

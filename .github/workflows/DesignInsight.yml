@@ -36,10 +36,15 @@ jobs:
           sudo snap install yq 
           UNIQUE_VERSION=$(yq '.info.version' oas/openapi.yaml)-${{ github.sha }}-design
           echo "version=${UNIQUE_VERSION}" >> $GITHUB_ENV
+      - name: merge openapi spec
+        run: |
+          cd spec-merge
+          npm install
+          npm run merge-ref-allof
       - uses: pactflow/actions/publish-provider-contract@v1.0.1
         env:
-          oas_file: oas/openapi.yaml
-          results_file: oas/openapi.yaml
+          oas_file: oas/openapi-transformed.json
+          results_file: oas/openapi-transformed.json
     outputs:
       version: ${{ env.version }}
 

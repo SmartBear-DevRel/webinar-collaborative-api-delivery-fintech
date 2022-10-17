@@ -12,11 +12,15 @@ namespace SmartBearCoin.CustomerManagement
         {
             //builder.Services.AddHttpClient();
 
+            // Add custom services
             builder.Services.AddSingleton<IValidationService>((s) => {
                 return new ValidationService();
             });
 
-            //builder.Services.AddSingleton<ILoggerProvider, MyLoggerProvider>();
+            builder.Services.AddSingleton<IPayeeService>((s) => {
+                return new PayeeService();
+            });
+
         }
     }
 }

@@ -1,7 +1,7 @@
 /*
  * SmartBearCoin - Payees API
  *
- * The **Customer Managment - Payees API** - allows retrieval of payees and payee transactions. The Payees API allows consumers to search, identify and retrieve payee information in one specified country.  Customer centricity is part of the DNA of SmartBearCoin. Therefore, Customer Management (CM) is considered a core business capability. The focus of CM is outward focused on enabling a consistent, digital customer experience, throughout the customer journey and across channels (omnichannel). This leads to measurable improvements of customer satisfaction and the increase of sales volume and/or margin.  Value exposed through Customer Management capabilities is build upon an API-First strategy at SmartBearCoin. 
+ * The **Customer Managment - Payees API** - allows retrieval of payees and payee transactions. The Payees API allows consumers to search, identify and retrieve payee information in one specified country. Customer centricity is part of the DNA of SmartBearCoin. Therefore, Customer Management (CM) is considered a core business capability. The focus of CM is outward focused on enabling a consistent, digital customer experience, throughout the customer journey and across channels (omnichannel). This leads to measurable improvements of customer satisfaction and the increase of sales volume and/or margin. Value exposed through Customer Management capabilities is build upon an API-First strategy at SmartBearCoin. 
  *
  * OpenAPI spec version: 1.0.0
  * Contact: customer.management.apiteam@smartbearcoin.com
@@ -18,7 +18,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
-namespace SmartBearCoin.CustomerManagement.Models
+namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
 { 
     /// <summary>
     /// 
