@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project id="9cab7dfb-4784-4a51-aee4-dd9f28a7c7ef" created="3.40.2" activeEnvironment="Default environment" name="SmartBearCoin-Payee-Provider" updated="3.41.1 2022-09-28T09:40:46Z" encryptionMode="Not encrypted" xmlns:con="http://eviware.com/soapui/config">
+<con:soapui-project id="9cab7dfb-4784-4a51-aee4-dd9f28a7c7ef" created="3.40.2" activeEnvironment="Acc" name="SmartBearCoin-Payee-Provider" updated="3.41.1 2022-09-28T09:40:46Z" encryptionMode="Not encrypted" xmlns:con="http://eviware.com/soapui/config">
   <con:settings/>
   <con:interface xsi:type="con:RestService" id="b6504654-cff3-4271-b43a-022c6556552a" name="SmartBearCoin - Payees API" type="rest_ex" wadlVersion="https://swagger.io/openapiv3/specification" definitionUrl="file:/Users/saf/dev/webinar/webinar-collaborative-api-delivery-fintech/oas/openapi.yaml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <con:description>The **Customer Managment - Payees API** - allows retrieval of payees and payee transactions. The Payees API allows consumers to search, identify and retrieve payee information in one specified country.
@@ -17,7 +17,19 @@ Value exposed through Customer Management capabilities is build upon an API-Firs
     </con:definitionCache>
     <con:endpoints>
       <con:endpoint>http://localhost:8080/customer-management/v1/payees</con:endpoint>
+      <con:endpoint>http://localhost:8088/</con:endpoint>
     </con:endpoints>
+    <con:environmentSpec>
+      <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
+        <con:authProfile>Inherit From Parent</con:authProfile>
+      </con:entry>
+      <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
+        <con:authProfile>Inherit From Parent</con:authProfile>
+      </con:entry>
+      <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+        <con:authProfile>Inherit From Parent</con:authProfile>
+      </con:entry>
+    </con:environmentSpec>
     <con:resource name="/" path="/" id="c1638cd8-ded6-4139-b7e4-e952a6c1a420">
       <con:settings/>
       <con:parameters/>
@@ -165,8 +177,41 @@ Attributes that can be used for sorting are:
             <con:entry key="name" value="test"/>
             <con:entry key="country_of_registration" value="DE"/>
           </con:parameters>
+          <con:environmentSpec>
+            <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
+              <con:authProfile>Inherit From Parent</con:authProfile>
+            </con:entry>
+            <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
+              <con:authProfile>Inherit From Parent</con:authProfile>
+            </con:entry>
+            <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+              <con:authProfile>Inherit From Parent</con:authProfile>
+            </con:entry>
+          </con:environmentSpec>
         </con:request>
+        <con:environmentSpec>
+          <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
       </con:method>
+      <con:environmentSpec>
+        <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+      </con:environmentSpec>
     </con:resource>
     <con:resource name="/{payeeId}" path="/{payeeId}" id="16da67ff-9686-4bd4-8862-8a347653910a">
       <con:settings/>
@@ -262,8 +307,41 @@ Attributes that can be used for sorting are:
             <con:entry>Authorization</con:entry>
             <con:entry>country_of_registration</con:entry>
           </con:parameterOrder>
+          <con:environmentSpec>
+            <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
+              <con:authProfile>Inherit From Parent</con:authProfile>
+            </con:entry>
+            <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
+              <con:authProfile>Inherit From Parent</con:authProfile>
+            </con:entry>
+            <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+              <con:authProfile>Inherit From Parent</con:authProfile>
+            </con:entry>
+          </con:environmentSpec>
         </con:request>
+        <con:environmentSpec>
+          <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
       </con:method>
+      <con:environmentSpec>
+        <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+      </con:environmentSpec>
     </con:resource>
     <con:resource name="/{payeeId}/transactions" path="/{payeeId}/transactions" id="406da5db-207a-42e8-ad34-7a59e05ff551">
       <con:settings/>
@@ -351,15 +429,48 @@ Attributes that can be used for sorting are:
             <con:authType>No Authorization</con:authType>
           </con:credentials>
           <con:parameters/>
+          <con:environmentSpec>
+            <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
+              <con:authProfile>Inherit From Parent</con:authProfile>
+            </con:entry>
+            <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
+              <con:authProfile>Inherit From Parent</con:authProfile>
+            </con:entry>
+            <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+              <con:authProfile>Inherit From Parent</con:authProfile>
+            </con:entry>
+          </con:environmentSpec>
         </con:request>
+        <con:environmentSpec>
+          <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
       </con:method>
+      <con:environmentSpec>
+        <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+      </con:environmentSpec>
     </con:resource>
   </con:interface>
   <con:testSuite id="3501d97b-121e-426d-99d3-4d55750b952f" name="SmartBearCoin - Payees API Test Suite 1">
     <con:description>The test suite generated for the REST service [SmartBearCoin - Payees API]</con:description>
     <con:settings/>
     <con:runType>SEQUENTIAL</con:runType>
-    <con:testCase id="126c0810-c7d5-4954-8dcd-198cb92bac9c" discardOkResults="false" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="/ Test Case" searchProperties="true" timeout="0">
+    <con:testCase id="126c0810-c7d5-4954-8dcd-198cb92bac9c" discardOkResults="false" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="Get Payees" searchProperties="true" timeout="0">
       <con:description>The test case generated for the REST resource [/] located at [/]</con:description>
       <con:settings/>
       <con:testStep type="restrequest" name="Request 1" id="9e134db9-f2f9-447c-af58-d35179170767">
@@ -387,13 +498,35 @@ Attributes that can be used for sorting are:
               <con:entry key="name" value="test"/>
               <con:entry key="country_of_registration" value="DE"/>
             </con:parameters>
+            <con:environmentSpec>
+              <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
+                <con:authProfile>Inherit From Parent</con:authProfile>
+              </con:entry>
+              <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
+                <con:authProfile>Inherit From Parent</con:authProfile>
+              </con:entry>
+              <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+                <con:authProfile>Inherit From Parent</con:authProfile>
+              </con:entry>
+            </con:environmentSpec>
           </con:restRequest>
         </con:config>
       </con:testStep>
       <con:properties/>
       <con:reportParameters/>
+      <con:environmentSpec>
+        <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+      </con:environmentSpec>
     </con:testCase>
-    <con:testCase id="e785fcd9-a8bd-4ca6-b0b2-fdd8098b8d74" discardOkResults="false" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="/{payeeId} Test Case" searchProperties="true" timeout="0">
+    <con:testCase id="e785fcd9-a8bd-4ca6-b0b2-fdd8098b8d74" discardOkResults="false" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="Get Payee by ID" searchProperties="true" timeout="0">
       <con:description>The test case generated for the REST resource [/{payeeId}] located at [/{payeeId}]</con:description>
       <con:settings/>
       <con:testStep type="restrequest" name="Request 1" id="b2371d8d-175c-4398-b764-8e3715d75f32">
@@ -426,13 +559,35 @@ Attributes that can be used for sorting are:
               <con:entry>Authorization</con:entry>
               <con:entry>country_of_registration</con:entry>
             </con:parameterOrder>
+            <con:environmentSpec>
+              <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
+                <con:authProfile>Inherit From Parent</con:authProfile>
+              </con:entry>
+              <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
+                <con:authProfile>Inherit From Parent</con:authProfile>
+              </con:entry>
+              <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+                <con:authProfile>Inherit From Parent</con:authProfile>
+              </con:entry>
+            </con:environmentSpec>
           </con:restRequest>
         </con:config>
       </con:testStep>
       <con:properties/>
       <con:reportParameters/>
+      <con:environmentSpec>
+        <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+      </con:environmentSpec>
     </con:testCase>
-    <con:testCase id="b00e2156-a748-4c43-9c33-ebab68aaaaef" discardOkResults="false" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="/{payeeId}/transactions Test Case" searchProperties="true" timeout="0">
+    <con:testCase id="b00e2156-a748-4c43-9c33-ebab68aaaaef" discardOkResults="false" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="Get transaction history for payee" searchProperties="true" timeout="0">
       <con:description>The test case generated for the REST resource [/{payeeId}/transactions] located at [/{payeeId}/transactions]</con:description>
       <con:settings/>
       <con:testStep type="restrequest" name="Request 1" id="61a29a7c-a79b-48ae-87fa-775fd09ea834">
@@ -459,15 +614,217 @@ Attributes that can be used for sorting are:
             <con:parameters>
               <con:entry key="payeeId" value="592b4ece-c7a2-46ff-b380-96fd1638852a"/>
             </con:parameters>
+            <con:environmentSpec>
+              <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
+                <con:authProfile>Inherit From Parent</con:authProfile>
+              </con:entry>
+              <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
+                <con:authProfile>Inherit From Parent</con:authProfile>
+              </con:entry>
+              <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+                <con:authProfile>Inherit From Parent</con:authProfile>
+              </con:entry>
+            </con:environmentSpec>
           </con:restRequest>
         </con:config>
       </con:testStep>
       <con:properties/>
       <con:reportParameters/>
+      <con:environmentSpec>
+        <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+      </con:environmentSpec>
     </con:testCase>
     <con:properties/>
     <con:reportParameters/>
+    <con:environmentSpec>
+      <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
+        <con:authProfile>Inherit From Parent</con:authProfile>
+      </con:entry>
+      <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
+        <con:authProfile>Inherit From Parent</con:authProfile>
+      </con:entry>
+      <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+        <con:authProfile>Inherit From Parent</con:authProfile>
+      </con:entry>
+    </con:environmentSpec>
   </con:testSuite>
+  <con:restMockService id="4f544685-539a-431a-b6e3-924df4c86fb2" port="8088" path="/" host="localhost" name="SmartBearCoin - Payees API Virtual Service">
+    <con:settings/>
+    <con:properties/>
+    <con:constraints>
+      <con:congestion>0</con:congestion>
+      <con:inputBandwidth>-1</con:inputBandwidth>
+      <con:outputBandwidth>-1</con:outputBandwidth>
+      <con:maxThreadPoolCapacity>20</con:maxThreadPoolCapacity>
+      <con:coreThreadPoolCapacity>5</con:coreThreadPoolCapacity>
+      <con:virtError>
+        <con:start>0</con:start>
+        <con:endless>true</con:endless>
+      </con:virtError>
+    </con:constraints>
+    <con:headerValidator type="NONE"/>
+    <con:restMockAction name="/" method="GET" resourcePath="/" id="fca60b5c-4c29-4401-8ed3-c1839f0d00c1">
+      <con:settings/>
+      <con:dispatchStyle>SEQUENCE</con:dispatchStyle>
+      <con:dispatchConfig/>
+      <con:dispatchXPath/>
+      <con:routeScript/>
+      <con:response name="Response 1" id="08f1d78f-de04-42b1-bae5-d67413e315d2" httpResponseStatus="400" mediaType="application/json" compressedBodyContent="aced00057372002f636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c7565000b8b02c748eeab0200035a000a636f6d707265737365644c000b636f6d7072657373696f6e74003d4c636f6d2f657669776172652f736f617075692f696d706c2f737570706f72742f436f6d7072657373656456616c756524436f6d7072657373696f6e3b5b0004646174617400025b427870007e72003b636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c756524436f6d7072657373696f6e00000000000000001200007872000e6a6176612e6c616e672e456e756d000000000000000012000078707400044e4f4e4570">
+        <con:settings/>
+        <con:responseContent>{
+  "code" : "string",
+  "status" : 0,
+  "type" : "https://api.smartbearcoin.com/problems/missing-request-header",
+  "title" : "missing-request-header",
+  "instance" : "string",
+  "details" : [ {
+    "type" : "https://api.smartbearcoin.com/problems/missing-request-header",
+    "title" : "missing-request-header",
+    "detail" : "string",
+    "contextData" : [ {
+      "path" : "string",
+      "providedValue" : "string",
+      "allowedValues" : [ "string" ],
+      "allowedFormat" : "string",
+      "condition" : "string"
+    } ]
+  } ]
+}</con:responseContent>
+      </con:response>
+      <con:response name="Response 2" id="8f92046c-e9bb-404e-a51c-32bf37b14afe" httpResponseStatus="500" mediaType="application/json" compressedBodyContent="aced00057372002f636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c7565000b8b02c748eeab0200035a000a636f6d707265737365644c000b636f6d7072657373696f6e74003d4c636f6d2f657669776172652f736f617075692f696d706c2f737570706f72742f436f6d7072657373656456616c756524436f6d7072657373696f6e3b5b0004646174617400025b427870007e72003b636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c756524436f6d7072657373696f6e00000000000000001200007872000e6a6176612e6c616e672e456e756d000000000000000012000078707400044e4f4e4570">
+        <con:settings/>
+        <con:responseContent>{
+  "code" : "string",
+  "status" : 0,
+  "type" : "https://api.smartbearcoin.com/problems/missing-request-header",
+  "title" : "missing-request-header",
+  "instance" : "string",
+  "details" : [ {
+    "type" : "https://api.smartbearcoin.com/problems/missing-request-header",
+    "title" : "missing-request-header",
+    "detail" : "string",
+    "contextData" : [ {
+      "path" : "string",
+      "providedValue" : "string",
+      "allowedValues" : [ "string" ],
+      "allowedFormat" : "string",
+      "condition" : "string"
+    } ]
+  } ]
+}</con:responseContent>
+      </con:response>
+    </con:restMockAction>
+    <con:restMockAction name="/{payeeId}" method="GET" resourcePath="/{payeeId}" id="996129c7-fc44-4d2d-8a52-39406e245a0c">
+      <con:settings/>
+      <con:dispatchStyle>SEQUENCE</con:dispatchStyle>
+      <con:dispatchConfig/>
+      <con:dispatchXPath/>
+      <con:routeScript/>
+      <con:response name="Response 1" id="762f163a-17a0-4f75-8f4f-cc0cba515ffd" httpResponseStatus="400" mediaType="application/json" compressedBodyContent="aced00057372002f636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c7565000b8b02c748eeab0200035a000a636f6d707265737365644c000b636f6d7072657373696f6e74003d4c636f6d2f657669776172652f736f617075692f696d706c2f737570706f72742f436f6d7072657373656456616c756524436f6d7072657373696f6e3b5b0004646174617400025b427870007e72003b636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c756524436f6d7072657373696f6e00000000000000001200007872000e6a6176612e6c616e672e456e756d000000000000000012000078707400044e4f4e4570">
+        <con:settings/>
+        <con:responseContent>{
+  "code" : "string",
+  "status" : 0,
+  "type" : "https://api.smartbearcoin.com/problems/missing-request-header",
+  "title" : "missing-request-header",
+  "instance" : "string",
+  "details" : [ {
+    "type" : "https://api.smartbearcoin.com/problems/missing-request-header",
+    "title" : "missing-request-header",
+    "detail" : "string",
+    "contextData" : [ {
+      "path" : "string",
+      "providedValue" : "string",
+      "allowedValues" : [ "string" ],
+      "allowedFormat" : "string",
+      "condition" : "string"
+    } ]
+  } ]
+}</con:responseContent>
+      </con:response>
+      <con:response name="Response 2" id="eba02217-de6a-4bb0-9682-4ea071d42cf5" httpResponseStatus="500" mediaType="application/json" compressedBodyContent="aced00057372002f636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c7565000b8b02c748eeab0200035a000a636f6d707265737365644c000b636f6d7072657373696f6e74003d4c636f6d2f657669776172652f736f617075692f696d706c2f737570706f72742f436f6d7072657373656456616c756524436f6d7072657373696f6e3b5b0004646174617400025b427870007e72003b636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c756524436f6d7072657373696f6e00000000000000001200007872000e6a6176612e6c616e672e456e756d000000000000000012000078707400044e4f4e4570">
+        <con:settings/>
+        <con:responseContent>{
+  "code" : "string",
+  "status" : 0,
+  "type" : "https://api.smartbearcoin.com/problems/missing-request-header",
+  "title" : "missing-request-header",
+  "instance" : "string",
+  "details" : [ {
+    "type" : "https://api.smartbearcoin.com/problems/missing-request-header",
+    "title" : "missing-request-header",
+    "detail" : "string",
+    "contextData" : [ {
+      "path" : "string",
+      "providedValue" : "string",
+      "allowedValues" : [ "string" ],
+      "allowedFormat" : "string",
+      "condition" : "string"
+    } ]
+  } ]
+}</con:responseContent>
+      </con:response>
+    </con:restMockAction>
+    <con:restMockAction name="/{payeeId}/transactions" method="GET" resourcePath="/{payeeId}/transactions" id="a1e572a9-89ea-4bfb-8270-254e5ebe7a05">
+      <con:settings/>
+      <con:dispatchStyle>SEQUENCE</con:dispatchStyle>
+      <con:dispatchConfig/>
+      <con:dispatchXPath/>
+      <con:routeScript/>
+      <con:response name="Response 1" id="915c87c3-1751-41e2-b42a-ed7e839781ba" httpResponseStatus="400" mediaType="application/json" compressedBodyContent="aced00057372002f636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c7565000b8b02c748eeab0200035a000a636f6d707265737365644c000b636f6d7072657373696f6e74003d4c636f6d2f657669776172652f736f617075692f696d706c2f737570706f72742f436f6d7072657373656456616c756524436f6d7072657373696f6e3b5b0004646174617400025b427870007e72003b636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c756524436f6d7072657373696f6e00000000000000001200007872000e6a6176612e6c616e672e456e756d000000000000000012000078707400044e4f4e4570">
+        <con:settings/>
+        <con:responseContent>{
+  "code" : "string",
+  "status" : 0,
+  "type" : "https://api.smartbearcoin.com/problems/missing-request-header",
+  "title" : "missing-request-header",
+  "instance" : "string",
+  "details" : [ {
+    "type" : "https://api.smartbearcoin.com/problems/missing-request-header",
+    "title" : "missing-request-header",
+    "detail" : "string",
+    "contextData" : [ {
+      "path" : "string",
+      "providedValue" : "string",
+      "allowedValues" : [ "string" ],
+      "allowedFormat" : "string",
+      "condition" : "string"
+    } ]
+  } ]
+}</con:responseContent>
+      </con:response>
+      <con:response name="Response 2" id="22e94bb3-52d5-4ab0-97e4-b7a1329a36d3" httpResponseStatus="500" mediaType="application/json" compressedBodyContent="aced00057372002f636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c7565000b8b02c748eeab0200035a000a636f6d707265737365644c000b636f6d7072657373696f6e74003d4c636f6d2f657669776172652f736f617075692f696d706c2f737570706f72742f436f6d7072657373656456616c756524436f6d7072657373696f6e3b5b0004646174617400025b427870007e72003b636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c756524436f6d7072657373696f6e00000000000000001200007872000e6a6176612e6c616e672e456e756d000000000000000012000078707400044e4f4e4570">
+        <con:settings/>
+        <con:responseContent>{
+  "code" : "string",
+  "status" : 0,
+  "type" : "https://api.smartbearcoin.com/problems/missing-request-header",
+  "title" : "missing-request-header",
+  "instance" : "string",
+  "details" : [ {
+    "type" : "https://api.smartbearcoin.com/problems/missing-request-header",
+    "title" : "missing-request-header",
+    "detail" : "string",
+    "contextData" : [ {
+      "path" : "string",
+      "providedValue" : "string",
+      "allowedValues" : [ "string" ],
+      "allowedFormat" : "string",
+      "condition" : "string"
+    } ]
+  } ]
+}</con:responseContent>
+      </con:response>
+    </con:restMockAction>
+  </con:restMockService>
   <con:properties/>
   <con:wssContainer/>
   <con:databaseConnectionContainer/>
@@ -511,6 +868,38 @@ Attributes that can be used for sorting are:
 // pw.close()
 // fos.close()</con:script>
   </con:eventHandlers>
+  <con:environment id="746474bf-7ed1-4a18-be94-2ab283e16806" name="Prod" index="0">
+    <con:service type="REST" name="SmartBearCoin - Payees API">
+      <con:endpoint authProfile="No Authorization" proxyHost="" proxyPort="" proxyUsername="" proxyPassword="">https://sbdevrel-fua-smartbearcoin-prd.azurewebsites.net/api</con:endpoint>
+    </con:service>
+    <con:databaseConnectionContainer/>
+    <con:jmsConnectionContainer/>
+  </con:environment>
+  <con:environment id="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b" name="Acc" index="1">
+    <con:service type="REST" name="SmartBearCoin - Payees API">
+      <con:endpoint authProfile="No Authorization" proxyHost="" proxyPort="" proxyUsername="" proxyPassword="">https://sbdevrel-fua-smartbearcoin-acc.azurewebsites.net/api</con:endpoint>
+    </con:service>
+    <con:databaseConnectionContainer/>
+    <con:jmsConnectionContainer/>
+  </con:environment>
+  <con:environment id="9fec74ec-694a-473f-8f54-6dea36261a3f" name="Virtual" index="2">
+    <con:service type="REST" name="SmartBearCoin - Payees API">
+      <con:endpoint authProfile="No Authorization" proxyHost="" proxyPort="" proxyUsername="" proxyPassword="">http://localhost:8088/</con:endpoint>
+    </con:service>
+    <con:databaseConnectionContainer/>
+    <con:jmsConnectionContainer/>
+  </con:environment>
   <con:authRepository/>
+  <con:environmentSpec>
+    <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
+      <con:authProfile>No Authorization</con:authProfile>
+    </con:entry>
+    <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
+      <con:authProfile>No Authorization</con:authProfile>
+    </con:entry>
+    <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+      <con:authProfile>No Authorization</con:authProfile>
+    </con:entry>
+  </con:environmentSpec>
   <con:tags/>
 </con:soapui-project>
