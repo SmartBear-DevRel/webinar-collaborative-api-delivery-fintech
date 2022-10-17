@@ -31,6 +31,15 @@ export const App = () => {
         setResponse({ data: 'No Response' });
         console.log(error);
       });
+    API.getPayees('DE', 'foo')
+      .then((response) => {
+        setResponse({ data: response });
+        console.log(response);
+      })
+      .catch(function (error: any) {
+        setResponse({ data: 'No Response' });
+        console.log(error);
+      });
   };
   const onChangeHandler = (event: HTMLInputElement) => {
     const { name, value } = event;

@@ -6,27 +6,31 @@ const providerWithConsumerA = new PactV3({
   provider: 'SmartBearCoin-Payee-Provider'
 });
 
-const { like, eachLike } = MatchersV3;
+const { like, eachLike, reify } = MatchersV3;
 
 describe('test with pact', () => {
   it('should return all payees', () => {
-    const expectedPayees = {
-      account_name: 'account_name',
-      any_bic: 'VHO7ZKQT',
-      bank_account_currency: 'EUR',
-      bank_code: 'bank_code',
-      bank_name: 'bank_name',
-      iban: 'IE01AIBK935955939393',
-      id: '592b4ece-c7a2-46ff-b380-96fd1638852a',
-      name: 'name'
+    const expectedResponse = {
+      data: eachLike({
+        account_name: 'account_name',
+        any_bic: 'VHO7ZKQT',
+        bank_account_currency: 'EUR',
+        bank_code: 'bank_code',
+        bank_name: 'bank_name',
+        iban: 'IE01AIBK935955939393',
+        id: '592b4ece-c7a2-46ff-b380-96fd1638852a',
+        name: 'name'
+      })
     };
+    const expectedPayees = reify(expectedResponse.data);
+
     providerWithConsumerA
       .given('server is up')
       .given('is authenticated')
       .uponReceiving('A request to get all payees')
       .withRequest({
         method: 'GET',
-        path: '/',
+        path: '/payees',
         query: { country_of_registration: like('DE'), name: like('test') },
         headers: {
           'x-Authorization': like('Bearer 1234')
@@ -34,13 +38,13 @@ describe('test with pact', () => {
       })
       .willRespondWith({
         status: 200,
-        body: eachLike(expectedPayees),
+        body: expectedResponse,
         contentType: 'application/json'
       });
     return providerWithConsumerA.executeTest((mockserver) => {
       const client = new API(mockserver.url);
       return client.getPayees('DE', 'foo').then((res) => {
-        expect(res).toEqual([expectedPayees]);
+        expect(res).toEqual(expectedPayees);
       });
     });
   });
@@ -63,7 +67,7 @@ describe('test with pact', () => {
       .uponReceiving(`A request to get payee with id ${id}`)
       .withRequest({
         method: 'GET',
-        path: '/' + id,
+        path: '/payees/' + id,
         headers: {
           'x-Authorization': like('Bearer 1234')
         }
@@ -90,7 +94,7 @@ describe('test with pact', () => {
       .uponReceiving(`A request to get payee with id ${id}`)
       .withRequest({
         method: 'GET',
-        path: '/' + id,
+        path: '/payees/' + id,
         headers: {
           'x-Authorization': like('Bearer 1234')
         }

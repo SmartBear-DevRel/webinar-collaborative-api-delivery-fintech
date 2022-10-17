@@ -37,18 +37,20 @@ export class API {
       name
     });
     return axios
-      .get(this.withPath('/'), {
+      .get(this.withPath('/payees'), {
         headers: {
           'x-Authorization': this.generateAuthToken()
         },
         params
       })
-      .then((r: { data: Payee[] }) => r.data.map((p) => new Payee(p)));
+      .then((r: { data: { data: Payee[] } }) =>
+        r.data.data.map((p) => new Payee(p))
+      );
   }
 
   async getPayeeById(id: string) {
     return axios
-      .get(this.withPath('/' + id), {
+      .get(this.withPath('/payees/' + id), {
         headers: {
           'x-Authorization': this.generateAuthToken()
         }
