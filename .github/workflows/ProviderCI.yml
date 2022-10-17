@@ -1,178 +1,335 @@
-on: [workflow_dispatch]     # change the triggering mechanism to suit your needs (manual run by default)
-
 name: Provider-API-AzureFunction-CI
 
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'provider_azure_function/**'
+      - '.github/workflows/ProviderCI.yml'
+      - 'oas/**'
+  pull_request:
+    branches: ['main']
+    paths:
+      - '.github/workflows/ProviderCI.yml'
+      - 'provider_azure_function/**'
+      - 'oas/**'
+
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'provider_azure_function'   # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '6.0.402'                                   # set this to the dotnet version to use
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'provider_azure_function' # set this to the path to your web app project, defaults to the repository root
+  DOTNET_VERSION: '6.0.402' # set this to the dotnet version to use
+  oas_file: oas/openapi.yaml
+  results_file: ReadyAPI_Tests/report.xml
+  application_name: SmartBearCoin-Payee-Provider
+  PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
+  PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
 
 jobs:
+  test-local:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Install core tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install azure-functions-core-tools-4
+      - name: Test
+        run: chmod ugo+rwx ReadyAPI_Tests && ./startServerAndTest.sh
+        env:
+          PROJECT_FOLDER: ReadyAPI_Tests
+          PROJECT_FILE: 'SmartBearCoin-Payee-Provider-readyapi-project.xml'
+          SLM_API_KEY: ${{ secrets.SLM_API_KEY }}
+          SERVER_DIR: provider_azure_function
+          SERVER_COMMAND: 'func start --csharp'
+          WAIT_FOR: 'http://localhost:7071'
+          ENDPOINT: http://localhost:7071/api/payees
+      - name: get version of OAS
+        run: |
+          sudo snap install yq && 
+          OAS_VERSION=$(yq '.info.version' oas/openapi.yaml)
+          echo "OAS_VERSION=${OAS_VERSION}" >> $GITHUB_ENV 
+          UNIQUE_VERSION=${OAS_VERSION}-${{ github.sha }}-service
+          echo "version=${UNIQUE_VERSION}" >> $GITHUB_ENV
+      - uses: pactflow/actions/publish-provider-contract@v1.0.0
+        if: success()
+      - uses: pactflow/actions/publish-provider-contract@v1.0.0
+        if: failure()
+        env:
+          EXIT_CODE: 1
+    outputs:
+      version: ${{ env.version }}
+
+  can-i-deploy-acc:
+    needs: test-local
+    runs-on: ubuntu-latest
+    env:
+      deploy_target: test
+    steps:
+      - name: can-i-deploy ${{ env.application_name }} to ${{ env.deploy_target }}
+        uses: pactflow/actions/can-i-deploy@v1.0.1
+        env:
+          to_environment: ${{ env.deploy_target }}
+          version: ${{ needs.test-local.outputs.version }}
 
   # use ARM templates to set up the Azure Infra
   deploy-infrastructure-acc:
     runs-on: ubuntu-latest
     environment: acc
+    needs: [test-local, can-i-deploy-acc]
+    if: github.ref == 'refs/heads/main'
 
     # set outputs needed by subsequent jobs
+
     outputs:
       azFunctionAppName: ${{ steps.armdeploy.outputs.functionAppName }}
-    
+
     steps:
+      # check out code
+      - uses: actions/checkout@main
 
-    # check out code
-    - uses: actions/checkout@main
+      # login to Azure
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    # login to Azure
-    - uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+      # deploy ARM template to setup azure resources (group & sub defined in credentials)
+      - name: Run ARM deploy
+        id: armdeploy
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resourceGroupName: ${{ secrets.AZURE_RG }}
+          template: ./provider_azure_function/azuredeploy.json
+          parameters: ./provider_azure_function/azuredeploy.acc.parameters.json
 
-    # deploy ARM template to setup azure resources (group & sub defined in credentials)
-    - name: Run ARM deploy
-      id: armdeploy
-      uses: azure/arm-deploy@v1
-      with:
-        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-        resourceGroupName: ${{ secrets.AZURE_RG }}
-        template: ./provider_azure_function/azuredeploy.json
-        parameters: ./provider_azure_function/azuredeploy.acc.parameters.json
-  
     # use ARM templates to set up the Azure Infra
-  
+
+  can-i-deploy-prd:
+    needs: [test-local, test-acc]
+    runs-on: ubuntu-latest
+    env:
+      deploy_target: production
+    steps:
+      - name: can-i-deploy ${{ env.application_name }} to ${{ env.deploy_target }}
+        uses: pactflow/actions/can-i-deploy@v1.0.1
+        env:
+          to_environment: ${{ env.deploy_target }}
+          version: ${{ needs.test-local.outputs.version }}
+
   deploy-infrastructure-prd:
-    needs: [build-and-deploy-acc]
+    needs: [test-local, can-i-deploy-prd, record-deploy-acc]
     runs-on: ubuntu-latest
     environment: prd
+    if: github.ref == 'refs/heads/main'
 
     # set outputs needed by subsequent jobs
     outputs:
       azFunctionAppName: ${{ steps.armdeploy.outputs.functionAppName }}
-    
+
     steps:
+      # check out code
+      - uses: actions/checkout@main
 
-    # check out code
-    - uses: actions/checkout@main
+      # login to Azure
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    # login to Azure
-    - uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-    # deploy ARM template to setup azure resources (group & sub defined in credentials)
-    - name: Run ARM deploy
-      id: armdeploy
-      uses: azure/arm-deploy@v1
-      with:
-        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-        resourceGroupName: ${{ secrets.AZURE_RG }}
-        template: ./provider_azure_function/azuredeploy.json
-        parameters: ./provider_azure_function/azuredeploy.prd.parameters.json
-  
+      # deploy ARM template to setup azure resources (group & sub defined in credentials)
+      - name: Run ARM deploy
+        id: armdeploy
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resourceGroupName: ${{ secrets.AZURE_RG }}
+          template: ./provider_azure_function/azuredeploy.json
+          parameters: ./provider_azure_function/azuredeploy.prd.parameters.json
 
   # build and deploy our Azure functions for Fintech Webinar
   build-and-deploy-acc:
-    needs: [deploy-infrastructure-acc]
+    needs: [test-local, can-i-deploy-acc, deploy-infrastructure-acc]
     runs-on: windows-latest
     environment: acc
     steps:
-    # check out code
-    - name: 'Checkout code'
-      uses: actions/checkout@main
+      # check out code
+      - name: 'Checkout code'
+        uses: actions/checkout@main
 
-    # login to Azure
-    - uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-        enable-AzPSSession: true      
+      # login to Azure
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
 
-    # get publish profile
-    - name: Get publish profile
-      id: fncapp
-      uses: azure/powershell@v1
-      with:
-        inlineScript: |
-          $profile = ""
-          $profile = Get-AzWebAppPublishingProfile -ResourceGroupName ${{ secrets.AZURE_RG }} -Name ${{ needs.deploy-infrastructure-acc.outputs.azFunctionAppName }}
-          $profile = $profile.Replace("`r", "").Replace("`n", "")
-          Write-Output "::set-output name=profile::$profile"
-        azPSVersion: "latest"
+      # get publish profile
+      - name: Get publish profile
+        id: fncapp
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            $profile = ""
+            $profile = Get-AzWebAppPublishingProfile -ResourceGroupName ${{ secrets.AZURE_RG }} -Name ${{ needs.deploy-infrastructure-acc.outputs.azFunctionAppName }}
+            $profile = $profile.Replace("`r", "").Replace("`n", "")
+            Write-Output "::set-output name=profile::$profile"
+          azPSVersion: 'latest'
 
-    # setup donet environments
-    - name: Setup DotNet Environments
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: |
-          6.0.x
-          ${{ env.DOTNET_VERSION }}
+      # setup donet environments
+      - name: Setup DotNet Environments
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: |
+            6.0.x
+            ${{ env.DOTNET_VERSION }}
 
-    # build project
-    - name: 'Resolve dependencies and build'
-      shell: pwsh
-      run: |
-        pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-        dotnet restore
-        dotnet build --configuration Release --output ./output
-        popd
+      # build project
+      - name: 'Resolve dependencies and build'
+        shell: pwsh
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          dotnet restore
+          dotnet build --configuration Release --output ./output
+          popd
 
-    # publish azure function
-    - name: 'Run Azure Functions Action'
-      uses: Azure/functions-action@v1
-      id: fa
-      with:
-        app-name: ${{ needs.deploy-infrastructure-acc.outputs.azFunctionAppName }}
-        package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-        publish-profile: ${{ steps.fncapp.outputs.profile }}
+      # publish azure function
+      - name: 'Run Azure Functions Action'
+        uses: Azure/functions-action@v1
+        id: fa
+        with:
+          app-name: ${{ needs.deploy-infrastructure-acc.outputs.azFunctionAppName }}
+          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+          publish-profile: ${{ steps.fncapp.outputs.profile }}
+
+  # test our Azure functions for Fintech Webinar
+  test-acc:
+    needs: [record-deploy-acc]
+    runs-on: ubuntu-latest
+    environment: acc
+    steps:
+      # check out code
+      - name: 'Checkout code'
+        uses: actions/checkout@main
+      - name: Test
+        run: chmod ugo+rwx ReadyAPI_Tests && ./launchReadyAPITestRunner.sh
+        env:
+          PROJECT_FOLDER: ReadyAPI_Tests
+          PROJECT_FILE: 'SmartBearCoin-Payee-Provider-readyapi-project.xml'
+          SLM_API_KEY: ${{ secrets.SLM_API_KEY }}
+          ENDPOINT: https://sbdevrel-fua-smartbearcoin-acc.azurewebsites.net/api/payees
+
+  record-deploy-acc:
+    needs:
+      [
+        test-local,
+        deploy-infrastructure-acc,
+        can-i-deploy-acc,
+        build-and-deploy-acc
+      ]
+    runs-on: ubuntu-latest
+    env:
+      deployed_env: test
+    steps:
+      - name: record-deployment ${{ env.application_name }} to ${{ env.deployed_env }}
+        if: github.ref == 'refs/heads/main'
+        uses: pactflow/actions/record-deployment@v1.0.1
+        env:
+          environment: ${{ env.deployed_env }}
+          version: ${{ needs.test-local.outputs.version }}
 
   # build and deploy our Azure functions for Fintech Webinar
   build-and-deploy-prd:
-    needs: [deploy-infrastructure-prd, build-and-deploy-acc]
+    needs:
+      [
+        test-local,
+        can-i-deploy-prd,
+        record-deploy-acc,
+        deploy-infrastructure-prd
+      ]
     runs-on: windows-latest
     environment: prd
     steps:
-    # check out code
-    - name: 'Checkout code'
-      uses: actions/checkout@main
+      # check out code
+      - name: 'Checkout code'
+        uses: actions/checkout@main
 
-    # login to Azure
-    - uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-        enable-AzPSSession: true      
+      # login to Azure
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
 
-    # get publish profile
-    - name: Get publish profile
-      id: fncapp
-      uses: azure/powershell@v1
-      with:
-        inlineScript: |
-          $profile = ""
-          $profile = Get-AzWebAppPublishingProfile -ResourceGroupName ${{ secrets.AZURE_RG }} -Name ${{ needs.deploy-infrastructure-prd.outputs.azFunctionAppName }}
-          $profile = $profile.Replace("`r", "").Replace("`n", "")
-          Write-Output "::set-output name=profile::$profile"
-        azPSVersion: "latest"
+      # get publish profile
+      - name: Get publish profile
+        id: fncapp
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            $profile = ""
+            $profile = Get-AzWebAppPublishingProfile -ResourceGroupName ${{ secrets.AZURE_RG }} -Name ${{ needs.deploy-infrastructure-prd.outputs.azFunctionAppName }}
+            $profile = $profile.Replace("`r", "").Replace("`n", "")
+            Write-Output "::set-output name=profile::$profile"
+          azPSVersion: 'latest'
 
-    # setup donet environments
-    - name: Setup DotNet Environments
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: |
-          6.0.x
-          ${{ env.DOTNET_VERSION }}
+      # setup donet environments
+      - name: Setup DotNet Environments
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: |
+            6.0.x
+            ${{ env.DOTNET_VERSION }}
 
-    # build project
-    - name: 'Resolve dependencies and build'
-      shell: pwsh
-      run: |
-        pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-        dotnet restore
-        dotnet build --configuration Release --output ./output
-        popd
+      # build project
+      - name: 'Resolve dependencies and build'
+        shell: pwsh
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          dotnet restore
+          dotnet build --configuration Release --output ./output
+          popd
 
-    # publish azure function
-    - name: 'Run Azure Functions Action'
-      uses: Azure/functions-action@v1
-      id: fa
-      with:
-        app-name: ${{ needs.deploy-infrastructure-prd.outputs.azFunctionAppName }}
-        package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-        publish-profile: ${{ steps.fncapp.outputs.profile }}
+      # publish azure function
+      - name: 'Run Azure Functions Action'
+        uses: Azure/functions-action@v1
+        id: fa
+        with:
+          app-name: ${{ needs.deploy-infrastructure-prd.outputs.azFunctionAppName }}
+          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+          publish-profile: ${{ steps.fncapp.outputs.profile }}
+
+  record-deploy-prd:
+    needs:
+      [
+        test-local,
+        deploy-infrastructure-prd,
+        can-i-deploy-prd,
+        build-and-deploy-prd
+      ]
+    runs-on: ubuntu-latest
+    env:
+      deployed_env: production
+    steps:
+      - name: record-deployment ${{ env.application_name }} to ${{ env.deployed_env }}
+        if: github.ref == 'refs/heads/main'
+        uses: pactflow/actions/record-deployment@v1.0.1
+        env:
+          environment: ${{ env.deployed_env }}
+          version: ${{ needs.test-local.outputs.version }}
+
+  # test our Azure functions for Fintech Webinar
+  test-prd:
+    needs: [record-deploy-prd]
+    runs-on: ubuntu-latest
+    environment: acc
+    steps:
+      # check out code
+      - name: 'Checkout code'
+        uses: actions/checkout@main
+      - name: Test
+        run: chmod ugo+rwx ReadyAPI_Tests && ./launchReadyAPITestRunner.sh
+        env:
+          PROJECT_FOLDER: ReadyAPI_Tests
+          PROJECT_FILE: 'SmartBearCoin-Payee-Provider-readyapi-project.xml'
+          SLM_API_KEY: ${{ secrets.SLM_API_KEY }}
+          ENDPOINT: https://sbdevrel-fua-smartbearcoin-prd.azurewebsites.net/api/payees
