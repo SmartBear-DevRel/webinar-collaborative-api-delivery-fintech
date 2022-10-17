@@ -15,14 +15,14 @@ info:
 servers:
 - url: https://virtserver.swaggerhub.com/mhiggins-sa/payee-api/1.0.0
   description: SwaggerHub API Auto Mocking
-- url: https://api.smartbearcoin.com/customer-management/v1/payees
+- url: https://api.smartbearcoin.com/customer-management/v1
 tags:
 - name: Customer Management - Payees
   description: Customer Management Payee Capability APIs
 - name: Customer Management - Payee Transactions
   description: Customer Management Payee Transactions APIs
 paths:
-  /:
+  /payees:
     get:
       tags:
       - Customer Management - Payees
@@ -487,12 +487,15 @@ paths:
           description: 503 Service Not Available
 components:
   schemas:
-    local_SWIFT_payee:
+    SWIFT_payee:
       required:
       - account_name
       - any_bic
+      - bank_code
       - bank_name
       - iban
+      - payee_type
+      - remittance_email_address
       type: object
       properties:
         account_name:
@@ -508,23 +511,44 @@ components:
           minLength: 3
           pattern: "^[A-Z]{3,3}$"
           type: string
-          description: |
-            ISO three character currency code.
-
-            The Currency Code must be registered, or have already been registered. Valid active or historic currency codes are registered with the ISO 4217 Maintenance Agency, consist of three (3) contiguous letters, and may be or not be withdrawn on the day the message containing the Currency is exchanged.
+          description: ""
         bank_name:
           $ref: '#/components/schemas/FinancialInstitutioIdentification'
         bank_code:
           type: string
+        bank_address:
+          $ref: '#/components/schemas/SWIFT_payee_bank_address'
+        payee_type:
+          pattern: ^Person|Organization$
+          type: string
+          enum:
+          - Person
+          - Organizastion
+          default: Person
+        personal_information:
+          $ref: '#/components/schemas/SWIFT_payee_personal_information'
+        organization_name:
+          type: string
+        payee_address:
+          $ref: '#/components/schemas/SWIFT_payee_bank_address'
+        remittance_email_address:
+          type: string
+      additionalProperties: false
     Payee:
       allOf:
-      - $ref: '#/components/schemas/SWIFT_Payee'
+      - $ref: '#/components/schemas/SWIFT_payee'
       - type: object
         properties:
           id:
             type: string
           name:
             type: string
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          description: transactionId
     Problem:
       title: Problem
       required:
@@ -602,35 +626,6 @@ components:
           items:
             $ref: '#/components/schemas/Pagination_links'
       description: paginate schema for use across plural resources
-    SWIFT_Payee:
-      required:
-      - account_name
-      - any_bic
-      - bank_name
-      - iban
-      type: object
-      properties:
-        account_name:
-          maxLength: 35
-          minLength: 3
-          type: string
-        iban:
-          $ref: '#/components/schemas/IBAN2007Identifier'
-        any_bic:
-          $ref: '#/components/schemas/AnyBICDec2014Identifier'
-        bank_account_currency:
-          maxLength: 3
-          minLength: 3
-          pattern: "^[A-Z]{3,3}$"
-          type: string
-          description: |
-            ISO three character currency code.
-
-            The Currency Code must be registered, or have already been registered. Valid active or historic currency codes are registered with the ISO 4217 Maintenance Agency, consist of three (3) contiguous letters, and may be or not be withdrawn on the day the message containing the Currency is exchanged.
-        bank_name:
-          $ref: '#/components/schemas/FinancialInstitutioIdentification'
-        bank_code:
-          type: string
     IBAN2007Identifier:
       pattern: "^[A-Z]{2,2}[0-9]{2,2}[a-zA-Z0-9]{1,30}$"
       type: string
@@ -657,7 +652,10 @@ components:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/Payee'
+          minItems: 0
+          type: array
+          items:
+            $ref: '#/components/schemas/Payee'
         links:
           $ref: '#/components/schemas/Pagination'
     inline_response_200_1:
@@ -667,9 +665,28 @@ components:
       type: object
       properties:
         data:
-          type: string
+          minimum: 0
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
         links:
           $ref: '#/components/schemas/Pagination'
+    SWIFT_payee_bank_address:
+      type: object
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+    SWIFT_payee_personal_information:
+      type: object
+      properties:
+        family_name:
+          type: string
+        first_name:
+          type: string
     Problem_contextData:
       required:
       - path
