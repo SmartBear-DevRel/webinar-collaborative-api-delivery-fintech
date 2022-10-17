@@ -1,18 +1,23 @@
 import { useState } from 'react';
 import API from './Api';
+import { PayeeInterface } from './Payee';
 
 export const App = () => {
-  interface Payee {
-    name: string;
-  }
   interface Response {
-    data: string | 'No Response';
+    data: PayeeInterface | 'No Response';
   }
-  let initialState: Payee = {
+  let initialState: PayeeInterface = {
+    account_name: 'string',
+    iban: 'string',
+    any_bic: 'string',
+    bank_account_currency: 'string',
+    bank_name: 'AAAA Bank',
+    bank_code: 'string',
+    id: 'string',
     name: '592b4ece-c7a2-46ff-b380-96fd1638852a'
   };
   const inputStyle = { border: '1px solid black', height: 75, padding: 10 };
-  const [payee, setPayee] = useState<Payee>(initialState);
+  const [payee, setPayee] = useState<PayeeInterface>(initialState);
   const [response, setResponse] = useState<Response>();
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
@@ -23,7 +28,16 @@ export const App = () => {
         console.log(response);
       })
       .catch(function (error: any) {
-        setResponse({ data: 'An error occurred, please try again later' });
+        setResponse({ data: 'No Response' });
+        console.log(error);
+      });
+    API.getPayees('DE', 'foo')
+      .then((response) => {
+        setResponse({ data: response });
+        console.log(response);
+      })
+      .catch(function (error: any) {
+        setResponse({ data: 'No Response' });
         console.log(error);
       });
   };
@@ -70,12 +84,28 @@ export const App = () => {
         </table>
       </form>
       <br />
-      {response?.data && (
+      {response?.data && response?.data !== 'No Response' && (
         <table style={inputStyle}>
           <tbody>
             <tr>
-              <td>Results:</td>
-              <td>{response.data}</td>
+              <th>{'account_name'}</th>
+              <th>{'iban'}</th>
+              <th>{'any_bic'}</th>
+              <th>{'bank_account_currency'}</th>
+              <th>{'bank_name'}</th>
+              <th>{'bank_code'}</th>
+              <th>{'id'}</th>
+              <th>{'name'}</th>
+            </tr>
+            <tr>
+              <td>{response?.data.account_name}</td>
+              <td>{response?.data.iban}</td>
+              <td>{response?.data.any_bic}</td>
+              <td>{response?.data.bank_account_currency}</td>
+              <td>{response?.data.bank_name}</td>
+              <td>{response?.data.bank_code}</td>
+              <td>{response?.data.id}</td>
+              <td>{response?.data.name}</td>
             </tr>
           </tbody>
         </table>

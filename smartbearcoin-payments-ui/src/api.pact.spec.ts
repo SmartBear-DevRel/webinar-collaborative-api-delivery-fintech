@@ -6,38 +6,60 @@ const providerWithConsumerA = new PactV3({
   provider: 'SmartBearCoin-Payee-Provider'
 });
 
-const { like } = MatchersV3;
+const { like, eachLike, reify } = MatchersV3;
 
 describe('test with pact', () => {
   it('should return all payees', () => {
-    const expectedMessage = 'Payees will soon be returned here!';
+    const expectedResponse = {
+      data: eachLike({
+        account_name: 'account_name',
+        any_bic: 'VHO7ZKQT',
+        bank_account_currency: 'EUR',
+        bank_code: 'bank_code',
+        bank_name: 'bank_name',
+        iban: 'IE01AIBK935955939393',
+        id: '592b4ece-c7a2-46ff-b380-96fd1638852a',
+        name: 'name'
+      })
+    };
+    const expectedPayees = reify(expectedResponse.data);
+
     providerWithConsumerA
       .given('server is up')
       .given('is authenticated')
       .uponReceiving('A request to get all payees')
       .withRequest({
         method: 'GET',
-        path: '/',
+        path: '/payees',
         query: { country_of_registration: like('DE'), name: like('test') },
         headers: {
-          Authorization: like('Bearer 1234')
+          'x-Authorization': like('Bearer 1234')
         }
       })
       .willRespondWith({
         status: 200,
-        body: expectedMessage,
-        contentType: 'text/plain'
+        body: expectedResponse,
+        contentType: 'application/json'
       });
     return providerWithConsumerA.executeTest((mockserver) => {
       const client = new API(mockserver.url);
       return client.getPayees('DE', 'foo').then((res) => {
-        expect(res).toEqual(expectedMessage);
+        expect(res).toEqual(expectedPayees);
       });
     });
   });
   it('should return a particular payee', () => {
     const id = '592b4ece-c7a2-46ff-b380-96fd1638852a';
-    const expectedMessage = `Details on payeeId: ${id} will be available shortly`;
+    const expectedPayee = {
+      account_name: 'account_name',
+      any_bic: 'VHO7ZKQT',
+      bank_account_currency: 'EUR',
+      bank_code: 'bank_code',
+      bank_name: 'bank_name',
+      iban: 'IE01AIBK935955939393',
+      id: '592b4ece-c7a2-46ff-b380-96fd1638852a',
+      name: 'name'
+    };
     providerWithConsumerA
       .given('server is up')
       .given('is authenticated')
@@ -45,20 +67,20 @@ describe('test with pact', () => {
       .uponReceiving(`A request to get payee with id ${id}`)
       .withRequest({
         method: 'GET',
-        path: '/' + id,
+        path: '/payees/' + id,
         headers: {
-          Authorization: like('Bearer 1234')
+          'x-Authorization': like('Bearer 1234')
         }
       })
       .willRespondWith({
         status: 200,
-        body: expectedMessage,
-        contentType: 'text/plain'
+        body: like(expectedPayee),
+        contentType: 'application/json'
       });
     return providerWithConsumerA.executeTest((mockserver) => {
       const client = new API(mockserver.url);
       return client.getPayeeById(id).then((res) => {
-        expect(res).toEqual(expectedMessage);
+        expect(res).toEqual(expectedPayee);
       });
     });
   });
@@ -72,9 +94,9 @@ describe('test with pact', () => {
       .uponReceiving(`A request to get payee with id ${id}`)
       .withRequest({
         method: 'GET',
-        path: '/' + id,
+        path: '/payees/' + id,
         headers: {
-          Authorization: like('Bearer 1234')
+          'x-Authorization': like('Bearer 1234')
         }
       })
       .willRespondWith({
