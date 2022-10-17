@@ -12,12 +12,12 @@ describe('test with pact', () => {
   it('should return all payees', () => {
     const expectedPayees = {
       account_name: 'account_name',
-      any_bic: 'any_bic',
-      bank_account_currency: 'bank_account_currency',
+      any_bic: 'VHO7ZKQT',
+      bank_account_currency: 'EUR',
       bank_code: 'bank_code',
       bank_name: 'bank_name',
-      iban: 'iban',
-      id: 'id',
+      iban: 'IE01AIBK935955939393',
+      id: '592b4ece-c7a2-46ff-b380-96fd1638852a',
       name: 'name'
     };
     providerWithConsumerA
@@ -29,7 +29,7 @@ describe('test with pact', () => {
         path: '/',
         query: { country_of_registration: like('DE'), name: like('test') },
         headers: {
-          Authorization: like('Bearer 1234')
+          'x-Authorization': like('Bearer 1234')
         }
       })
       .willRespondWith({
@@ -48,12 +48,12 @@ describe('test with pact', () => {
     const id = '592b4ece-c7a2-46ff-b380-96fd1638852a';
     const expectedPayee = {
       account_name: 'account_name',
-      any_bic: 'any_bic',
-      bank_account_currency: 'bank_account_currency',
+      any_bic: 'VHO7ZKQT',
+      bank_account_currency: 'EUR',
       bank_code: 'bank_code',
       bank_name: 'bank_name',
-      iban: 'iban',
-      id,
+      iban: 'IE01AIBK935955939393',
+      id: '592b4ece-c7a2-46ff-b380-96fd1638852a',
       name: 'name'
     };
     providerWithConsumerA
@@ -65,7 +65,7 @@ describe('test with pact', () => {
         method: 'GET',
         path: '/' + id,
         headers: {
-          Authorization: like('Bearer 1234')
+          'x-Authorization': like('Bearer 1234')
         }
       })
       .willRespondWith({
@@ -92,7 +92,7 @@ describe('test with pact', () => {
         method: 'GET',
         path: '/' + id,
         headers: {
-          Authorization: like('Bearer 1234')
+          'x-Authorization': like('Bearer 1234')
         }
       })
       .willRespondWith({

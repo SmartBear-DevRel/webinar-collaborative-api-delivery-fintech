@@ -39,7 +39,7 @@ export class API {
     return axios
       .get(this.withPath('/'), {
         headers: {
-          Authorization: this.generateAuthToken()
+          'x-Authorization': this.generateAuthToken()
         },
         params
       })
@@ -50,7 +50,7 @@ export class API {
     return axios
       .get(this.withPath('/' + id), {
         headers: {
-          Authorization: this.generateAuthToken()
+          'x-Authorization': this.generateAuthToken()
         }
       })
       .then((r: { data: Payee }) => new Payee(r.data));
