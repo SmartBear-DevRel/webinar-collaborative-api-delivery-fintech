@@ -61,6 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       deploy_target: test
+      REACT_APP_API_BASE_URL: https://sbdevrel-fua-smartbearcoin-acc.azurewebsites.net/api
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -82,7 +83,6 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          REACT_APP_API_BASE_URL: https://sbdevrel-fua-smartbearcoin-acc.azurewebsites.net/api
         timeout-minutes: 1
       - name: record-deployment ${{ env.application_name }} to ${{ env.deploy_target }}
         uses: pactflow/actions/record-deployment@v1.0.1
@@ -95,6 +95,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       deploy_target: production
+      REACT_APP_API_BASE_URL: https://sbdevrel-fua-smartbearcoin-prd.azurewebsites.net/api
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -117,7 +118,6 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          REACT_APP_API_BASE_URL: https://sbdevrel-fua-smartbearcoin-prd.azurewebsites.net/api
         timeout-minutes: 1
       - name: record-deployment ${{ env.application_name }} to ${{ env.deploy_target }}
         uses: pactflow/actions/record-deployment@v1.0.1
