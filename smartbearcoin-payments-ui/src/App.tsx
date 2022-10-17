@@ -194,11 +194,7 @@ export const App = () => {
                   <tr>
                     <td></td>
                     <td align="right">
-                      <StyledButton
-                        type="submit"
-                        value="Submit"
-                        onClick={(e) => getPayeesRequest()}
-                      />
+                      <StyledButton type="submit" value="Submit" />
                     </td>
                   </tr>
                 </tbody>
