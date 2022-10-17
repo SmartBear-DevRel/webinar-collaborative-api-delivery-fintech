@@ -57,7 +57,7 @@ jobs:
           SERVER_DIR: provider_azure_function
           SERVER_COMMAND: 'func start --csharp'
           WAIT_FOR: 'http://localhost:7071'
-          ENDPOINT: http://localhost:7071/api/payees
+          ENDPOINT: http://localhost:7071/api
       - uses: pactflow/actions/publish-provider-contract@v1.0.0
         if: success()
       - uses: pactflow/actions/publish-provider-contract@v1.0.0
