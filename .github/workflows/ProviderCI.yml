@@ -24,7 +24,7 @@ env:
   DOTNET_VERSION: '6.0.402' # set this to the dotnet version to use
   oas_file: oas/openapi-transformed.json
   results_file: ReadyAPI_Tests/report.xml
-  application_name: SmartBearCoin-Payee-Provider
+  application_name: SmartBearCoin-Payee-Provider-No-Consumer
   PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
   PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
 
