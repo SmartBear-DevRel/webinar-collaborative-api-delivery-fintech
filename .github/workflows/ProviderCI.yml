@@ -2,6 +2,11 @@ name: Provider-API-AzureFunction-CI
 
 on:
   workflow_dispatch:
+    inputs:
+      application_name:
+        description: name_of_provider
+        required: true
+        default: 'SmartBearCoin-Payee-Provider'
   # push:
   #   paths:
   #     - 'provider_azure_function/**'
@@ -24,6 +29,14 @@ env:
   PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
 
 jobs:
+  setup:
+    name: 🏗️ setup
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "application_name=${application_name:-${application_name}}" >> $GITHUB_ENV
+    outputs:
+      application_name: ${{ env.application_name }}
+
   test-local:
     runs-on: ubuntu-latest
     steps:
