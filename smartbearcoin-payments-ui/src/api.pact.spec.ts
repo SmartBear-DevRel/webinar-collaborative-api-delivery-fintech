@@ -14,7 +14,7 @@ describe('test with pact', () => {
       data: eachLike({
         account_name: 'account_name',
         any_bic: 'VHO7ZKQT',
-        bank_account_currency: 'EUR',
+        bank_account_currency: 'euros',
         bank_code: 'bank_code',
         bank_name: 'bank_name',
         iban: 'IE01AIBK935955939393',
@@ -53,7 +53,7 @@ describe('test with pact', () => {
     const expectedPayee = {
       account_name: 'account_name',
       any_bic: 'VHO7ZKQT',
-      bank_account_currency: 'EUR',
+      bank_account_currency: 'euros',
       bank_code: 'bank_code',
       bank_name: 'bank_name',
       iban: 'IE01AIBK935955939393',
