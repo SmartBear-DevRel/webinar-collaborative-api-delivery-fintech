@@ -498,13 +498,14 @@ Attributes that can be used for sorting are:
         <con:config xsi:type="con:DataSourceStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <con:dataSource type="Grid">
             <con:configuration>
-              <check><![CDATA[<xml-fragment><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry></xml-fragment>]]></check>
+              <check><![CDATA[<xml-fragment><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry></xml-fragment>]]></check>
               <row><![CDATA[<xml-fragment><con:entry xmlns:con="http://eviware.com/soapui/config">f55e2f3d-a05a-4893-9b39-b2c609a977e8</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">IT</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">coffee</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config"/></xml-fragment>]]></row>
               <row><![CDATA[<xml-fragment><con:entry xmlns:con="http://eviware.com/soapui/config">3057a155-1699-4894-9998-bfa7ab846119</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">IT</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">paris</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config"/></xml-fragment>]]></row>
               <row><![CDATA[<xml-fragment><con:entry xmlns:con="http://eviware.com/soapui/config">d0bd8cc2-800c-4199-9908-f14f9b814f8e</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">IT</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">LTD</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config"/></xml-fragment>]]></row>
               <row><![CDATA[<xml-fragment><con:entry xmlns:con="http://eviware.com/soapui/config">1dde99af-288b-44f6-94a2-024d85b7673b</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">FR</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config"/><con:entry xmlns:con="http://eviware.com/soapui/config"/></xml-fragment>]]></row>
               <row><![CDATA[<xml-fragment><con:entry xmlns:con="http://eviware.com/soapui/config">4eb603f3-e7e7-47b1-a5df-557b6204616e</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">IE</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config"/><con:entry xmlns:con="http://eviware.com/soapui/config"/></xml-fragment>]]></row>
               <row><![CDATA[<xml-fragment><con:entry xmlns:con="http://eviware.com/soapui/config">a83acdb9-4353-425f-8d16-eae37d905cb8</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">IE</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config"/><con:entry xmlns:con="http://eviware.com/soapui/config"/></xml-fragment>]]></row>
+              <row><![CDATA[<xml-fragment><con:entry xmlns:con="http://eviware.com/soapui/config">1e331a0f-29bd-4b6b-8b21-8b87ed653c6b </con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">IE</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config"/><con:entry xmlns:con="http://eviware.com/soapui/config"/></xml-fragment>]]></row>
               <row><![CDATA[<xml-fragment><con:entry xmlns:con="http://eviware.com/soapui/config">1e331a0f-29bd-4b6b-8b21-8b87ed653c6b </con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">IE</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config"/><con:entry xmlns:con="http://eviware.com/soapui/config"/></xml-fragment>]]></row>
               <recognizeAsPlainText>true</recognizeAsPlainText>
             </con:configuration>
@@ -514,6 +515,7 @@ Attributes that can be used for sorting are:
           <con:property>payeeID</con:property>
           <con:property>country</con:property>
           <con:property>name</con:property>
+          <con:completeLastOperation>true</con:completeLastOperation>
           <con:restartOnRun>true</con:restartOnRun>
         </con:config>
       </con:testStep>
@@ -527,7 +529,7 @@ Attributes that can be used for sorting are:
             <con:endpoint>http://localhost:7071/api/payees</con:endpoint>
             <con:request/>
             <con:originalUri>http://localhost/customer-management/v1/payees/</con:originalUri>
-            <con:assertion type="Valid HTTP Status Codes" id="7d986342-9dfd-49a3-b89e-ff41ced20409" name="Valid HTTP Status Codes">
+            <con:assertion type="Valid HTTP Status Codes" name="Valid HTTP Status Codes" id="80a8e79a-28a3-4b0d-b537-7abd01178522">
               <con:settings/>
               <con:configuration>
                 <codes>200</codes>
@@ -539,7 +541,7 @@ Attributes that can be used for sorting are:
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:parameters>
-              <con:entry key="name" value="paris"/>
+              <con:entry key="name" value="${Payee Data#name}"/>
               <con:entry key="country_of_registration" value="${Payee Data#country}"/>
             </con:parameters>
             <con:environmentSpec>
@@ -569,16 +571,7 @@ Attributes that can be used for sorting are:
             <con:assertion type="Valid HTTP Status Codes" id="e8b60e4e-a8e6-4c8d-87e0-f45aae5d7cca" name="Valid HTTP Status Codes">
               <con:settings/>
               <con:configuration>
-                <codes>200</codes>
-              </con:configuration>
-            </con:assertion>
-            <con:assertion type="JsonPath Existence Match" id="412eab47-082e-46d6-8b36-96b74365792f" name="Successful Response Must Contain Remittance Email Address">
-              <con:configuration>
-                <path>$['remittance_email_address']</path>
-                <content>true</content>
-                <allowWildcards>false</allowWildcards>
-                <ignoreNamspaceDifferences>false</ignoreNamspaceDifferences>
-                <ignoreComments>false</ignoreComments>
+                <codes>200,404</codes>
               </con:configuration>
             </con:assertion>
             <con:credentials>
@@ -588,7 +581,7 @@ Attributes that can be used for sorting are:
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:parameters>
               <con:entry key="payeeId" value="${Payee Data#payeeID}"/>
-              <con:entry key="country_of_registration" value="${Payee Data#country}"/>
+              <con:entry key="country_of_registration" value="IE"/>
             </con:parameters>
             <con:parameterOrder>
               <con:entry>payeeId</con:entry>
@@ -622,7 +615,7 @@ Attributes that can be used for sorting are:
             <con:assertion type="Valid HTTP Status Codes" id="28ad3501-81ee-4391-9198-f88681bed91d" name="Valid HTTP Status Codes">
               <con:settings/>
               <con:configuration>
-                <codes>200</codes>
+                <codes>200,404</codes>
               </con:configuration>
             </con:assertion>
             <con:credentials>
@@ -631,7 +624,7 @@ Attributes that can be used for sorting are:
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:parameters>
-              <con:entry key="payeeId" value="1dde99af-288b-44f6-94a2-024d85b7673b"/>
+              <con:entry key="payeeId" value="${Payee Data#payeeID}"/>
             </con:parameters>
             <con:environmentSpec>
               <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
