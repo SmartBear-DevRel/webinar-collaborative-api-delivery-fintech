@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project id="9cab7dfb-4784-4a51-aee4-dd9f28a7c7ef" created="3.40.2" activeEnvironment="Prod" name="SmartBearCoin-Payee-Provider" updated="3.41.1 2022-09-28T09:40:46Z" encryptionMode="Not encrypted" xmlns:con="http://eviware.com/soapui/config">
+<con:soapui-project id="9cab7dfb-4784-4a51-aee4-dd9f28a7c7ef" created="3.40.2" activeEnvironment="Prod" name="SmartBearCoin-Payee-Provider" updated="3.41.1 2022-09-28T09:40:46Z" encryptionMode="Not encrypted" resourceRoot="" xmlns:con="http://eviware.com/soapui/config">
   <con:settings/>
   <con:interface xsi:type="con:RestService" id="b6504654-cff3-4271-b43a-022c6556552a" name="SmartBearCoin - Payees API" type="rest_ex" wadlVersion="https://swagger.io/openapiv3/specification" definitionUrl="file:/Users/saf/dev/webinar/webinar-collaborative-api-delivery-fintech/oas/openapi.yaml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <con:description>The **Customer Managment - Payees API** - allows retrieval of payees and payee transactions. The Payees API allows consumers to search, identify and retrieve payee information in one specified country.
@@ -11,7 +11,7 @@ Value exposed through Customer Management capabilities is build upon an API-Firs
     <con:definitionCache type="TEXT" rootPart="file:/Users/saf/dev/webinar/webinar-collaborative-api-delivery-fintech/oas/openapi.yaml">
       <con:part>
         <con:url>file:/Users/saf/dev/webinar/webinar-collaborative-api-delivery-fintech/oas/openapi.yaml</con:url>
-        <con:content>{"openapi":"3.0.3","info":{"title":"SmartBearCoin - Payees API","description":"The **Customer Managment - Payees API** - allows retrieval of payees and payee transactions. The Payees API allows consumers to search, identify and retrieve payee information in one specified country.\n\nCustomer centricity is part of the DNA of SmartBearCoin. Therefore, Customer Management (CM) is considered a core business capability. The focus of CM is outward focused on enabling a consistent, digital customer experience, throughout the customer journey and across channels (omnichannel). This leads to measurable improvements of customer satisfaction and the increase of sales volume and/or margin.\n\nValue exposed through Customer Management capabilities is build upon an API-First strategy at SmartBearCoin.\n","termsOfService":"http://swagger.io/terms/","contact":{"email":"customer.management.apiteam@smartbearcoin.com"},"license":{"name":"Apache 2.0","url":"http://www.apache.org/licenses/LICENSE-2.0.html"},"version":"1.0.0"},"servers":[{"url":"https://api.smartbearcoin.com/customer-management/v1/payees"}],"tags":[{"name":"Customer Management - Payees","description":"Customer Management Payee Capability APIs"},{"name":"Customer Management - Payee Transactions","description":"Customer Management Payee Transactions APIs"}],"paths":{"/payees":{"get":{"description":"This API method supports searching and identifying payees within a specified country.\nSearch results will be sorted on highest confidence matching level.\n\n#### Search/Filter criteria\n\nThe following search criteria are supported to identify an payee registered within our customer management domain and within a specified country:\n- search based on the 9 digit unique duns number; DUNS is abbreviation of data universal numbering system issued by Dun &amp; Bradstreet\n- search based on jurisdiction identifier and type (e.g. company identifier in a specific country); examples are chamber of commerce number or KVK (NL), Siret (FR), CIF (ES), VAT Number (BE), Tax Number (US) and Company Registration Number (GB)\n- search based on name\n- search based on name and address\n  - address search criteria are postalCode, city, region and address line (street, house number, house number addition, building name)\n\nThe following validation rules apply while providing the search criteria:\n- the `country_of_registration` is required\n  - at least one of the other search criteria must be provided\n- if `duns_number` is provided, no other criteria are allowed\n- if `jurisdiction_identifier` is provided, no other criteria are allowed\n- the `name` is required if either of `duns_number` or `jurisdiction_identifier` is not provided\n\n#### Jurisdiction Identifier types  \nThe jurisdiction identifier types that are supported per country, and default applied if not explicitly provided are as detailed below. \n\n| Country Code | Country  | Supported | Default |\n|--------------|----------|-----------|---------|        \n|   BE    |Belgium|vat-number|vat-number|        \n|   ES    |Spain|cif, nif|cif|\n|   FR    |France|siret|siret|\n|   GB    |United Kingdom|organization-number|organization-number|\n|   IE    |Ireland|organization-number|organization-number|\n|   IT    |Italy|fiscal-code|fiscal-code|\n|   NL    |Netherlands|chamber-of-commerce-number|chamber-of-commerce-number|\n|   PT    |Portugal|cif, nif|cif|\n|   US    |United States|tax-number, ssn|tax-number|\n\n#### Pagination &amp; Sorting\nThis resource collection API supports both pagination and sorting of returned resources. Please refer to the our [**API Standards &amp; Guidelines**](https://github.com/SmartBear/api-standards-and-guidelines#pagination) to find out how to use the `page`, `page_size`, and `sort` request parameters to sort or paginate the returned payees.","parameters":[{"name":"country_of_registration","in":"query","required":true,"style":"form","explode":true,"schema":{"type":"string"}},{"name":"jurisdiction_identifier","in":"query","required":false,"style":"form","explode":true,"schema":{"type":"string"}},{"name":"jurisdiction_identifier_type","in":"query","required":false,"style":"form","explode":true,"schema":{"type":"string"}},{"name":"name","in":"query","required":false,"style":"form","explode":true,"schema":{"type":"string"}},{"name":"page","in":"query","required":false,"style":"form","explode":true,"schema":{"type":"string"}},{"name":"sort","in":"query","required":false,"style":"form","explode":true,"schema":{"type":"string"}},{"name":"Authorization","in":"header","required":true,"style":"simple","explode":false,"schema":{"type":"string"}}],"responses":{"400":{"description":"400 Bad Request","content":{"application/json":{"example":""}}},"500":{"description":"500 Internal Server Error","content":{"application/json":{"example":""}}}}}},"/payees/{payeeId}":{"get":{"description":"Retrieve the full detailed response of a known payee based on it's SmartBearCoin customer managemenent reference identifier.","parameters":[{"name":"payeeId","in":"path","required":true,"style":"simple","explode":false,"schema":{"type":"string"}},{"name":"Authorization","in":"header","required":true,"style":"simple","explode":false,"schema":{"type":"string"}},{"name":"country_of_registration","in":"query","required":true,"style":"form","explode":true,"schema":{"type":"string"}}],"responses":{"400":{"description":"400 Bad Request","content":{"application/json":{"example":""}}},"500":{"description":"500 Internal Server Error","content":{"application/json":{"example":""}}}}}},"/payees/{payeeId}/transactions":{"get":{"description":"Retrieve the payment history transactions for a particular payee","parameters":[{"name":"payeeId","in":"path","required":true,"style":"simple","explode":false,"schema":{"type":"string"}},{"name":"transaction_from","in":"query","required":false,"style":"form","explode":true,"schema":{"type":"string"}},{"name":"transaction_until","in":"query","required":false,"style":"form","explode":true,"schema":{"type":"string"}},{"name":"Authorization","in":"header","required":true,"style":"simple","explode":false,"schema":{"type":"string"}}],"responses":{"400":{"description":"400 Bad Request","content":{"application/json":{"example":""}}},"500":{"description":"500 Internal Server Error","content":{"application/json":{"example":""}}}}}}},"components":{"schemas":{"Problem":{"title":"Problem","required":["code","status","title","type"],"type":"object","properties":{"code":{"type":"string","description":"an application-specific error code"},"status":{"type":"integer","description":"The HTTP status code generated by the origin server for this occurrence of the problem"},"type":{"type":"string","description":"A URI reference that identifies the problem type.","format":"uri","enum":["https://api.smartbearcoin.com/problems/missing-request-header","https://api.smartbearcoin.com/problems/missing-request-parameter","https://api.smartbearcoin.com/problems/invalid-request-header-format","https://api.smartbearcoin.com/problems/invalid-request-parameter-format","https://api.smartbearcoin.com/problems/invalid-request-parameter-value","https://api.smartbearcoin.com/problems/internal-server-error"]},"title":{"type":"string","description":"a short, human-readable summary of the problem that SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization","enum":["missing-request-header","missing-request-parameter","invalid-request-header-format","invalid-request-parameter-format","invalid-request-parameter-value","internal-server-error"]},"instance":{"type":"string","description":"A URI reference that identifies the specific occurrence of the problem","format":"uri"},"details":{"minItems":1,"type":"array","items":{"required":["detail","title","type"],"type":"object","properties":{"type":{"type":"string","description":"A URI reference that identifies the problem type.","format":"uri","enum":["https://api.smartbearcoin.com/problems/missing-request-header","https://api.smartbearcoin.com/problems/missing-request-parameter","https://api.smartbearcoin.com/problems/invalid-request-header-format","https://api.smartbearcoin.com/problems/invalid-request-parameter-format","https://api.smartbearcoin.com/problems/invalid-request-parameter-value","https://api.smartbearcoin.com/problems/internal-server-error"]},"title":{"type":"string","description":"a short, human-readable summary of the problem that SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization","enum":["missing-request-header","missing-request-parameter","invalid-request-header-format","invalid-request-parameter-format","invalid-request-parameter-value","internal-server-error"]},"detail":{"type":"string","description":"A human-readable explanation specific to this occurrence of the problem. Like title, this field value can be localized."},"contextData":{"type":"array","items":{"required":["path"],"type":"object","properties":{"path":{"type":"string"},"providedValue":{"type":"string"},"allowedValues":{"type":"array","items":{"type":"string"}},"allowedFormat":{"type":"string"},"condition":{"type":"string"}}}}}}}},"description":"Problem object provides detailed information about an errors that occurred during an api call execution.\nThis problem object is conform the standard specifications, see https://tools.ietf.org/html/rfc7807.\nThe extensions on the standard are the `contextData` providing context data and `details` arrays.\n"}},"responses":{"400BadRequest":{"description":"400 Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Problem"},"examples":{"Missing conditionally required request parameter":{"value":{"code":"4000020","status":400,"type":"https://api.smartbearcoin.com/problems/missing-request-parameter","title":"missing-request-parameter","details":[{"type":"https://api.smartbearcoin.com/problems/missing-request-parameter","title":"missing-request-parameter","detail":"The request does not contain the conditionally required parameter 'name', when 'jurisdiction_identifier' is not provided.","contextData":[{"path":"/name","condition":"jurisdiction_identifier == null"}]}]}},"Invalid request parameter format":{"value":{"code":"4000022","status":400,"type":"https://api.smartbearcoin.com/problems/invalid-request-parameter-format","title":"invalid-request-parameter-format","details":[{"type":"https://api.smartbearcoin.com/problems/invalid-request-parameter-format","title":"invalid-request-parameter-format","detail":"The provided value [Ireland] for parameter 'country_of_registration' does not have the expected format.","contextData":[{"path":"/country_of_registration","providedValue":"Ireland","allowedFormat":"^[a-zA-Z]{2}$"}]}]}},"Invalid request parameter value":{"value":{"code":"4000023","status":400,"type":"https://api.smartbearcoin.com/problems/invalid-request-parameter-value","title":"invalid-request-parameter-value","details":[{"type":"https://api.smartbearcoin.com/problems/invalid-request-parameter-value","title":"invalid-request-parameter-value","detail":"The provided value [vat-number] for parameter 'jurisdiction_identifier_type' in country_of_registration [IT] is not allowed. The allowed values are [fiscal-code].","contextData":[{"path":"/jurisdiction_identifier_type","providedValue":"vat-number","allowedValues":["fiscal-code"]}]}]}}}}}},"500InternalServerError":{"description":"500 Internal Server Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Problem"},"examples":{"Internal Server Error due to a technical failure":{"value":{"code":"5000001","status":500,"type":"https://api.smartbearcoin.com/problems/internal-server-error","title":"internal-server-error","details":[{"type":"https://api.smartbearcoin.com/problems/internal-server-error","title":"internal-server-error","detail":"The server encountered an internal error and was unable to complete your request."}]}}}}}}}}}</con:content>
+        <con:content>{"openapi":"3.0.3","info":{"title":"SmartBearCoin - Payees API","description":"The **Customer Managment - Payees API** - allows retrieval of payees and payee transactions. The Payees API allows consumers to search, identify and retrieve payee information in one specified country.\n\nCustomer centricity is part of the DNA of SmartBearCoin. Therefore, Customer Management (CM) is considered a core business capability. The focus of CM is outward focused on enabling a consistent, digital customer experience, throughout the customer journey and across channels (omnichannel). This leads to measurable improvements of customer satisfaction and the increase of sales volume and/or margin.\n\nValue exposed through Customer Management capabilities is build upon an API-First strategy at SmartBearCoin.\n","termsOfService":"http://swagger.io/terms/","contact":{"email":"customer.management.apiteam@smartbearcoin.com"},"license":{"name":"Apache 2.0","url":"http://www.apache.org/licenses/LICENSE-2.0.html"},"version":"1.0.0"},"servers":[{"url":"https://api.smartbearcoin.com/customer-management/v1/payees"}],"tags":[{"name":"Customer Management - Payees","description":"Customer Management Payee Capability APIs"},{"name":"Customer Management - Payee Transactions","description":"Customer Management Payee Transactions APIs"}],"paths":{"/payees/{payeeId}":{"get":{"description":"Retrieve the full detailed response of a known payee based on it's SmartBearCoin customer managemenent reference identifier.","parameters":[{"name":"payeeId","in":"path","required":true,"style":"simple","explode":false,"schema":{"type":"string"}},{"name":"Authorization","in":"header","required":true,"style":"simple","explode":false,"schema":{"type":"string"}},{"name":"country_of_registration","in":"query","required":true,"style":"form","explode":true,"schema":{"type":"string"}}],"responses":{"400":{"description":"400 Bad Request","content":{"application/json":{"example":""}}},"500":{"description":"500 Internal Server Error","content":{"application/json":{"example":""}}}}}},"/payees/{payeeId}/transactions":{"get":{"description":"Retrieve the payment history transactions for a particular payee","parameters":[{"name":"payeeId","in":"path","required":true,"style":"simple","explode":false,"schema":{"type":"string"}},{"name":"transaction_from","in":"query","required":false,"style":"form","explode":true,"schema":{"type":"string"}},{"name":"transaction_until","in":"query","required":false,"style":"form","explode":true,"schema":{"type":"string"}},{"name":"Authorization","in":"header","required":true,"style":"simple","explode":false,"schema":{"type":"string"}}],"responses":{"400":{"description":"400 Bad Request","content":{"application/json":{"example":""}}},"500":{"description":"500 Internal Server Error","content":{"application/json":{"example":""}}}}},"parameters":[{"name":"payeeId","in":"path","required":true,"style":"simple","explode":false}]},"/payees":{"description":"","get":{"description":"This API method supports searching and identifying payees within a specified country.\nSearch results will be sorted on highest confidence matching level.\n\n#### Search/Filter criteria\n\nThe following search criteria are supported to identify an payee registered within our customer management domain and within a specified country:\n- search based on the 9 digit unique duns number; DUNS is abbreviation of data universal numbering system issued by Dun &amp; Bradstreet\n- search based on jurisdiction identifier and type (e.g. company identifier in a specific country); examples are chamber of commerce number or KVK (NL), Siret (FR), CIF (ES), VAT Number (BE), Tax Number (US) and Company Registration Number (GB)\n- search based on name\n- search based on name and address\n  - address search criteria are postalCode, city, region and address line (street, house number, house number addition, building name)\n\nThe following validation rules apply while providing the search criteria:\n- the `country_of_registration` is required\n  - at least one of the other search criteria must be provided\n- if `duns_number` is provided, no other criteria are allowed\n- if `jurisdiction_identifier` is provided, no other criteria are allowed\n- the `name` is required if either of `duns_number` or `jurisdiction_identifier` is not provided\n\n#### Jurisdiction Identifier types  \nThe jurisdiction identifier types that are supported per country, and default applied if not explicitly provided are as detailed below. \n\n| Country Code | Country  | Supported | Default |\n|--------------|----------|-----------|---------|        \n|   BE    |Belgium|vat-number|vat-number|        \n|   ES    |Spain|cif, nif|cif|\n|   FR    |France|siret|siret|\n|   GB    |United Kingdom|organization-number|organization-number|\n|   IE    |Ireland|organization-number|organization-number|\n|   IT    |Italy|fiscal-code|fiscal-code|\n|   NL    |Netherlands|chamber-of-commerce-number|chamber-of-commerce-number|\n|   PT    |Portugal|cif, nif|cif|\n|   US    |United States|tax-number, ssn|tax-number|\n\n#### Pagination &amp; Sorting\nThis resource collection API supports both pagination and sorting of returned resources. Please refer to the our [**API Standards &amp; Guidelines**](https://github.com/SmartBear/api-standards-and-guidelines#pagination) to find out how to use the `page`, `page_size`, and `sort` request parameters to sort or paginate the returned payees.","parameters":[{"name":"country_of_registration","in":"query","required":true,"schema":{"type":"string"}},{"name":"jurisdiction_identifier","in":"query","required":false,"schema":{"type":"string"}},{"name":"jurisdiction_identifier_type","in":"query","required":false,"schema":{"type":"string"}},{"name":"name","in":"query","required":false,"schema":{"type":"string"}},{"name":"page","in":"query","required":false,"schema":{"type":"string"}},{"name":"sort","in":"query","required":false,"schema":{"type":"string"}},{"name":"Authorization","in":"header","required":true,"schema":{"type":"string"}}],"responses":{"400":{"description":"400 Bad Request","content":{"application/json":{"example":""}}},"500":{"description":"500 Internal Server Error","content":{"application/json":{"example":""}}}}}}},"components":{"schemas":{"Problem":{"title":"Problem","required":["code","status","title","type"],"type":"object","properties":{"code":{"type":"string","description":"an application-specific error code"},"status":{"type":"integer","description":"The HTTP status code generated by the origin server for this occurrence of the problem"},"type":{"type":"string","description":"A URI reference that identifies the problem type.","format":"uri","enum":["https://api.smartbearcoin.com/problems/missing-request-header","https://api.smartbearcoin.com/problems/missing-request-parameter","https://api.smartbearcoin.com/problems/invalid-request-header-format","https://api.smartbearcoin.com/problems/invalid-request-parameter-format","https://api.smartbearcoin.com/problems/invalid-request-parameter-value","https://api.smartbearcoin.com/problems/internal-server-error"]},"title":{"type":"string","description":"a short, human-readable summary of the problem that SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization","enum":["missing-request-header","missing-request-parameter","invalid-request-header-format","invalid-request-parameter-format","invalid-request-parameter-value","internal-server-error"]},"instance":{"type":"string","description":"A URI reference that identifies the specific occurrence of the problem","format":"uri"},"details":{"minItems":1,"type":"array","items":{"required":["detail","title","type"],"type":"object","properties":{"type":{"type":"string","description":"A URI reference that identifies the problem type.","format":"uri","enum":["https://api.smartbearcoin.com/problems/missing-request-header","https://api.smartbearcoin.com/problems/missing-request-parameter","https://api.smartbearcoin.com/problems/invalid-request-header-format","https://api.smartbearcoin.com/problems/invalid-request-parameter-format","https://api.smartbearcoin.com/problems/invalid-request-parameter-value","https://api.smartbearcoin.com/problems/internal-server-error"]},"title":{"type":"string","description":"a short, human-readable summary of the problem that SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization","enum":["missing-request-header","missing-request-parameter","invalid-request-header-format","invalid-request-parameter-format","invalid-request-parameter-value","internal-server-error"]},"detail":{"type":"string","description":"A human-readable explanation specific to this occurrence of the problem. Like title, this field value can be localized."},"contextData":{"type":"array","items":{"required":["path"],"type":"object","properties":{"path":{"type":"string"},"providedValue":{"type":"string"},"allowedValues":{"type":"array","items":{"type":"string"}},"allowedFormat":{"type":"string"},"condition":{"type":"string"}}}}}}}},"description":"Problem object provides detailed information about an errors that occurred during an api call execution.\nThis problem object is conform the standard specifications, see https://tools.ietf.org/html/rfc7807.\nThe extensions on the standard are the `contextData` providing context data and `details` arrays.\n"}},"responses":{"400BadRequest":{"description":"400 Bad Request","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Problem"},"examples":{"Missing conditionally required request parameter":{"value":{"code":"4000020","status":400,"type":"https://api.smartbearcoin.com/problems/missing-request-parameter","title":"missing-request-parameter","details":[{"type":"https://api.smartbearcoin.com/problems/missing-request-parameter","title":"missing-request-parameter","detail":"The request does not contain the conditionally required parameter 'name', when 'jurisdiction_identifier' is not provided.","contextData":[{"path":"/name","condition":"jurisdiction_identifier == null"}]}]}},"Invalid request parameter format":{"value":{"code":"4000022","status":400,"type":"https://api.smartbearcoin.com/problems/invalid-request-parameter-format","title":"invalid-request-parameter-format","details":[{"type":"https://api.smartbearcoin.com/problems/invalid-request-parameter-format","title":"invalid-request-parameter-format","detail":"The provided value [Ireland] for parameter 'country_of_registration' does not have the expected format.","contextData":[{"path":"/country_of_registration","providedValue":"Ireland","allowedFormat":"^[a-zA-Z]{2}$"}]}]}},"Invalid request parameter value":{"value":{"code":"4000023","status":400,"type":"https://api.smartbearcoin.com/problems/invalid-request-parameter-value","title":"invalid-request-parameter-value","details":[{"type":"https://api.smartbearcoin.com/problems/invalid-request-parameter-value","title":"invalid-request-parameter-value","detail":"The provided value [vat-number] for parameter 'jurisdiction_identifier_type' in country_of_registration [IT] is not allowed. The allowed values are [fiscal-code].","contextData":[{"path":"/jurisdiction_identifier_type","providedValue":"vat-number","allowedValues":["fiscal-code"]}]}]}}}}}},"500InternalServerError":{"description":"500 Internal Server Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Problem"},"examples":{"Internal Server Error due to a technical failure":{"value":{"code":"5000001","status":500,"type":"https://api.smartbearcoin.com/problems/internal-server-error","title":"internal-server-error","details":[{"type":"https://api.smartbearcoin.com/problems/internal-server-error","title":"internal-server-error","detail":"The server encountered an internal error and was unable to complete your request."}]}}}}}}}}}</con:content>
         <con:type>https://swagger.io/openapiv3/specification</con:type>
       </con:part>
     </con:definitionCache>
@@ -432,7 +432,9 @@ Attributes that can be used for sorting are:
 }</con:sampleContent>
         </con:representation>
         <con:request name="Request 1" id="7ac957b7-8a8f-470c-b718-6d31f7ba447a" mediaType="application/json">
-          <con:settings/>
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
           <con:endpoint>http://localhost:8080/customer-management/v1/payees</con:endpoint>
           <con:request/>
           <con:credentials>
@@ -482,13 +484,33 @@ Attributes that can be used for sorting are:
     <con:description>The test suite generated for the REST service [SmartBearCoin - Payees API]</con:description>
     <con:settings/>
     <con:runType>SEQUENTIAL</con:runType>
-    <con:testCase id="126c0810-c7d5-4954-8dcd-198cb92bac9c" discardOkResults="false" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="Get Payees" searchProperties="true" timeout="0">
+    <con:testCase id="126c0810-c7d5-4954-8dcd-198cb92bac9c" discardOkResults="false" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="Payee Test Case" searchProperties="true" timeout="0">
       <con:description>The test case generated for the REST resource [/] located at [/]</con:description>
       <con:settings/>
-      <con:testStep type="restrequest" name="Request 1" id="9e134db9-f2f9-447c-af58-d35179170767">
+      <con:testStep type="datasource" name="Payee Data" id="74f994ac-ebf5-481a-9bb2-6c13e2e8b17f">
+        <con:settings/>
+        <con:config xsi:type="con:DataSourceStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <con:dataSource type="Excel">
+            <con:configuration>
+              <file>C:/Users/joseph.joyce/Desktop/Seminar_DataSource.xlsx</file>
+              <worksheet/>
+              <cell>A1</cell>
+              <ignoreEmpty>false</ignoreEmpty>
+              <evaluateFormulas>false</evaluateFormulas>
+            </con:configuration>
+          </con:dataSource>
+          <con:shared>true</con:shared>
+          <con:restartShared>true</con:restartShared>
+          <con:property>payeeID</con:property>
+          <con:property>country</con:property>
+          <con:property>name</con:property>
+          <con:restartOnRun>true</con:restartOnRun>
+        </con:config>
+      </con:testStep>
+      <con:testStep type="restrequest" name="Get list of all payees" id="9e134db9-f2f9-447c-af58-d35179170767">
         <con:settings/>
         <con:config service="SmartBearCoin - Payees API" resourcePath="/payees" methodName="getPayees" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-          <con:restRequest name="Request 1" id="e644f216-edd4-471d-bc1f-a5085a1e7aa3" mediaType="application/json">
+          <con:restRequest name="Get list of all payees" id="e644f216-edd4-471d-bc1f-a5085a1e7aa3" mediaType="application/json">
             <con:settings>
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
@@ -507,8 +529,8 @@ Attributes that can be used for sorting are:
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:parameters>
-              <con:entry key="name" value="test"/>
-              <con:entry key="country_of_registration" value="DE"/>
+              <con:entry key="name" value="paris"/>
+              <con:entry key="country_of_registration" value="${Payee Data#country}"/>
             </con:parameters>
             <con:environmentSpec>
               <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
@@ -524,47 +546,30 @@ Attributes that can be used for sorting are:
           </con:restRequest>
         </con:config>
       </con:testStep>
-      <con:properties/>
-      <con:reportParameters/>
-      <con:environmentSpec>
-        <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
-          <con:authProfile>Inherit From Parent</con:authProfile>
-        </con:entry>
-        <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
-          <con:authProfile>Inherit From Parent</con:authProfile>
-        </con:entry>
-        <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
-          <con:authProfile>Inherit From Parent</con:authProfile>
-        </con:entry>
-      </con:environmentSpec>
-    </con:testCase>
-    <con:testCase id="e785fcd9-a8bd-4ca6-b0b2-fdd8098b8d74" discardOkResults="false" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="Get Payee by ID" searchProperties="true" timeout="0">
-      <con:description>The test case generated for the REST resource [/{payeeId}] located at [/{payeeId}]</con:description>
-      <con:settings/>
-      <con:testStep type="restrequest" name="Request 1" id="b2371d8d-175c-4398-b764-8e3715d75f32">
+      <con:testStep type="restrequest" name="Get a specific payee using their ID" id="a5076889-5121-4e1d-a8af-26fbb6f67631">
         <con:settings/>
         <con:config service="SmartBearCoin - Payees API" resourcePath="/payees/{payeeId}" methodName="getPayeeById" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-          <con:restRequest name="Request 1" id="1a8c8680-3fc6-4deb-82ec-399e824b98b1" mediaType="application/json">
+          <con:restRequest name="Get a specific payee using their ID" id="1a8c8680-3fc6-4deb-82ec-399e824b98b1" mediaType="application/json">
             <con:settings>
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
-            <con:endpoint>http://localhost:7071/api/payees</con:endpoint>
+            <con:endpoint>http://localhost:8080/customer-management/v1/payees</con:endpoint>
             <con:request/>
             <con:originalUri>http://localhost/customer-management/v1/payees/</con:originalUri>
-            <con:assertion type="Valid HTTP Status Codes" id="41767b8b-fa22-43fb-94b9-8c6d60048c01" name="Valid HTTP Status Codes">
+            <con:assertion type="Valid HTTP Status Codes" id="e8b60e4e-a8e6-4c8d-87e0-f45aae5d7cca" name="Valid HTTP Status Codes">
               <con:settings/>
               <con:configuration>
                 <codes>200</codes>
               </con:configuration>
             </con:assertion>
             <con:credentials>
-              <con:selectedAuthProfile>Inherit From Parent</con:selectedAuthProfile>
+              <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
               <con:authType>No Authorization</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:parameters>
-              <con:entry key="payeeId" value="1e331a0f-29bd-4b6b-8b21-8b87ed653c6b"/>
-              <con:entry key="country_of_registration" value="DE"/>
+              <con:entry key="payeeId" value="${Payee Data#payeeID}"/>
+              <con:entry key="country_of_registration" value="${Payee Data#country}"/>
             </con:parameters>
             <con:parameterOrder>
               <con:entry>payeeId</con:entry>
@@ -585,46 +590,29 @@ Attributes that can be used for sorting are:
           </con:restRequest>
         </con:config>
       </con:testStep>
-      <con:properties/>
-      <con:reportParameters/>
-      <con:environmentSpec>
-        <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
-          <con:authProfile>Inherit From Parent</con:authProfile>
-        </con:entry>
-        <con:entry environmentId="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b">
-          <con:authProfile>Inherit From Parent</con:authProfile>
-        </con:entry>
-        <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
-          <con:authProfile>Inherit From Parent</con:authProfile>
-        </con:entry>
-      </con:environmentSpec>
-    </con:testCase>
-    <con:testCase id="b00e2156-a748-4c43-9c33-ebab68aaaaef" discardOkResults="false" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="Get transaction history for payee" searchProperties="true" timeout="0">
-      <con:description>The test case generated for the REST resource [/{payeeId}/transactions] located at [/{payeeId}/transactions]</con:description>
-      <con:settings/>
-      <con:testStep type="restrequest" name="Request 1" id="61a29a7c-a79b-48ae-87fa-775fd09ea834">
+      <con:testStep type="restrequest" name="Return list of a specific payee's transaction history" id="7312257d-fbc8-4400-b2b4-088c1de00869">
         <con:settings/>
         <con:config service="SmartBearCoin - Payees API" resourcePath="/payees/{payeeId}/transactions" methodName="getPayeeTransactions" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-          <con:restRequest name="Request 1" id="7ac957b7-8a8f-470c-b718-6d31f7ba447a" mediaType="application/json">
+          <con:restRequest name="Return list of a specific payee's transaction history" id="7ac957b7-8a8f-470c-b718-6d31f7ba447a" mediaType="application/json">
             <con:settings>
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
-            <con:endpoint>http://localhost:7071/api/payees</con:endpoint>
+            <con:endpoint>http://localhost:8080/customer-management/v1/payees</con:endpoint>
             <con:request/>
-            <con:originalUri>http://localhost/customer-management/v1/payees/transactions</con:originalUri>
-            <con:assertion type="Valid HTTP Status Codes" id="3fc93a33-7104-479d-bf72-4f2b86ecd734" name="Valid HTTP Status Codes">
+            <con:originalUri>http://localhost/payees/transactions</con:originalUri>
+            <con:assertion type="Valid HTTP Status Codes" id="28ad3501-81ee-4391-9198-f88681bed91d" name="Valid HTTP Status Codes">
               <con:settings/>
               <con:configuration>
                 <codes>200</codes>
               </con:configuration>
             </con:assertion>
             <con:credentials>
-              <con:selectedAuthProfile>Inherit From Parent</con:selectedAuthProfile>
+              <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
               <con:authType>No Authorization</con:authType>
             </con:credentials>
             <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
             <con:parameters>
-              <con:entry key="payeeId" value="1e331a0f-29bd-4b6b-8b21-8b87ed653c6b"/>
+              <con:entry key="payeeId" value="1dde99af-288b-44f6-94a2-024d85b7673b"/>
             </con:parameters>
             <con:environmentSpec>
               <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
@@ -638,6 +626,14 @@ Attributes that can be used for sorting are:
               </con:entry>
             </con:environmentSpec>
           </con:restRequest>
+        </con:config>
+      </con:testStep>
+      <con:testStep type="datasourceloop" name="Data Source Loop" id="f5e88b50-fddb-4dd4-87a8-3f92f36b2e67">
+        <con:settings/>
+        <con:config>
+          <dataSourceStep>Payee Data</dataSourceStep>
+          <targetStep>Get list of all payees</targetStep>
+          <discardResults>true</discardResults>
         </con:config>
       </con:testStep>
       <con:properties/>
@@ -683,13 +679,13 @@ Attributes that can be used for sorting are:
       </con:virtError>
     </con:constraints>
     <con:headerValidator type="NONE"/>
-    <con:restMockAction name="/" method="GET" resourcePath="" id="fca60b5c-4c29-4401-8ed3-c1839f0d00c1">
+    <con:restMockAction name="/payees" method="GET" resourcePath="/payees" id="fca60b5c-4c29-4401-8ed3-c1839f0d00c1">
       <con:settings/>
       <con:dispatchStyle>SEQUENCE</con:dispatchStyle>
       <con:dispatchConfig/>
       <con:dispatchXPath/>
       <con:routeScript/>
-      <con:response name="Response 1" id="08f1d78f-de04-42b1-bae5-d67413e315d2" httpResponseStatus="400" mediaType="application/json" compressedBodyContent="aced00057372002f636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c7565000b8b02c748eeab0200035a000a636f6d707265737365644c000b636f6d7072657373696f6e74003d4c636f6d2f657669776172652f736f617075692f696d706c2f737570706f72742f436f6d7072657373656456616c756524436f6d7072657373696f6e3b5b0004646174617400025b427870007e72003b636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c756524436f6d7072657373696f6e00000000000000001200007872000e6a6176612e6c616e672e456e756d000000000000000012000078707400044e4f4e4570" dataSource="">
+      <con:response name="Response 1" id="08f1d78f-de04-42b1-bae5-d67413e315d2" httpResponseStatus="200" mediaType="application/json" compressedBodyContent="aced00057372002f636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c7565000b8b02c748eeab0200035a000a636f6d707265737365644c000b636f6d7072657373696f6e74003d4c636f6d2f657669776172652f736f617075692f696d706c2f737570706f72742f436f6d7072657373656456616c756524436f6d7072657373696f6e3b5b0004646174617400025b427870007e72003b636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c756524436f6d7072657373696f6e00000000000000001200007872000e6a6176612e6c616e672e456e756d000000000000000012000078707400044e4f4e4570" dataSource="">
         <con:settings/>
         <con:responseContent>{
   "code" : "string",
@@ -711,7 +707,7 @@ Attributes that can be used for sorting are:
   } ]
 }</con:responseContent>
       </con:response>
-      <con:response name="Response 2" id="8f92046c-e9bb-404e-a51c-32bf37b14afe" httpResponseStatus="500" mediaType="application/json" compressedBodyContent="aced00057372002f636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c7565000b8b02c748eeab0200035a000a636f6d707265737365644c000b636f6d7072657373696f6e74003d4c636f6d2f657669776172652f736f617075692f696d706c2f737570706f72742f436f6d7072657373656456616c756524436f6d7072657373696f6e3b5b0004646174617400025b427870007e72003b636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c756524436f6d7072657373696f6e00000000000000001200007872000e6a6176612e6c616e672e456e756d000000000000000012000078707400044e4f4e4570" dataSource="">
+      <con:response name="Response 2" id="8f92046c-e9bb-404e-a51c-32bf37b14afe" httpResponseStatus="200" mediaType="application/json" compressedBodyContent="aced00057372002f636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c7565000b8b02c748eeab0200035a000a636f6d707265737365644c000b636f6d7072657373696f6e74003d4c636f6d2f657669776172652f736f617075692f696d706c2f737570706f72742f436f6d7072657373656456616c756524436f6d7072657373696f6e3b5b0004646174617400025b427870007e72003b636f6d2e657669776172652e736f617075692e696d706c2e737570706f72742e436f6d7072657373656456616c756524436f6d7072657373696f6e00000000000000001200007872000e6a6176612e6c616e672e456e756d000000000000000012000078707400044e4f4e4570" dataSource="">
         <con:settings/>
         <con:responseContent>{
   "code" : "string",
@@ -734,7 +730,7 @@ Attributes that can be used for sorting are:
 }</con:responseContent>
       </con:response>
     </con:restMockAction>
-    <con:restMockAction name="/{payeeId}" method="GET" resourcePath="/{payeeId}" id="996129c7-fc44-4d2d-8a52-39406e245a0c">
+    <con:restMockAction name="payees/{payeeId}" method="GET" resourcePath="payees/{payeeId}" id="996129c7-fc44-4d2d-8a52-39406e245a0c">
       <con:settings/>
       <con:dispatchStyle>SEQUENCE</con:dispatchStyle>
       <con:dispatchConfig/>
@@ -785,7 +781,7 @@ Attributes that can be used for sorting are:
 }</con:responseContent>
       </con:response>
     </con:restMockAction>
-    <con:restMockAction name="/{payeeId}/transactions" method="GET" resourcePath="/{payeeId}/transactions" id="a1e572a9-89ea-4bfb-8270-254e5ebe7a05">
+    <con:restMockAction name="payees/{payeeId}/transactions" method="GET" resourcePath="payees/{payeeId}/transactions" id="a1e572a9-89ea-4bfb-8270-254e5ebe7a05">
       <con:settings/>
       <con:dispatchStyle>SEQUENCE</con:dispatchStyle>
       <con:dispatchConfig/>
@@ -837,6 +833,7 @@ Attributes that can be used for sorting are:
       </con:response>
     </con:restMockAction>
   </con:restMockService>
+  <con:requirements/>
   <con:properties/>
   <con:wssContainer/>
   <con:databaseConnectionContainer/>
@@ -902,6 +899,152 @@ Attributes that can be used for sorting are:
     <con:jmsConnectionContainer/>
   </con:environment>
   <con:authRepository/>
+  <con:loadUiTest name="Payee Test Case | 100 Virtual Users" id="fb334aad-eeec-470d-8513-cf7ab7c849f9">
+    <con:settings>
+      <con:setting id="soapUIObjectSourceId">126c0810-c7d5-4954-8dcd-198cb92bac9c</con:setting>
+      <con:setting id="soapUIObjectSourceType">soapUIObjectSourceType_RestRequest</con:setting>
+    </con:settings>
+    <con1:loadui-project id="5cdbd3b8-b59e-457c-86bd-78ba1d708794" label="Load Test 1" xmlns:con1="http://eviware.com/loadui/config">
+      <con1:properties>
+        <con1:property propagates="true" key="ModelItem.description" type="java.lang.String"/>
+        <con1:property propagates="true" key="CanvasItem.abortOnFinish" type="java.lang.Boolean">false</con1:property>
+        <con1:property propagates="true" key="ModelItem.saveReport" type="java.lang.Boolean">false</con1:property>
+        <con1:property propagates="true" key="ModelItem.reportFolder" type="java.lang.String"/>
+        <con1:property propagates="true" key="ModelItem.reportFormat" type="java.lang.String"/>
+        <con1:property propagates="true" key="Temporary project" type="java.lang.String"/>
+        <con1:property propagates="true" key="ModelItem.rate" type="java.lang.Long">100</con1:property>
+        <con1:property propagates="true" key="ModelItem.loadDistributionType" type="com.smartbear.load.facade.LoadDistributionType">Relative</con1:property>
+        <con1:property propagates="true" key="ModelItem.remoteMode" type="java.lang.String"/>
+        <con1:property propagates="true" key="ModelItem.id" type="java.lang.String">fb334aad-eeec-470d-8513-cf7ab7c849f9</con1:property>
+      </con1:properties>
+      <con1:attributes>
+        <con1:property key="limits">Time=7200;</con1:property>
+      </con1:attributes>
+      <con1:addons>
+        <con1:addon type="com.eviware.loadui.api.assertion.AssertionAddon" id="cfe2f6c3-dbf9-44ed-86e7-12b743a3f414">
+          <con1:attributes>
+            <con1:property key="parentId">5cdbd3b8-b59e-457c-86bd-78ba1d708794</con1:property>
+            <con1:property key="valueReference">rO0ABXNyADdjb20uZXZpd2FyZS5sb2FkdWkudXRpbC5zZXJpYWxpemF0aW9uLlN0YXRpc3RpY1Jlc29sdmVyJwTr+w+xV3ECAARMAA1ob2xkZXJBZGRyZXNzdAASTGphdmEvbGFuZy9TdHJpbmc7TAAGc291cmNlcQB+AAFMAA1zdGF0aXN0aWNOYW1lcQB+AAFMAAx2YXJpYWJsZU5hbWVxAH4AAXhwdAAkNWNkYmQzYjgtYjU5ZS00NTdjLTg2YmQtNzhiYTFkNzA4Nzk0dAAEbWFpbnQAB0FWRVJBR0V0AApUaW1lIFRha2Vu</con1:property>
+            <con1:property key="Labeled@label">Time Taken - average</con1:property>
+            <con1:property key="constraint">rO0ABXNyADFjb20uZXZpd2FyZS5sb2FkdWkudXRpbC5hc3NlcnRpb24uUmFuZ2VDb25zdHJhaW50Y94NW62dOawCAAJEAANtYXhEAANtaW54cECJAAAAAAAAAAAAAAAAAAA=</con1:property>
+            <con1:property key="tolerancePeriod">0</con1:property>
+            <con1:property key="toleranceAllowedOccurrences">0</con1:property>
+            <con1:property key="stopTestOnFailure">false</con1:property>
+          </con1:attributes>
+          <con1:addons/>
+        </con1:addon>
+        <con1:addon type="com.eviware.loadui.api.assertion.AssertionAddon" id="ec61bcf9-1bbf-4581-bdef-94ef515415d5">
+          <con1:attributes>
+            <con1:property key="parentId">5cdbd3b8-b59e-457c-86bd-78ba1d708794</con1:property>
+            <con1:property key="valueReference">rO0ABXNyADdjb20uZXZpd2FyZS5sb2FkdWkudXRpbC5zZXJpYWxpemF0aW9uLlN0YXRpc3RpY1Jlc29sdmVyJwTr+w+xV3ECAARMAA1ob2xkZXJBZGRyZXNzdAASTGphdmEvbGFuZy9TdHJpbmc7TAAGc291cmNlcQB+AAFMAA1zdGF0aXN0aWNOYW1lcQB+AAFMAAx2YXJpYWJsZU5hbWVxAH4AAXhwdAAkNWNkYmQzYjgtYjU5ZS00NTdjLTg2YmQtNzhiYTFkNzA4Nzk0dAAEbWFpbnQAClBFUl9TRUNPTkR0AAhGYWlsdXJlcw==</con1:property>
+            <con1:property key="Labeled@label">Failures - per second</con1:property>
+            <con1:property key="constraint">rO0ABXNyADFjb20uZXZpd2FyZS5sb2FkdWkudXRpbC5hc3NlcnRpb24uUmFuZ2VDb25zdHJhaW50Y94NW62dOawCAAJEAANtYXhEAANtaW54cD/wAAAAAAAAAAAAAAAAAAA=</con1:property>
+            <con1:property key="tolerancePeriod">0</con1:property>
+            <con1:property key="toleranceAllowedOccurrences">0</con1:property>
+            <con1:property key="stopTestOnFailure">false</con1:property>
+          </con1:attributes>
+          <con1:addons/>
+        </con1:addon>
+      </con1:addons>
+      <con1:scene label="New Scenario" id="88e48b53-b0cf-44af-908d-bb32ecc8c0af">
+        <con1:properties>
+          <con1:property propagates="true" key="ModelItem.description" type="java.lang.String"/>
+          <con1:property propagates="true" key="CanvasItem.abortOnFinish" type="java.lang.Boolean">false</con1:property>
+          <con1:property propagates="true" key="SceneItem.followProject" type="java.lang.Boolean">true</con1:property>
+          <con1:property propagates="true" key="SceneItem.scenarioRatePercentage" type="java.lang.Long">100</con1:property>
+          <con1:property propagates="true" key="SceneItem.scenarioRateSpecific" type="java.lang.Long">10</con1:property>
+          <con1:property propagates="true" key="ModelItem.samplerOutputLevel" type="com.eviware.loadui.api.component.SoapUISamplerOutputLevel">TestCaseAndAllTestSteps</con1:property>
+        </con1:properties>
+        <con1:attributes>
+          <con1:property key="limits">Time=7200;</con1:property>
+        </con1:attributes>
+        <con1:addons/>
+        <con1:component type="com.eviware.loadui.impl.component.IntervalComponent" label="Interval 1" id="a11af0d3-dde3-4608-9317-f33469a513a4" category="Scheduler">
+          <con1:properties>
+            <con1:property propagates="true" key="ModelItem.description" type="java.lang.String"/>
+            <con1:property propagates="true" key="stateProperty" type="java.lang.Boolean">true</con1:property>
+            <con1:property propagates="true" key="startAt" type="java.lang.Long">0</con1:property>
+            <con1:property propagates="true" key="duration" type="java.lang.Long">5</con1:property>
+            <con1:property propagates="true" key="unit" type="java.lang.String">Sec</con1:property>
+            <con1:property propagates="true" key="mode" type="java.lang.String">Single</con1:property>
+            <con1:property propagates="true" key="defaultMode" type="java.lang.Boolean">true</con1:property>
+          </con1:properties>
+          <con1:attributes>
+            <con1:property key="com.eviware.loadui.api.model.ComponentItem@type">Interval</con1:property>
+          </con1:attributes>
+          <con1:addons/>
+        </con1:component>
+        <con1:component type="com.eviware.loadui.components.soapui.SoapUISamplerComponent" label="SmartBearCoin - Payees API Test Suite 1:Payee Test Case" id="54eddda0-c5bf-41b5-b474-ed74a3b3adbe" category="Runners">
+          <con1:properties>
+            <con1:property propagates="true" key="ModelItem.description" type="java.lang.String"/>
+            <con1:property propagates="true" key="concurrentSamples" type="java.lang.Long">1000</con1:property>
+            <con1:property propagates="true" key="property_name_is_not_relevant_for_private_property" type="java.lang.Long">9223372036854775807</con1:property>
+            <con1:property propagates="true" key="maxQueueSize" type="java.lang.Long">1000</con1:property>
+            <con1:property propagates="true" key="countDiscarded" type="java.lang.Boolean">false</con1:property>
+            <con1:property propagates="true" key="disabledTestSteps" type="java.lang.String"/>
+            <con1:property propagates="true" key="_thinkTime" type="java.lang.Long">0</con1:property>
+            <con1:property propagates="true" key="ReadyApiTestCase" type="com.eviware.soapui.impl.wsdl.testcase.WsdlTestCase">126c0810-c7d5-4954-8dcd-198cb92bac9c</con1:property>
+            <con1:property propagates="true" key="raiseError" type="java.lang.Boolean">true</con1:property>
+            <con1:property propagates="true" key="outputTestCaseProperties" type="java.lang.Boolean">true</con1:property>
+            <con1:property propagates="true" key="OutputLevel" type="java.lang.String">TestCase only</con1:property>
+            <con1:property propagates="true" key="closeConnectionsAfterRequest" type="java.lang.Boolean">false</con1:property>
+            <con1:property propagates="true" key="disableSoapuiAssertions" type="java.lang.Boolean">false</con1:property>
+            <con1:property propagates="true" key="forceShareDatasources" type="java.lang.Boolean">true</con1:property>
+          </con1:properties>
+          <con1:attributes>
+            <con1:property key="com.eviware.loadui.api.model.ComponentItem@type">Ready API TestCase Runner</con1:property>
+          </con1:attributes>
+          <con1:addons/>
+        </con1:component>
+        <con1:component type="com.eviware.loadui.impl.component.generators.RampUpRate" label="Ramp 1" id="611a92c9-e9ff-48b6-bcc1-09da6693fe0b" category="Generators">
+          <con1:properties>
+            <con1:property propagates="true" key="ModelItem.description" type="java.lang.String"/>
+            <con1:property propagates="true" key="stateProperty" type="java.lang.Boolean">true</con1:property>
+            <con1:property propagates="true" key="limitVU" type="java.lang.Long">100</con1:property>
+            <con1:property propagates="true" key="start" type="java.lang.Long">0</con1:property>
+            <con1:property propagates="true" key="end" type="java.lang.Long">100</con1:property>
+            <con1:property propagates="true" key="period" type="java.lang.Long">10</con1:property>
+            <con1:property propagates="true" key="unit" type="java.lang.String">Sec</con1:property>
+          </con1:properties>
+          <con1:attributes>
+            <con1:property key="com.eviware.loadui.api.model.ComponentItem@type">Ramp</con1:property>
+          </con1:attributes>
+          <con1:addons/>
+        </con1:component>
+        <con1:connection outputTerminalId="a11af0d3-dde3-4608-9317-f33469a513a4/outgoingTerminal" inputTerminalId="611a92c9-e9ff-48b6-bcc1-09da6693fe0b/stateTerminal"/>
+        <con1:connection outputTerminalId="611a92c9-e9ff-48b6-bcc1-09da6693fe0b/triggerTerminal" inputTerminalId="54eddda0-c5bf-41b5-b474-ed74a3b3adbe/triggerTerminal"/>
+        <con1:connection outputTerminalId="54eddda0-c5bf-41b5-b474-ed74a3b3adbe/runningTerminal" inputTerminalId="611a92c9-e9ff-48b6-bcc1-09da6693fe0b/Sample Count"/>
+      </con1:scene>
+      <con1:statistics>
+        <con1:page title="DefaultLoadUIStatisticPage">
+          <con1:chartGroup type="com.eviware.loadui.api.statistics.model.chart.line.LineChartView" title="" groupType="Monitors">
+            <con1:attributes>
+              <con1:property key="GroupId">8377e561-3fe8-4edd-96c3-3e2fc6f0bbe1</con1:property>
+            </con1:attributes>
+          </con1:chartGroup>
+          <con1:chartGroup type="com.eviware.loadui.api.statistics.model.chart.line.LineChartView" title="Stress Statistics" groupType="Graph">
+            <con1:chart statisticHolder="5cdbd3b8-b59e-457c-86bd-78ba1d708794">
+              <con1:attributes>
+                <con1:property key="_CHART_segments">67:36:5cdbd3b8-b59e-457c-86bd-78ba1d70879410:Time Taken7:AVERAGE4:main68:36:5cdbd3b8-b59e-457c-86bd-78ba1d7087948:Failures10:PER_SECOND4:main65:36:5cdbd3b8-b59e-457c-86bd-78ba1d70879410:Running VU5:TOTAL4:main</con1:property>
+              </con1:attributes>
+            </con1:chart>
+            <con1:attributes>
+              <con1:property key="GroupId">5985533a-3a4a-4290-ad8e-031c0ef6ca7b</con1:property>
+            </con1:attributes>
+          </con1:chartGroup>
+        </con1:page>
+      </con1:statistics>
+      <con1:heatUpTime>0</con1:heatUpTime>
+    </con1:loadui-project>
+    <con:loadUITestScenario projectId="5cdbd3b8-b59e-457c-86bd-78ba1d708794" scenarioId="88e48b53-b0cf-44af-908d-bb32ecc8c0af" name="New Scenario" id="d56bf272-3229-4e27-b091-4fa56979db61">
+      <con:settings/>
+    </con:loadUITestScenario>
+    <con:loadUIPanelData id="18b9d886-5c25-41d8-b29e-e4b94479d637">
+      <con:panel>Log</con:panel>
+    </con:loadUIPanelData>
+    <con:statistics id="5985533a-3a4a-4290-ad8e-031c0ef6ca7b"/>
+    <con:reportParameters/>
+  </con:loadUiTest>
   <con:environmentSpec>
     <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
       <con:authProfile>No Authorization</con:authProfile>
