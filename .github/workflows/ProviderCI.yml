@@ -82,7 +82,7 @@ jobs:
     needs: test-local
     runs-on: ubuntu-latest
     env:
-      deploy_target: test
+      deploy_target: acceptance
     steps:
       - name: can-i-deploy ${{ env.application_name }} to ${{ env.deploy_target }}
         uses: pactflow/actions/can-i-deploy@v1.0.1
