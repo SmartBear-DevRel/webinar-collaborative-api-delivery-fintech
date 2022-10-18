@@ -1,6 +1,6 @@
 on: [workflow_dispatch]     # change the triggering mechanism to suit your needs (manual run by default)
 
-name: Provider-API-AzureFunction-CI
+name: Provider-CI-Infra-and-Code-Only
 
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'provider_azure_function'   # set this to the path to your web app project, defaults to the repository root
