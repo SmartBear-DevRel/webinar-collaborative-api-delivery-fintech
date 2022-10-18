@@ -7,6 +7,10 @@ on:
         description: name_of_provider
         required: true
         default: 'SmartBearCoin-Payee-Provider'
+      demo_deploy:
+        description: skip deployment steps for demo
+        required: true
+        default: 'false'
   # push:
   #   paths:
   #     - 'provider_azure_function/**'
@@ -24,9 +28,10 @@ env:
   DOTNET_VERSION: '6.0.402' # set this to the dotnet version to use
   oas_file: oas/openapi-transformed.json
   results_file: ReadyAPI_Tests/report.xml
-  application_name: SmartBearCoin-Payee-Provider
   PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
   PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
+  application_name: ${{ github.event.inputs.application_name }}
+  demo_deploy: ${{ github.event.inputs.demo_deploy }}
 
 jobs:
   setup:
@@ -108,11 +113,13 @@ jobs:
 
       # login to Azure
       - uses: azure/login@v1
+        if: ${{ env.demo_deploy != 'true' }}
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       # deploy ARM template to setup azure resources (group & sub defined in credentials)
       - name: Run ARM deploy
+        if: ${{ env.demo_deploy != 'true' }}
         id: armdeploy
         uses: azure/arm-deploy@v1
         with:
@@ -151,11 +158,13 @@ jobs:
 
       # login to Azure
       - uses: azure/login@v1
+        if: ${{ env.demo_deploy != 'true' }}
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       # deploy ARM template to setup azure resources (group & sub defined in credentials)
       - name: Run ARM deploy
+        if: ${{ env.demo_deploy != 'true' }}
         id: armdeploy
         uses: azure/arm-deploy@v1
         with:
@@ -176,12 +185,14 @@ jobs:
 
       # login to Azure
       - uses: azure/login@v1
+        if: ${{ env.demo_deploy != 'true' }}
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           enable-AzPSSession: true
 
       # get publish profile
       - name: Get publish profile
+        if: ${{ env.demo_deploy != 'true' }}
         id: fncapp
         uses: azure/powershell@v1
         with:
@@ -194,6 +205,7 @@ jobs:
 
       # setup donet environments
       - name: Setup DotNet Environments
+        if: ${{ env.demo_deploy != 'true' }}
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: |
@@ -202,6 +214,7 @@ jobs:
 
       # build project
       - name: 'Resolve dependencies and build'
+        if: ${{ env.demo_deploy != 'true' }}
         shell: pwsh
         run: |
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
@@ -211,6 +224,7 @@ jobs:
 
       # publish azure function
       - name: 'Run Azure Functions Action'
+        if: ${{ env.demo_deploy != 'true' }}
         uses: Azure/functions-action@v1
         id: fa
         with:
@@ -272,12 +286,14 @@ jobs:
 
       # login to Azure
       - uses: azure/login@v1
+        if: ${{ env.demo_deploy != 'true' }}
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           enable-AzPSSession: true
 
       # get publish profile
       - name: Get publish profile
+        if: ${{ env.demo_deploy != 'true' }}
         id: fncapp
         uses: azure/powershell@v1
         with:
@@ -290,6 +306,7 @@ jobs:
 
       # setup donet environments
       - name: Setup DotNet Environments
+        if: ${{ env.demo_deploy != 'true' }}
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: |
@@ -298,6 +315,7 @@ jobs:
 
       # build project
       - name: 'Resolve dependencies and build'
+        if: ${{ env.demo_deploy != 'true' }}
         shell: pwsh
         run: |
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
@@ -307,6 +325,7 @@ jobs:
 
       # publish azure function
       - name: 'Run Azure Functions Action'
+        if: ${{ env.demo_deploy != 'true' }}
         uses: Azure/functions-action@v1
         id: fa
         with:
