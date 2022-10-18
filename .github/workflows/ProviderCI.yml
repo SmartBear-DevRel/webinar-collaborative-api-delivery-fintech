@@ -266,7 +266,7 @@ jobs:
       ]
     runs-on: ubuntu-latest
     env:
-      deployed_env: test
+      deployed_env: acceptance
       application_name: ${{ needs.setup.outputs.application_name }}
     steps:
       - name: record-deployment ${{ env.application_name }} to ${{ env.deployed_env }}
