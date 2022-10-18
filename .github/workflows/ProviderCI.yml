@@ -30,7 +30,8 @@ env:
   results_file: ReadyAPI_Tests/report.xml
   PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
   PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
-  application_name: ${{ github.event.inputs.application_name }}
+  application_name: SmartBearCoin-Payee-Provider
+  application_name_default: ${{ github.event.inputs.application_name }}
   demo_deploy: ${{ github.event.inputs.demo_deploy }}
 
 jobs:
@@ -38,12 +39,15 @@ jobs:
     name: 🏗️ setup
     runs-on: ubuntu-latest
     steps:
-      - run: echo "application_name=${application_name:-${application_name}}" >> $GITHUB_ENV
+      - run: echo "application_name=${application_name:-${application_name_default}}" >> $GITHUB_ENV
     outputs:
       application_name: ${{ env.application_name }}
 
   test-local:
+    needs: setup
     runs-on: ubuntu-latest
+    env:
+      application_name: ${{ needs.setup.outputs.application_name }}
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET
@@ -84,10 +88,11 @@ jobs:
       version: ${{ env.version }}
 
   can-i-deploy-acc:
-    needs: test-local
+    needs: [setup, test-local]
     runs-on: ubuntu-latest
     env:
       deploy_target: test
+      application_name: ${{ needs.setup.outputs.application_name }}
     steps:
       - name: can-i-deploy ${{ env.application_name }} to ${{ env.deploy_target }}
         uses: pactflow/actions/can-i-deploy@v1.0.1
@@ -131,7 +136,7 @@ jobs:
     # use ARM templates to set up the Azure Infra
 
   can-i-deploy-prd:
-    needs: [test-local, test-acc]
+    needs: [setup, test-local, test-acc]
     runs-on: ubuntu-latest
     env:
       deploy_target: production
@@ -141,6 +146,7 @@ jobs:
         env:
           to_environment: ${{ env.deploy_target }}
           version: ${{ needs.test-local.outputs.version }}
+          application_name: ${{ needs.setup.outputs.application_name }}
 
   deploy-infrastructure-prd:
     needs: [test-local, can-i-deploy-prd, record-deploy-acc]
@@ -252,6 +258,7 @@ jobs:
   record-deploy-acc:
     needs:
       [
+        setup,
         test-local,
         deploy-infrastructure-acc,
         can-i-deploy-acc,
@@ -260,6 +267,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       deployed_env: test
+      application_name: ${{ needs.setup.outputs.application_name }}
     steps:
       - name: record-deployment ${{ env.application_name }} to ${{ env.deployed_env }}
         if: github.ref == 'refs/heads/main'
@@ -336,6 +344,7 @@ jobs:
   record-deploy-prd:
     needs:
       [
+        setup,
         test-local,
         deploy-infrastructure-prd,
         can-i-deploy-prd,
@@ -344,6 +353,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       deployed_env: production
+      application_name: ${{ needs.setup.outputs.application_name }}
     steps:
       - name: record-deployment ${{ env.application_name }} to ${{ env.deployed_env }}
         if: github.ref == 'refs/heads/main'
