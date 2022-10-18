@@ -10,14 +10,9 @@ name: Design Insight
 
 on:
   push:
-    branches: ['swaggerhub*', 'main']
+    branches: ['swaggerhub*']
     paths:
       - 'oas/**'
-  pull_request:
-    branches: ['main']
-    paths:
-      - 'oas/**'
-
   workflow_dispatch:
 
 env:
@@ -38,9 +33,7 @@ jobs:
           echo "version=${UNIQUE_VERSION}" >> $GITHUB_ENV
       - name: merge openapi spec
         run: |
-          cd spec-merge
-          npm install
-          npm run merge-ref-allof
+          npx -y oas-merge ./oas/openapi.yaml
       - uses: pactflow/actions/publish-provider-contract@v1.0.1
         env:
           oas_file: oas/openapi-transformed.json

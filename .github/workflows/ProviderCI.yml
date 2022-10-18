@@ -2,17 +2,17 @@ name: Provider-API-AzureFunction-CI
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - 'provider_azure_function/**'
-      - '.github/workflows/ProviderCI.yml'
-      - 'oas/**'
-  pull_request:
-    branches: ['main']
-    paths:
-      - '.github/workflows/ProviderCI.yml'
-      - 'provider_azure_function/**'
-      - 'oas/**'
+  # push:
+  #   paths:
+  #     - 'provider_azure_function/**'
+  #     - '.github/workflows/ProviderCI.yml'
+  #     - 'oas/**'
+  # pull_request:
+  #   branches: ['main']
+  #   paths:
+  #     - '.github/workflows/ProviderCI.yml'
+  #     - 'provider_azure_function/**'
+  #     - 'oas/**'
 
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'provider_azure_function' # set this to the path to your web app project, defaults to the repository root
@@ -45,9 +45,7 @@ jobs:
           echo "version=${UNIQUE_VERSION}" >> $GITHUB_ENV
       - name: merge openapi spec
         run: |
-          cd spec-merge
-          npm install
-          npm run merge-ref-allof
+          npx -y oas-merge ./oas/openapi.yaml
       - name: Test
         run: chmod ugo+rwx ReadyAPI_Tests && ./startServerAndTest.sh
         env:
