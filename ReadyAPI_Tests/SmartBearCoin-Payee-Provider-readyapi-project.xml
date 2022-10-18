@@ -486,17 +486,27 @@ Attributes that can be used for sorting are:
     <con:runType>SEQUENTIAL</con:runType>
     <con:testCase id="126c0810-c7d5-4954-8dcd-198cb92bac9c" discardOkResults="false" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="Payee Test Case" searchProperties="true" timeout="0">
       <con:description>The test case generated for the REST resource [/] located at [/]</con:description>
-      <con:settings/>
+      <con:settings>
+        <con:setting id="IncludeOverview">true</con:setting>
+        <con:setting id="IncludeResults">true</con:setting>
+        <con:setting id="FlowLayout">true</con:setting>
+        <con:setting id="ErrorDetails">true</con:setting>
+        <con:setting id="IncludeCoverage">true</con:setting>
+      </con:settings>
       <con:testStep type="datasource" name="Payee Data" id="74f994ac-ebf5-481a-9bb2-6c13e2e8b17f">
         <con:settings/>
         <con:config xsi:type="con:DataSourceStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-          <con:dataSource type="Excel">
+          <con:dataSource type="Grid">
             <con:configuration>
-              <file>C:/Users/joseph.joyce/Desktop/Seminar_DataSource.xlsx</file>
-              <worksheet/>
-              <cell>A1</cell>
-              <ignoreEmpty>false</ignoreEmpty>
-              <evaluateFormulas>false</evaluateFormulas>
+              <check><![CDATA[<xml-fragment><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">true</con:entry></xml-fragment>]]></check>
+              <row><![CDATA[<xml-fragment><con:entry xmlns:con="http://eviware.com/soapui/config">f55e2f3d-a05a-4893-9b39-b2c609a977e8</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">IT</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">coffee</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config"/></xml-fragment>]]></row>
+              <row><![CDATA[<xml-fragment><con:entry xmlns:con="http://eviware.com/soapui/config">3057a155-1699-4894-9998-bfa7ab846119</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">IT</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">paris</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config"/></xml-fragment>]]></row>
+              <row><![CDATA[<xml-fragment><con:entry xmlns:con="http://eviware.com/soapui/config">d0bd8cc2-800c-4199-9908-f14f9b814f8e</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">IT</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">LTD</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config"/></xml-fragment>]]></row>
+              <row><![CDATA[<xml-fragment><con:entry xmlns:con="http://eviware.com/soapui/config">1dde99af-288b-44f6-94a2-024d85b7673b</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">FR</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config"/><con:entry xmlns:con="http://eviware.com/soapui/config"/></xml-fragment>]]></row>
+              <row><![CDATA[<xml-fragment><con:entry xmlns:con="http://eviware.com/soapui/config">4eb603f3-e7e7-47b1-a5df-557b6204616e</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">IE</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config"/><con:entry xmlns:con="http://eviware.com/soapui/config"/></xml-fragment>]]></row>
+              <row><![CDATA[<xml-fragment><con:entry xmlns:con="http://eviware.com/soapui/config">a83acdb9-4353-425f-8d16-eae37d905cb8</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">IE</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config"/><con:entry xmlns:con="http://eviware.com/soapui/config"/></xml-fragment>]]></row>
+              <row><![CDATA[<xml-fragment><con:entry xmlns:con="http://eviware.com/soapui/config">1e331a0f-29bd-4b6b-8b21-8b87ed653c6b </con:entry><con:entry xmlns:con="http://eviware.com/soapui/config">IE</con:entry><con:entry xmlns:con="http://eviware.com/soapui/config"/><con:entry xmlns:con="http://eviware.com/soapui/config"/></xml-fragment>]]></row>
+              <recognizeAsPlainText>true</recognizeAsPlainText>
             </con:configuration>
           </con:dataSource>
           <con:shared>true</con:shared>
@@ -560,6 +570,15 @@ Attributes that can be used for sorting are:
               <con:settings/>
               <con:configuration>
                 <codes>200</codes>
+              </con:configuration>
+            </con:assertion>
+            <con:assertion type="JsonPath Existence Match" id="412eab47-082e-46d6-8b36-96b74365792f" name="Successful Response Must Contain Remittance Email Address">
+              <con:configuration>
+                <path>$['remittance_email_address']</path>
+                <content>true</content>
+                <allowWildcards>false</allowWildcards>
+                <ignoreNamspaceDifferences>false</ignoreNamspaceDifferences>
+                <ignoreComments>false</ignoreComments>
               </con:configuration>
             </con:assertion>
             <con:credentials>
@@ -918,7 +937,7 @@ Attributes that can be used for sorting are:
         <con1:property propagates="true" key="ModelItem.id" type="java.lang.String">fb334aad-eeec-470d-8513-cf7ab7c849f9</con1:property>
       </con1:properties>
       <con1:attributes>
-        <con1:property key="limits">Time=7200;</con1:property>
+        <con1:property key="limits">Time=30;</con1:property>
       </con1:attributes>
       <con1:addons>
         <con1:addon type="com.eviware.loadui.api.assertion.AssertionAddon" id="cfe2f6c3-dbf9-44ed-86e7-12b743a3f414">
@@ -949,14 +968,14 @@ Attributes that can be used for sorting are:
       <con1:scene label="New Scenario" id="88e48b53-b0cf-44af-908d-bb32ecc8c0af">
         <con1:properties>
           <con1:property propagates="true" key="ModelItem.description" type="java.lang.String"/>
-          <con1:property propagates="true" key="CanvasItem.abortOnFinish" type="java.lang.Boolean">false</con1:property>
+          <con1:property propagates="true" key="CanvasItem.abortOnFinish" type="java.lang.Boolean">true</con1:property>
           <con1:property propagates="true" key="SceneItem.followProject" type="java.lang.Boolean">true</con1:property>
           <con1:property propagates="true" key="SceneItem.scenarioRatePercentage" type="java.lang.Long">100</con1:property>
           <con1:property propagates="true" key="SceneItem.scenarioRateSpecific" type="java.lang.Long">10</con1:property>
           <con1:property propagates="true" key="ModelItem.samplerOutputLevel" type="com.eviware.loadui.api.component.SoapUISamplerOutputLevel">TestCaseAndAllTestSteps</con1:property>
         </con1:properties>
         <con1:attributes>
-          <con1:property key="limits">Time=7200;</con1:property>
+          <con1:property key="limits">Time=30;</con1:property>
         </con1:attributes>
         <con1:addons/>
         <con1:component type="com.eviware.loadui.impl.component.IntervalComponent" label="Interval 1" id="a11af0d3-dde3-4608-9317-f33469a513a4" category="Scheduler">
