@@ -30,7 +30,7 @@ env:
   results_file: ReadyAPI_Tests/report.xml
   PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
   PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
-  application_name: ${{ github.event.inputs.application_name }}S
+  application_name: ${{ github.event.inputs.application_name }}
   application_name_default: SmartBearCoin-Payee-Provider
   demo_deploy: ${{ github.event.inputs.demo_deploy }}
 
