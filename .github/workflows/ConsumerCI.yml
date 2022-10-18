@@ -63,11 +63,11 @@ jobs:
         env:
           pactfiles: ${{ env.application_folder }}/pacts
 
-  can-i-deploy-to-test:
+  can-i-deploy-to-acc:
     needs: [setup, test]
     runs-on: ubuntu-latest
     env:
-      deploy_target: test
+      deploy_target: acceptance
     steps:
       - name: can-i-deploy ${{ env.application_name }} to ${{ env.deploy_target }}
         uses: pactflow/actions/can-i-deploy@v1.0.1
@@ -87,12 +87,12 @@ jobs:
           to_environment: ${{ env.deploy_target }}
           application_name: ${{ needs.setup.outputs.PACT_CONSUMER }}
 
-  deploy-to-test:
+  deploy-to-acc:
     if: github.ref == 'refs/heads/main'
-    needs: [setup, can-i-deploy-to-test]
+    needs: [setup, can-i-deploy-to-acc]
     runs-on: ubuntu-latest
     env:
-      deploy_target: test
+      deploy_target: acceptance
       REACT_APP_API_BASE_URL: https://sbdevrel-fua-smartbearcoin-acc.azurewebsites.net/api
     steps:
       - uses: actions/checkout@v3
