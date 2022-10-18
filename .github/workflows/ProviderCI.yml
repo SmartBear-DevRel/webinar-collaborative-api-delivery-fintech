@@ -7,6 +7,10 @@ on:
         description: name_of_provider
         required: true
         default: 'SmartBearCoin-Payee-Provider'
+      demo_deploy:
+        description: skip deployment steps for demo
+        required: true
+        default: 'false'
   # push:
   #   paths:
   #     - 'provider_azure_function/**'
@@ -24,21 +28,26 @@ env:
   DOTNET_VERSION: '6.0.402' # set this to the dotnet version to use
   oas_file: oas/openapi-transformed.json
   results_file: ReadyAPI_Tests/report.xml
-  application_name: SmartBearCoin-Payee-Provider
   PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
   PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
+  application_name: ${{ github.event.inputs.application_name }}
+  application_name_default: SmartBearCoin-Payee-Provider
+  demo_deploy: ${{ github.event.inputs.demo_deploy }}
 
 jobs:
   setup:
     name: 🏗️ setup
     runs-on: ubuntu-latest
     steps:
-      - run: echo "application_name=${application_name:-${application_name}}" >> $GITHUB_ENV
+      - run: echo "application_name=${application_name:-${application_name_default}}" >> $GITHUB_ENV
     outputs:
       application_name: ${{ env.application_name }}
 
   test-local:
+    needs: setup
     runs-on: ubuntu-latest
+    env:
+      application_name: ${{ needs.setup.outputs.application_name }}
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET
@@ -79,10 +88,11 @@ jobs:
       version: ${{ env.version }}
 
   can-i-deploy-acc:
-    needs: test-local
+    needs: [setup, test-local]
     runs-on: ubuntu-latest
     env:
       deploy_target: acceptance
+      application_name: ${{ needs.setup.outputs.application_name }}
     steps:
       - name: can-i-deploy ${{ env.application_name }} to ${{ env.deploy_target }}
         uses: pactflow/actions/can-i-deploy@v1.0.1
@@ -108,11 +118,13 @@ jobs:
 
       # login to Azure
       - uses: azure/login@v1
+        if: ${{ env.demo_deploy != 'true' }}
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       # deploy ARM template to setup azure resources (group & sub defined in credentials)
       - name: Run ARM deploy
+        if: ${{ env.demo_deploy != 'true' }}
         id: armdeploy
         uses: azure/arm-deploy@v1
         with:
@@ -124,7 +136,7 @@ jobs:
     # use ARM templates to set up the Azure Infra
 
   can-i-deploy-prd:
-    needs: [test-local, test-acc]
+    needs: [setup, test-local, test-acc]
     runs-on: ubuntu-latest
     env:
       deploy_target: production
@@ -134,6 +146,7 @@ jobs:
         env:
           to_environment: ${{ env.deploy_target }}
           version: ${{ needs.test-local.outputs.version }}
+          application_name: ${{ needs.setup.outputs.application_name }}
 
   deploy-infrastructure-prd:
     needs: [test-local, can-i-deploy-prd, record-deploy-acc]
@@ -151,11 +164,13 @@ jobs:
 
       # login to Azure
       - uses: azure/login@v1
+        if: ${{ env.demo_deploy != 'true' }}
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       # deploy ARM template to setup azure resources (group & sub defined in credentials)
       - name: Run ARM deploy
+        if: ${{ env.demo_deploy != 'true' }}
         id: armdeploy
         uses: azure/arm-deploy@v1
         with:
@@ -176,12 +191,14 @@ jobs:
 
       # login to Azure
       - uses: azure/login@v1
+        if: ${{ env.demo_deploy != 'true' }}
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           enable-AzPSSession: true
 
       # get publish profile
       - name: Get publish profile
+        if: ${{ env.demo_deploy != 'true' }}
         id: fncapp
         uses: azure/powershell@v1
         with:
@@ -194,6 +211,7 @@ jobs:
 
       # setup donet environments
       - name: Setup DotNet Environments
+        if: ${{ env.demo_deploy != 'true' }}
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: |
@@ -202,6 +220,7 @@ jobs:
 
       # build project
       - name: 'Resolve dependencies and build'
+        if: ${{ env.demo_deploy != 'true' }}
         shell: pwsh
         run: |
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
@@ -211,6 +230,7 @@ jobs:
 
       # publish azure function
       - name: 'Run Azure Functions Action'
+        if: ${{ env.demo_deploy != 'true' }}
         uses: Azure/functions-action@v1
         id: fa
         with:
@@ -238,6 +258,7 @@ jobs:
   record-deploy-acc:
     needs:
       [
+        setup,
         test-local,
         deploy-infrastructure-acc,
         can-i-deploy-acc,
@@ -246,6 +267,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       deployed_env: test
+      application_name: ${{ needs.setup.outputs.application_name }}
     steps:
       - name: record-deployment ${{ env.application_name }} to ${{ env.deployed_env }}
         if: github.ref == 'refs/heads/main'
@@ -272,12 +294,14 @@ jobs:
 
       # login to Azure
       - uses: azure/login@v1
+        if: ${{ env.demo_deploy != 'true' }}
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           enable-AzPSSession: true
 
       # get publish profile
       - name: Get publish profile
+        if: ${{ env.demo_deploy != 'true' }}
         id: fncapp
         uses: azure/powershell@v1
         with:
@@ -290,6 +314,7 @@ jobs:
 
       # setup donet environments
       - name: Setup DotNet Environments
+        if: ${{ env.demo_deploy != 'true' }}
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: |
@@ -298,6 +323,7 @@ jobs:
 
       # build project
       - name: 'Resolve dependencies and build'
+        if: ${{ env.demo_deploy != 'true' }}
         shell: pwsh
         run: |
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
@@ -307,6 +333,7 @@ jobs:
 
       # publish azure function
       - name: 'Run Azure Functions Action'
+        if: ${{ env.demo_deploy != 'true' }}
         uses: Azure/functions-action@v1
         id: fa
         with:
@@ -317,6 +344,7 @@ jobs:
   record-deploy-prd:
     needs:
       [
+        setup,
         test-local,
         deploy-infrastructure-prd,
         can-i-deploy-prd,
@@ -325,6 +353,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       deployed_env: production
+      application_name: ${{ needs.setup.outputs.application_name }}
     steps:
       - name: record-deployment ${{ env.application_name }} to ${{ env.deployed_env }}
         if: github.ref == 'refs/heads/main'

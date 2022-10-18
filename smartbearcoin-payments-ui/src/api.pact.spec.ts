@@ -2,8 +2,8 @@ import { API } from './Api';
 import { PactV3, MatchersV3 } from '@pact-foundation/pact';
 
 const providerWithConsumerA = new PactV3({
-  consumer: 'SmartBearCoin-Payments-UI',
-  provider: 'SmartBearCoin-Payee-Provider'
+  consumer: process.env.PACT_CONSUMER ?? 'SmartBearCoin-Payments-UI',
+  provider: process.env.PACT_PROVIDER ?? 'SmartBearCoin-Payee-Provider'
 });
 
 const { like, eachLike, reify } = MatchersV3;
