@@ -532,7 +532,7 @@ Attributes that can be used for sorting are:
             <con:assertion type="Valid HTTP Status Codes" name="Valid HTTP Status Codes" id="80a8e79a-28a3-4b0d-b537-7abd01178522">
               <con:settings/>
               <con:configuration>
-                <codes>200</codes>
+                <codes>200,400</codes>
               </con:configuration>
             </con:assertion>
             <con:credentials>
