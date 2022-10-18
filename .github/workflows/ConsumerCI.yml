@@ -124,7 +124,7 @@ jobs:
 
   deploy-to-production:
     if: github.ref == 'refs/heads/main'
-    needs: [setup, can-i-deploy-to-production, deploy-to-test]
+    needs: [setup, can-i-deploy-to-production, deploy-to-acc]
     runs-on: ubuntu-latest
     env:
       deploy_target: production
