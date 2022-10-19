@@ -44,7 +44,7 @@ jobs:
   pact-can-i-deploy:
     strategy:
       matrix:
-        environment: [test, production]
+        environment: [acceptance, production]
       fail-fast: false
     needs: pact-publish-oas-action
     runs-on: ubuntu-latest
