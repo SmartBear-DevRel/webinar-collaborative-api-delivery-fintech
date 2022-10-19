@@ -19,7 +19,6 @@ env:
   application_name: SmartBearCoin-Payee-Provider
   PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
   PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
-  environment: test
 
 jobs:
   pact-publish-oas-action:
@@ -44,7 +43,7 @@ jobs:
   pact-can-i-deploy:
     strategy:
       matrix:
-        environment: [test, production]
+        environment: [acceptance, production]
       fail-fast: false
     needs: pact-publish-oas-action
     runs-on: ubuntu-latest
