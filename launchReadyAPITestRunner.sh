@@ -1,13 +1,8 @@
 #!/bin/bash
 
-## ACC
-# ENDPOINT=https://sbdevrel-fua-smartbearcoin-acc.azurewebsites.net/api/payees
-## PROD
-# ENDPOINT=https://sbdevrel-fua-smartbearcoin-prd.azurewebsites.net/api/payees
-
-ENDPOINT=${ENDPOINT:-'http://localhost:7071/api/payees'}
+ENDPOINT=${ENDPOINT:-'localhost:9092'}
 PROJECT_FOLDER=${PROJECT_FOLDER:-'ReadyAPI_Tests'}
-PROJECT_FILE=${PROJECT_FILE:-'SmartBearCoin-Payee-Provider-readyapi-project.xml'}
+PROJECT_FILE=${PROJECT_FILE:-'kafka_ready_project.xml'}
 
 MISSING=()
 [ ! "$PROJECT_FOLDER" ] && MISSING+=("PROJECT_FOLDER")
@@ -26,6 +21,8 @@ if [ ${#MISSING[@]} -gt 0 ]; then
     exit 1
 fi
 
+echo ${ENDPOINT}
+
 echo "executing tests for ${PROJECT_FILE}"
 docker run --rm --network="host" \
     -v=${PWD}/${PROJECT_FOLDER}:/project \
@@ -33,5 +30,5 @@ docker run --rm --network="host" \
     -e API_KEY=${SLM_API_KEY} \
     -e ENDPOINT=${ENDPOINT} \
     -e PROJECT_FILE=${PROJECT_FILE} \
-    -e COMMAND_LINE="'-e${ENDPOINT}' '-f/project' '-RJUnit-Style HTML Report' /project/${PROJECT_FILE}" \
+    -e COMMAND_LINE="'-hlocalhost:494' '-elocalhost:494' '-f/project' '-RJUnit-Style HTML Report' /project/${PROJECT_FILE}" \
     smartbear/ready-api-soapui-testrunner:latest

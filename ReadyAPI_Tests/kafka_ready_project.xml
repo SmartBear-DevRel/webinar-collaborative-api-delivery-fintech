@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="b4017a5f-c7fe-47c3-874c-d0999d5336e4" created="3.41.1" activeEnvironment="Default environment" name="Project 1" updated="3.41.1 2022-09-28T09:40:46Z" encryptionMode="Not encrypted" xmlns:con="http://eviware.com/soapui/config">
+  <con:settings>
+    <con:setting id="com.eviware.soapui.impl.wsdl.actions.iface.tools.soapui.ProTestRunnerAction@values-local"><![CDATA[<xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  <con:entry key="Settings File Password" value=""/>
+  <con:entry key="Report Format(s)" value="XML"/>
+  <con:entry key="Host:Port" value=""/>
+  <con:entry key="Export JUnit Results" value="true"/>
+  <con:entry key="Export All" value="true"/>
+  <con:entry key="Save After" value="false"/>
+  <con:entry key="Slack Channel(s)" value=""/>
+  <con:entry key="Add Settings" value="false"/>
+  <con:entry key="WSS Password Type" value=""/>
+  <con:entry key="Endpoint" value="localhost:9092"/>
+  <con:entry key="Test Suite Tags" value=""/>
+  <con:entry key="Select Report Type" value="JUnit-Style report for automation"/>
+  <con:entry key="System Properties" value=""/>
+  <con:entry key="Test Suite" value="Test Suite 1"/>
+  <con:entry key="Run in-process" value="false"/>
+  <con:entry key="Password" value=""/>
+  <con:entry key="Print Report" value="true"/>
+  <con:entry key="Open Report" value="false"/>
+  <con:entry key="Test Case Tags" value=""/>
+  <con:entry key="Export JUnit Results with test properties" value="false"/>
+  <con:entry key="Global Properties" value=""/>
+  <con:entry key="Project Properties" value=""/>
+  <con:entry key="Test Case" value="KafkaTest"/>
+  <con:entry key="Slack Access Token" value=""/>
+  <con:entry key="Project Password" value=""/>
+  <con:entry key="Username" value=""/>
+  <con:entry key="TestRunner Path" value="/Applications/ReadyAPI-3.41.1.app/Contents/Resources/app/bin"/>
+  <con:entry key="Environment" value="No Environment"/>
+  <con:entry key="Coverage Report" value="false"/>
+  <con:entry key="Enable UI" value="false"/>
+  <con:entry key="Root Folder" value=""/>
+  <con:entry key="Ignore Errors" value="false"/>
+  <con:entry key="Domain" value=""/>
+  <con:entry key="Tool Args" value=""/>
+  <con:entry key="Save Project" value="false"/>
+</xml-fragment>]]></con:setting>
+  </con:settings>
+  <con:interface xsi:type="con:MessageDrivenService" id="9cf96f82-b32d-4d5b-bf32-b96176694d5b" name="kafka" type="messagedrivenservice" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <con:settings/>
+    <con:definitionCache/>
+    <con:endpoints>
+      <con:endpoint>host.docker.internal:9092</con:endpoint>
+      <con:endpoint>localhost:9092</con:endpoint>
+    </con:endpoints>
+    <con:channel name="pets" id="ef06ec0f-9e6d-4f7e-bb7d-90127d2b5808">
+      <con:settings/>
+      <con:subscribeOperation name="Subscribe" id="79917e68-4f52-4c2d-b2a9-5d39740ea1df">
+        <con:settings/>
+      </con:subscribeOperation>
+      <con:publishOperation name="Publish" id="fe43dc82-5f52-4ee7-8331-18da466369cf">
+        <con:settings/>
+      </con:publishOperation>
+    </con:channel>
+    <con:channel name="adoptions.requested" id="71146d82-269b-41cd-a860-e32a1c4afc15">
+      <con:settings/>
+      <con:subscribeOperation name="Subscribe" id="f724a864-f0dd-41d0-a48a-76381b1f519c">
+        <con:settings/>
+      </con:subscribeOperation>
+      <con:publishOperation name="Publish" id="4b13c489-64db-4e83-92d0-c4e4735a6991">
+        <con:settings/>
+      </con:publishOperation>
+    </con:channel>
+    <con:channel name="data" id="87703c83-9181-4c84-93fe-59f4f707f4f1">
+      <con:settings/>
+      <con:subscribeOperation name="Subscribe" id="64816a98-cdac-4ee7-b3d3-c905e88b1396">
+        <con:settings/>
+      </con:subscribeOperation>
+      <con:publishOperation name="Publish" id="7717fb9e-b7c2-4373-8e20-d72ae011a728">
+        <con:settings/>
+      </con:publishOperation>
+    </con:channel>
+    <con:channel name="test" id="c2a3a24d-594f-40c9-970e-9a765c5312cb">
+      <con:settings/>
+      <con:subscribeOperation name="Subscribe" id="bfbe21b4-eb41-4971-9279-5e1c37423036">
+        <con:settings/>
+      </con:subscribeOperation>
+      <con:publishOperation name="Publish" id="74cf41ed-062b-424e-9046-6ea995c2f6d0">
+        <con:settings/>
+      </con:publishOperation>
+    </con:channel>
+  </con:interface>
+  <con:testSuite id="e5c1605a-e077-4bcc-bb4f-6798a934ee1c" name="Test Suite 1">
+    <con:settings/>
+    <con:runType>SEQUENTIAL</con:runType>
+    <con:testCase id="5838f558-d8f8-4017-9474-ae2eda843dba" discardOkResults="false" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="KafkaTest" searchProperties="true" timeout="0">
+      <con:settings/>
+      <con:testStep type="multiConfigureTestStep" name="Publish" id="e44cb1ff-f380-4e84-8972-307770d848ff">
+        <con:settings/>
+        <con:config activeStep="kafkaPublishTestStep" xsi:type="con:MultiConfigurationStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <con:kafkaPublishStep>
+            <con:operationId>74cf41ed-062b-424e-9046-6ea995c2f6d0</con:operationId>
+            <con:operationName>Publish</con:operationName>
+            <con:channelName>test</con:channelName>
+            <con:serviceName>kafka</con:serviceName>
+            <con:endpoint>localhost:9092</con:endpoint>
+            <con:connectionProperties/>
+            <con:schemaRegistry/>
+            <con:messageType>JSON</con:messageType>
+            <con:message>{
+   "foo" : "bar"
+}</con:message>
+            <con:parameters>
+              <con:parameter>
+                <con:name/>
+                <con:value xsi:nil="true"/>
+                <con:type>Header</con:type>
+              </con:parameter>
+            </con:parameters>
+          </con:kafkaPublishStep>
+        </con:config>
+      </con:testStep>
+      <con:testStep type="multiConfigureTestStep" name="Subscribe" id="82c2ead6-a6f1-471a-b206-12d2ad8b9558">
+        <con:settings/>
+        <con:config activeStep="kafkaSubscribeTestStep" xsi:type="con:MultiConfigurationStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <con:kafkaSubscribeStep>
+            <con:operationId>bfbe21b4-eb41-4971-9279-5e1c37423036</con:operationId>
+            <con:operationName>Subscribe</con:operationName>
+            <con:channelName>test</con:channelName>
+            <con:serviceName>kafka</con:serviceName>
+            <con:endpoint>localhost:9092</con:endpoint>
+            <con:connectionProperties/>
+            <con:schemaRegistry/>
+            <con:messageType>JSON</con:messageType>
+            <con:closeConditionType>ANY_CONDITION</con:closeConditionType>
+            <con:maxIdleTime>60</con:maxIdleTime>
+            <con:maxMessagesReceived>50</con:maxMessagesReceived>
+            <con:maxRunTime>1</con:maxRunTime>
+            <con:assertion type="DataAndMetadataAssertion" id="2b312cfa-fbac-4660-92a0-53513493d287" name="Smart Assertion">
+              <con:configuration xsi:type="con:DataAndMetadataAssertion">
+                <con:mode>Received Data</con:mode>
+                <con:elements>
+                  <con:path>$['foo']</con:path>
+                  <con:element>foo</con:element>
+                  <con:operatorId>1</con:operatorId>
+                  <con:enabled>true</con:enabled>
+                  <con:expectedValue>bar</con:expectedValue>
+                  <con:caseSensitive>true</con:caseSensitive>
+                  <con:numberType>false</con:numberType>
+                  <con:expectedDataType>1</con:expectedDataType>
+                </con:elements>
+                <con:originalMessage>{
+   "foo" : "bar"
+}</con:originalMessage>
+              </con:configuration>
+            </con:assertion>
+          </con:kafkaSubscribeStep>
+        </con:config>
+      </con:testStep>
+      <con:setupScript/>
+      <con:tearDownScript/>
+      <con:properties/>
+      <con:reportScript/>
+      <con:reportParameters/>
+    </con:testCase>
+    <con:properties/>
+    <con:setupScript/>
+    <con:reportParameters/>
+  </con:testSuite>
+  <con:requirements/>
+  <con:properties/>
+  <con:wssContainer/>
+  <con:databaseConnectionContainer/>
+  <con:jmsConnectionContainer/>
+  <con:oAuth2ProfileContainer/>
+  <con:oAuth1ProfileContainer/>
+  <con:reporting>
+    <con:reportTemplates/>
+    <con:xmlTemplates/>
+    <con:xmlTemplates/>
+    <con:parameters/>
+    <con:parameters/>
+  </con:reporting>
+  <con:reporting/>
+  <con:eventHandlers type="RequestFilter.filterRequest" name="RequestFilter.filterRequest">
+    <con:script>// Sample event script to add custom HTTP header to all outgoing REST, SOAP and HTTP(S) calls
+// This code is often used for adding custom authentication to ReadyAPI functional tests
+
+// If hardcoding the token, uncomment and change line 5
+// token = '4567'
+
+// If your token is parameterized in Project level custom property, uncomment line 8
+// token = request.parent.testCase.testSuite.project.getProperty('auth_token').getValue()
+
+// To modify all outgoing calls, remove comments from lines 11 to 16
+// headers = request.requestHeaders
+// if (headers.containsKey('auth_token2') == false) {
+//   headers.put('auth_token2', token)
+//   request.requestHeaders = headers
+// }</con:script>
+  </con:eventHandlers>
+  <con:eventHandlers type="TestRunListener.afterStep" name="TestRunListener.afterStep">
+    <con:script>// Save all test step results into files
+// Change the directory path in line 5 to a location where you want to store details
+// then uncomment lines 5 to 10
+
+// filePath = 'C:\\tempOutputDirectory\\'
+// fos = new java.io.FileOutputStream(filePath + testStepResult.testStep.label + '.txt', true)
+// pw = new java.io.PrintWriter(fos)
+// testStepResult.writeTo(pw)
+// pw.close()
+// fos.close()</con:script>
+  </con:eventHandlers>
+  <con:authRepository/>
+  <con:tags/>
+  <con:kafkaConnectionSettingsContainer>
+    <con:connectionSettings id="747cac80-2096-470f-857f-b4e6a3c1252a">
+      <con:subscribeProperties/>
+      <con:publishProperties/>
+      <con:schemaRegistry>
+        <con:url/>
+        <con:authProfile>No Authorization</con:authProfile>
+      </con:schemaRegistry>
+      <con:closeConditionType>ANY_CONDITION</con:closeConditionType>
+      <con:maxIdleTime>60</con:maxIdleTime>
+      <con:maxMessagesReceived>50</con:maxMessagesReceived>
+      <con:maxRunTime>60</con:maxRunTime>
+    </con:connectionSettings>
+    <con:connectionSettings id="cf67f77a-7f14-42f4-bcc9-79ae2defdb92">
+      <con:subscribeProperties/>
+      <con:publishProperties/>
+      <con:schemaRegistry/>
+      <con:closeConditionType>ANY_CONDITION</con:closeConditionType>
+      <con:maxIdleTime>60</con:maxIdleTime>
+      <con:maxMessagesReceived>50</con:maxMessagesReceived>
+      <con:maxRunTime>60</con:maxRunTime>
+    </con:connectionSettings>
+    <con:connectionSettings id="5d78c437-7668-4087-8e8c-3377d9b1c57c">
+      <con:subscribeProperties/>
+      <con:publishProperties/>
+      <con:schemaRegistry/>
+      <con:closeConditionType>ANY_CONDITION</con:closeConditionType>
+      <con:maxIdleTime>60</con:maxIdleTime>
+      <con:maxMessagesReceived>50</con:maxMessagesReceived>
+      <con:maxRunTime>60</con:maxRunTime>
+    </con:connectionSettings>
+    <con:connectionSettings id="f701bdac-596f-4113-a90d-0b1da9f0f02d">
+      <con:subscribeProperties/>
+      <con:publishProperties/>
+      <con:schemaRegistry>
+        <con:url/>
+        <con:authProfile>No Authorization</con:authProfile>
+      </con:schemaRegistry>
+      <con:closeConditionType>ANY_CONDITION</con:closeConditionType>
+      <con:maxIdleTime>60</con:maxIdleTime>
+      <con:maxMessagesReceived>50</con:maxMessagesReceived>
+      <con:maxRunTime>60</con:maxRunTime>
+    </con:connectionSettings>
+  </con:kafkaConnectionSettingsContainer>
+</con:soapui-project>
