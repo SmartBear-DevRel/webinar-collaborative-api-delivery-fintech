@@ -14,15 +14,13 @@ jobs:
       - uses: actions/checkout@v3
       - name: foo
         run: |
-          apt update -y 
-          apt upgrade -y 
-          apt install -y default-jdk
+          sudo apt update -y 
+          sudo apt upgrade -y 
+          sudo apt install -y default-jdk
           wget https://dlcdn.apache.org/kafka/3.4.0/kafka_2.13-3.4.0.tgz
           tar xzf kafka_2.13-3.4.0.tgz 
           sudo mv kafka_2.13-3.4.0 /usr/local/kafka
           /usr/local/kafka/bin/zookeeper-server-start.sh /usr/local/kafka/config/zookeeper.properties &
-          # zkServer start
-          sleep 45
       - name: Test
         run: chmod ugo+rwx ReadyAPI_Tests && ./startServerAndTest.sh
         env:
