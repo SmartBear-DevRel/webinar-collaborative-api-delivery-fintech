@@ -1,8 +1,0 @@
-Status: FAIL
-Time Taken: 0
-Size: 0
-Timestamp: Thu Mar 09 22:48:44 GMT 2023
-TestStep: Publish
-
------------------ Messages ------------------------------
-org.apache.kafka.common.errors.TimeoutException: Topic test not present in metadata after 10000 ms.

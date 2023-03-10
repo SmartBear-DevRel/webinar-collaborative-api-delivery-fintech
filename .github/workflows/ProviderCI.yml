@@ -15,12 +15,12 @@ jobs:
       - name: foo
         run: |
           sudo apt update -y 
-          sudo apt upgrade -y 
           sudo apt install -y default-jdk
           wget https://dlcdn.apache.org/kafka/3.4.0/kafka_2.13-3.4.0.tgz
           tar xzf kafka_2.13-3.4.0.tgz 
           sudo mv kafka_2.13-3.4.0 /usr/local/kafka
           /usr/local/kafka/bin/zookeeper-server-start.sh /usr/local/kafka/config/zookeeper.properties &
+          sleep 25
       - name: Test
         run: chmod ugo+rwx ReadyAPI_Tests && ./startServerAndTest.sh
         env:
@@ -28,7 +28,7 @@ jobs:
           PROJECT_FILE: 'kafka_ready_project.xml'
           SLM_API_KEY: ${{ secrets.SLM_API_KEY }}
           SERVER_COMMAND: '/usr/local/kafka/bin/kafka-server-start.sh /usr/local/kafka/config/server.properties'
-          CREATE_TOPIC_COMMAND: '/usr/local/kafka/bin/kafka-topics.sh --create --bootstrap-server 0.0.0.0:9092 --replication-factor 1 --partitions 1 --topic test'
+          CREATE_TOPIC_COMMAND: '/usr/local/kafka/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic test'
           ENDPOINT: localhost:9092
     outputs:
       version: ${{ env.version }}
