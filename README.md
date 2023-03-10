@@ -97,3 +97,27 @@ To use this feature, you will need:
 
 
 ### Requirements & Design
+
+1. TODO
+
+### Development, Testing & Virtualisation - Provider
+
+1. Import OpenAPI from SwaggerHub to ReadyAPI
+2. Create ReadyAPI Functional Tests
+3. Test ReadyAPI tests against virt-server locally
+4. Test ReadyAPI tests against virt-server locally with test runner
+5. Test ReadyAPI tests against virt-server locally with test runner docker
+6. Test ReadyAPI tests against virt-server in CI
+7. Upload to Provider Contract to PactFlow
+
+
+### Coding & Deployment - Provider
+
+
+### Coding & Deployment - Consumer
+
+
+### Exploration
+
+
+### Enhanced visiblity
