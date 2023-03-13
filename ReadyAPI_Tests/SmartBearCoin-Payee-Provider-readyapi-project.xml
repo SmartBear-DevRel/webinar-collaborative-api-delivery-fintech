@@ -1,6 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <con:soapui-project id="9cab7dfb-4784-4a51-aee4-dd9f28a7c7ef" created="3.40.2" activeEnvironment="Prod" name="SmartBearCoin-Payee-Provider" updated="3.41.1 2022-09-28T09:40:46Z" encryptionMode="Not encrypted" resourceRoot="" xmlns:con="http://eviware.com/soapui/config">
-  <con:settings/>
+  <con:settings>
+    <con:setting id="com.eviware.soapui.impl.wsdl.actions.iface.tools.soapui.ProTestRunnerUIAction@values-local"><![CDATA[<xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  <con:entry key="Settings File Password" value=""/>
+  <con:entry key="Report Format(s)" value="XML"/>
+  <con:entry key="Host:Port" value=""/>
+  <con:entry key="Export JUnit Results" value="true"/>
+  <con:entry key="Export All" value="true"/>
+  <con:entry key="Save After" value="false"/>
+  <con:entry key="Slack Channel(s)" value=""/>
+  <con:entry key="Add Settings" value="false"/>
+  <con:entry key="WSS Password Type" value=""/>
+  <con:entry key="Endpoint" value=""/>
+  <con:entry key="Test Suite Tags" value=""/>
+  <con:entry key="Select Report Type" value="JUnit-Style report for automation"/>
+  <con:entry key="System Properties" value=""/>
+  <con:entry key="Test Suite" value="&lt;all>"/>
+  <con:entry key="Run in-process" value="false"/>
+  <con:entry key="Password" value=""/>
+  <con:entry key="Print Report" value="true"/>
+  <con:entry key="Open Report" value="false"/>
+  <con:entry key="Test Case Tags" value=""/>
+  <con:entry key="Export JUnit Results with test properties" value="false"/>
+  <con:entry key="Global Properties" value=""/>
+  <con:entry key="Project Properties" value=""/>
+  <con:entry key="Test Case" value="&lt;all>"/>
+  <con:entry key="Slack Access Token" value=""/>
+  <con:entry key="Project Password" value=""/>
+  <con:entry key="Username" value=""/>
+  <con:entry key="TestRunner Path" value="/Applications/ReadyAPI-3.41.1.app/Contents/Resources/app/bin"/>
+  <con:entry key="Environment" value="No Environment"/>
+  <con:entry key="Coverage Report" value="false"/>
+  <con:entry key="Enable UI" value="false"/>
+  <con:entry key="Root Folder" value=""/>
+  <con:entry key="Ignore Errors" value="false"/>
+  <con:entry key="Domain" value=""/>
+  <con:entry key="Tool Args" value=""/>
+  <con:entry key="Save Project" value="false"/>
+</xml-fragment>]]></con:setting>
+  </con:settings>
   <con:interface xsi:type="con:RestService" id="b6504654-cff3-4271-b43a-022c6556552a" name="SmartBearCoin - Payees API" type="rest_ex" wadlVersion="https://swagger.io/openapiv3/specification" definitionUrl="file:/Users/saf/dev/webinar/webinar-collaborative-api-delivery-fintech/oas/openapi.yaml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <con:description>The **Customer Managment - Payees API** - allows retrieval of payees and payee transactions. The Payees API allows consumers to search, identify and retrieve payee information in one specified country.
 
@@ -526,7 +564,7 @@ Attributes that can be used for sorting are:
             <con:settings>
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
-            <con:endpoint>http://localhost:7071/api/payees</con:endpoint>
+            <con:endpoint>http://localhost:7071/api</con:endpoint>
             <con:request/>
             <con:originalUri>http://localhost/customer-management/v1/payees/</con:originalUri>
             <con:assertion type="Valid HTTP Status Codes" name="Valid HTTP Status Codes" id="80a8e79a-28a3-4b0d-b537-7abd01178522">
@@ -565,7 +603,7 @@ Attributes that can be used for sorting are:
             <con:settings>
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
-            <con:endpoint>http://localhost:8080/customer-management/v1/payees</con:endpoint>
+            <con:endpoint>http://localhost:7071/customer-management/v1</con:endpoint>
             <con:request/>
             <con:originalUri>http://localhost/customer-management/v1/payees/</con:originalUri>
             <con:assertion type="Valid HTTP Status Codes" id="e8b60e4e-a8e6-4c8d-87e0-f45aae5d7cca" name="Valid HTTP Status Codes">
@@ -609,7 +647,7 @@ Attributes that can be used for sorting are:
             <con:settings>
               <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
             </con:settings>
-            <con:endpoint>http://localhost:8080/customer-management/v1/payees</con:endpoint>
+            <con:endpoint>http://localhost:7071/customer-management/v1</con:endpoint>
             <con:request/>
             <con:originalUri>http://localhost/payees/transactions</con:originalUri>
             <con:assertion type="Valid HTTP Status Codes" id="28ad3501-81ee-4391-9198-f88681bed91d" name="Valid HTTP Status Codes">
