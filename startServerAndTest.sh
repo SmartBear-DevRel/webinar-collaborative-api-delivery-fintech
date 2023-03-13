@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# SERVER_DIR=${SERVER_DIR:-'provider_azure_function'}
+SERVER_DIR=${SERVER_DIR:-'js'}
 SERVER_COMMAND=${SERVER_COMMAND:-'kafka-server-start /opt/homebrew/etc/kafka/server.properties'}
 CREATE_TOPIC_COMMAND=${CREATE_TOPIC_COMMAND:-'kafka-topics --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic test'}
 # WAIT_FOR=${WAIT_FOR:-'http://localhost:7071'}
