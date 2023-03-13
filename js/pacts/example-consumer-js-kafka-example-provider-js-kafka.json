@@ -1,0 +1,44 @@
+{
+  "consumer": {
+    "name": "example-consumer-js-kafka"
+  },
+  "messages": [
+    {
+      "contents": {
+        "foo": "whee"
+      },
+      "description": "a thing event",
+      "matchingRules": {
+        "body": {
+          "$.foo": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ]
+          }
+        }
+      },
+      "metadata": {
+        "contentType": "application/json",
+        "kafka_topic": "test"
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "11.0.2"
+    },
+    "pactRust": {
+      "ffi": "0.4.0",
+      "models": "1.0.4"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "example-provider-js-kafka"
+  }
+}

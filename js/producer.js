@@ -1,40 +1,38 @@
-const { Kafka } = require('kafkajs')
+const { Kafka, Partitioners } = require('kafkajs');
 
 const kafka = new Kafka({
   clientId: 'test-app',
   brokers: ['localhost:9092']
-})
+});
 
-const producer = kafka.producer()
+const producer = kafka.producer({
+  createPartitioner: Partitioners.LegacyPartitioner
+});
 
 const run = async () => {
   // Producing
-  await producer.connect()
+  await producer.connect();
   await producer.send({
     topic: 'test',
-    messages: [
-      { value: 'Hello KafkaJS user!' },
-    ],
-  })
+    messages: messageProducer
+  });
+  await producer.disconnect();
+};
+
+const args = process.argv.slice(2);
+if (args[0] === '--start') {
+  run().catch(console.error);
 }
 
-run().catch(console.error)
+const messageProducer = () => {
+  const message = {
+    topic: 'test',
+    messages: [{ value: JSON.stringify({ foo: 'bar' }) }]
+  }
+  console.log("sending message:",message)
+  return message
+};
 
-
-// const kafka = require('kafka-node');
-// const Producer = kafka.Producer;
-// const client = new kafka.KafkaClient();
-// const producer = new Producer(client);
-
-// const payloads = [
-//   { topic: 'test', messages: 'New sale happened', partition: 0 },
-//   { topic: 'test', messages: ['Refund', 'Sale'] }
-// ];
-
-// producer.send(payloads, function (error, data) {
-//   if (error) {
-//     console.error(error);
-//   } else {
-//     console.log(data);
-//   }
-// });
+module.exports = {
+  messageProducer
+};
