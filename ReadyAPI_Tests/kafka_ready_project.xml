@@ -38,6 +38,43 @@
   <con:entry key="Tool Args" value=""/>
   <con:entry key="Save Project" value="false"/>
 </xml-fragment>]]></con:setting>
+    <con:setting id="com.eviware.soapui.impl.wsdl.actions.iface.tools.soapui.ProTestRunnerUIAction@values-local"><![CDATA[<xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  <con:entry key="Settings File Password" value=""/>
+  <con:entry key="Report Format(s)" value="XML"/>
+  <con:entry key="Host:Port" value=""/>
+  <con:entry key="Export JUnit Results" value="true"/>
+  <con:entry key="Export All" value="true"/>
+  <con:entry key="Save After" value="false"/>
+  <con:entry key="Slack Channel(s)" value=""/>
+  <con:entry key="Add Settings" value="false"/>
+  <con:entry key="WSS Password Type" value=""/>
+  <con:entry key="Endpoint" value="host.docker.internal:9092"/>
+  <con:entry key="Test Suite Tags" value=""/>
+  <con:entry key="Select Report Type" value="JUnit-Style report for automation"/>
+  <con:entry key="System Properties" value=""/>
+  <con:entry key="Test Suite" value="&lt;all>"/>
+  <con:entry key="Run in-process" value="false"/>
+  <con:entry key="Password" value=""/>
+  <con:entry key="Print Report" value="true"/>
+  <con:entry key="Open Report" value="false"/>
+  <con:entry key="Test Case Tags" value=""/>
+  <con:entry key="Export JUnit Results with test properties" value="false"/>
+  <con:entry key="Global Properties" value=""/>
+  <con:entry key="Project Properties" value=""/>
+  <con:entry key="Test Case" value="&lt;all>"/>
+  <con:entry key="Slack Access Token" value=""/>
+  <con:entry key="Project Password" value=""/>
+  <con:entry key="Username" value=""/>
+  <con:entry key="TestRunner Path" value="/Applications/ReadyAPI-3.41.1.app/Contents/Resources/app/bin"/>
+  <con:entry key="Environment" value="No Environment"/>
+  <con:entry key="Coverage Report" value="false"/>
+  <con:entry key="Enable UI" value="false"/>
+  <con:entry key="Root Folder" value=""/>
+  <con:entry key="Ignore Errors" value="false"/>
+  <con:entry key="Domain" value=""/>
+  <con:entry key="Tool Args" value=""/>
+  <con:entry key="Save Project" value="false"/>
+</xml-fragment>]]></con:setting>
   </con:settings>
   <con:interface xsi:type="con:MessageDrivenService" id="9cf96f82-b32d-4d5b-bf32-b96176694d5b" name="kafka" type="messagedrivenservice" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <con:settings/>
@@ -96,20 +133,14 @@
             <con:operationName>Publish</con:operationName>
             <con:channelName>test</con:channelName>
             <con:serviceName>kafka</con:serviceName>
-            <con:endpoint>localhost:9092</con:endpoint>
+            <con:endpoint>host.docker.internal:9092</con:endpoint>
             <con:connectionProperties/>
             <con:schemaRegistry/>
             <con:messageType>JSON</con:messageType>
             <con:message>{
    "foo" : "bar"
 }</con:message>
-            <con:parameters>
-              <con:parameter>
-                <con:name/>
-                <con:value xsi:nil="true"/>
-                <con:type>Header</con:type>
-              </con:parameter>
-            </con:parameters>
+            <con:parameters/>
           </con:kafkaPublishStep>
         </con:config>
       </con:testStep>
@@ -121,7 +152,7 @@
             <con:operationName>Subscribe</con:operationName>
             <con:channelName>test</con:channelName>
             <con:serviceName>kafka</con:serviceName>
-            <con:endpoint>localhost:9092</con:endpoint>
+            <con:endpoint>host.docker.internal:9092</con:endpoint>
             <con:connectionProperties/>
             <con:schemaRegistry/>
             <con:messageType>JSON</con:messageType>

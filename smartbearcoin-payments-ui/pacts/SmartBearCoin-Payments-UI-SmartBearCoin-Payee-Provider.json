@@ -1,0 +1,207 @@
+{
+  "consumer": {
+    "name": "SmartBearCoin-Payments-UI"
+  },
+  "interactions": [
+    {
+      "description": "A request to get all payees",
+      "providerStates": [
+        {
+          "name": "server is up"
+        },
+        {
+          "name": "is authenticated"
+        }
+      ],
+      "request": {
+        "headers": {
+          "x-Authorization": "Bearer 1234"
+        },
+        "matchingRules": {
+          "header": {
+            "$['x-Authorization']": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "query": {
+            "$.country_of_registration[0]": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.name[0]": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "method": "GET",
+        "path": "/payees",
+        "query": {
+          "country_of_registration": [
+            "DE"
+          ],
+          "name": [
+            "test"
+          ]
+        }
+      },
+      "response": {
+        "body": {
+          "data": [
+            {
+              "account_name": "account_name",
+              "any_bic": "VHO7ZKQT",
+              "bank_account_currency": "EUR",
+              "bank_code": "bank_code",
+              "bank_name": "bank_name",
+              "iban": "IE01AIBK935955939393",
+              "id": "592b4ece-c7a2-46ff-b380-96fd1638852a",
+              "name": "name"
+            }
+          ]
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.data": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "A request to get payee with id 592b4ece-c7a2-46ff-b380-96fd1638852a",
+      "providerStates": [
+        {
+          "name": "server is up"
+        },
+        {
+          "name": "is authenticated"
+        },
+        {
+          "name": "a payee with id 592b4ece-c7a2-46ff-b380-96fd1638852a does not exist"
+        }
+      ],
+      "request": {
+        "headers": {
+          "x-Authorization": "Bearer 1234"
+        },
+        "matchingRules": {
+          "header": {
+            "$['x-Authorization']": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "method": "GET",
+        "path": "/payees/592b4ece-c7a2-46ff-b380-96fd1638852a"
+      },
+      "response": {
+        "status": 404
+      }
+    },
+    {
+      "description": "A request to get payee with id 592b4ece-c7a2-46ff-b380-96fd1638852a",
+      "providerStates": [
+        {
+          "name": "server is up"
+        },
+        {
+          "name": "is authenticated"
+        },
+        {
+          "name": "a payee with id 592b4ece-c7a2-46ff-b380-96fd1638852a exists"
+        }
+      ],
+      "request": {
+        "headers": {
+          "x-Authorization": "Bearer 1234"
+        },
+        "matchingRules": {
+          "header": {
+            "$['x-Authorization']": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "method": "GET",
+        "path": "/payees/592b4ece-c7a2-46ff-b380-96fd1638852a"
+      },
+      "response": {
+        "body": {
+          "account_name": "account_name",
+          "any_bic": "VHO7ZKQT",
+          "bank_account_currency": "EUR",
+          "bank_code": "bank_code",
+          "bank_name": "bank_name",
+          "iban": "IE01AIBK935955939393",
+          "id": "592b4ece-c7a2-46ff-b380-96fd1638852a",
+          "name": "name"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "10.1.4"
+    },
+    "pactRust": {
+      "ffi": "0.3.12",
+      "models": "0.4.5"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "SmartBearCoin-Payee-Provider"
+  }
+}
