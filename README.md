@@ -165,8 +165,9 @@ If you want to run and edit the provider locally, then take note of the followin
 
 #### Prerequisites
 
-- VSCode, Visual Studio or other IDE capable of running .NET 6 projects
-- .NET 6
+- VSCode, Visual Studio or other IDE capable of running .NET 7 projects
+- .NET 7
+- Azure Functions Core Tools (>= v4.0.5571)
 - ngrok
 
 The project was created using VSCode with the following extensions installed:
@@ -194,8 +195,8 @@ Setup your `local.settings.json` file. Here is a sample settings configuration:
 {
   "IsEncrypted": false,
   "Values": {
-    "AzureWebJobsStorage": "",
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet"
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
   },
   "Host": {
     "CORS": "*"
