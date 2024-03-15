@@ -67,7 +67,7 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// </summary>
 
         [DataMember(Name="links")]
-        public List<PaginationLinks> Links { get; set; }
+        public List<PaginationLinks>? Links { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -100,7 +100,7 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// </summary>
         /// <param name="obj">Object to be compared</param>
         /// <returns>Boolean</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
@@ -112,36 +112,36 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// </summary>
         /// <param name="other">Instance of Pagination to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(Pagination other)
+        public bool Equals(Pagination? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return 
                 (
-                    Page == other.Page ||
+                    Page == other?.Page ||
                     Page != null &&
-                    Page.Equals(other.Page)
+                    Page.Equals(other?.Page)
                 ) && 
                 (
-                    PageSize == other.PageSize ||
+                    PageSize == other?.PageSize ||
                     PageSize != null &&
-                    PageSize.Equals(other.PageSize)
+                    PageSize.Equals(other?.PageSize)
                 ) && 
                 (
-                    RecordCount == other.RecordCount ||
+                    RecordCount == other?.RecordCount ||
                     RecordCount != null &&
-                    RecordCount.Equals(other.RecordCount)
+                    RecordCount.Equals(other?.RecordCount)
                 ) && 
                 (
-                    PageCount == other.PageCount ||
+                    PageCount == other?.PageCount ||
                     PageCount != null &&
-                    PageCount.Equals(other.PageCount)
+                    PageCount.Equals(other?.PageCount)
                 ) && 
                 (
-                    Links == other.Links ||
+                    Links == other?.Links ||
                     Links != null &&
-                    Links.SequenceEqual(other.Links)
+                    Links.SequenceEqual(other?.Links ?? new List<PaginationLinks>())
                 );
         }
 
