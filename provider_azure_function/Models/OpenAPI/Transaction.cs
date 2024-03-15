@@ -32,7 +32,7 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// <value>transactionId</value>
 
         [DataMember(Name="id")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -61,7 +61,7 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// </summary>
         /// <param name="obj">Object to be compared</param>
         /// <returns>Boolean</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
@@ -73,16 +73,16 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// </summary>
         /// <param name="other">Instance of Transaction to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(Transaction other)
+        public bool Equals(Transaction? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return 
                 (
-                    Id == other.Id ||
+                    Id == other?.Id ||
                     Id != null &&
-                    Id.Equals(other.Id)
+                    Id.Equals(other?.Id)
                 );
         }
 

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SmartBearCoin.CustomerManagement.Models;
 using SmartBearCoin.CustomerManagement.Models.OpenAPI;
 using System;
+using System.Collections.Specialized;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -18,13 +19,13 @@ namespace SmartBearCoin.CustomerManagement.Services
 
     public class ValidationService : IValidationService
     {
-        public SimpleValidationResult ValidateQueryParameters(IQueryCollection queryParameters)
+        public SimpleValidationResult ValidateQueryParameters(NameValueCollection queryParameters)
         {
             
-            string countryOfRegistration = queryParameters["country_of_registration"];
-            string jurisdiction_identifier = queryParameters["jurisdiction_identifier"];
-            string name = queryParameters["name"];
-            string jurisdiction_identifier_type = queryParameters["jurisdiction_identifier_type"];
+            string countryOfRegistration = queryParameters["country_of_registration"] ?? string.Empty;
+            string jurisdiction_identifier = queryParameters["jurisdiction_identifier"] ?? string.Empty;
+            string name = queryParameters["name"] ?? string.Empty;
+            string jurisdiction_identifier_type = queryParameters["jurisdiction_identifier_type"] ?? string.Empty;
 
             // check that the 'country_of_registration' was supplied
             if(string.IsNullOrEmpty(countryOfRegistration))
@@ -122,7 +123,7 @@ namespace SmartBearCoin.CustomerManagement.Services
 
         public Problem GenerateValidationProblem(SimpleValidationResult validationResults, string code)
         {
-            string enumValue = string.Concat(validationResults.ErrorType.Replace("-",""), "Enum");
+            string enumValue = string.Concat(validationResults.ErrorType?.Replace("-",""), "Enum");
 
             return new Problem() 
             { 
@@ -136,7 +137,7 @@ namespace SmartBearCoin.CustomerManagement.Services
                     {
                         Type = (ProblemDetails.TypeEnum)Enum.Parse(typeof(ProblemDetails.TypeEnum), enumValue, true),
                         Title = (ProblemDetails.TitleEnum)Enum.Parse(typeof(ProblemDetails.TitleEnum), enumValue, true),
-                        Detail = validationResults.Details
+                        Detail = validationResults?.Details ?? string.Empty
                     }
                 }
             };

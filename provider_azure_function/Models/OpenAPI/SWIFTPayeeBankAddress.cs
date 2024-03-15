@@ -31,21 +31,21 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// </summary>
 
         [DataMember(Name="street")]
-        public string Street { get; set; }
+        public string? Street { get; set; }
 
         /// <summary>
         /// Gets or Sets City
         /// </summary>
 
         [DataMember(Name="city")]
-        public string City { get; set; }
+        public string? City { get; set; }
 
         /// <summary>
         /// Gets or Sets Country
         /// </summary>
         [RegularExpression("/^[a-zA-Z]{2}$/")]
         [DataMember(Name="country")]
-        public string Country { get; set; }
+        public string? Country { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -76,7 +76,7 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// </summary>
         /// <param name="obj">Object to be compared</param>
         /// <returns>Boolean</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
@@ -88,26 +88,26 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// </summary>
         /// <param name="other">Instance of SWIFTPayeeBankAddress to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(SWIFTPayeeBankAddress other)
+        public bool Equals(SWIFTPayeeBankAddress? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return 
                 (
-                    Street == other.Street ||
+                    Street == other?.Street ||
                     Street != null &&
-                    Street.Equals(other.Street)
+                    Street.Equals(other?.Street)
                 ) && 
                 (
-                    City == other.City ||
+                    City == other?.City ||
                     City != null &&
-                    City.Equals(other.City)
+                    City.Equals(other?.City)
                 ) && 
                 (
-                    Country == other.Country ||
+                    Country == other?.Country ||
                     Country != null &&
-                    Country.Equals(other.Country)
+                    Country.Equals(other?.Country)
                 );
         }
 
