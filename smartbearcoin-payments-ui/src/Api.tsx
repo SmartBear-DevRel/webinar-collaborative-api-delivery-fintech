@@ -60,4 +60,5 @@ export class API {
   }
 }
 
-export default new API(defaultBaseUrl);
+const api = new API(defaultBaseUrl)
+export default api;
