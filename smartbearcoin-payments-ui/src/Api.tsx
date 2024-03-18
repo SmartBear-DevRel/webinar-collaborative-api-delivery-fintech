@@ -1,9 +1,7 @@
 import { Payee } from './Payee';
 
-const axios = require('axios').default;
-const adapter = require('axios/lib/adapters/http');
+import axios from "axios";
 
-axios.defaults.adapter = adapter;
 const defaultBaseUrl =
   process.env.REACT_APP_API_BASE_URL ||
   // 'https://sbdevrel-fua-smartbearcoin-prd.azurewebsites.net/api';
