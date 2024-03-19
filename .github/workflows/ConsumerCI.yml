@@ -21,7 +21,7 @@ on:
       - '.github/workflows/ConsumerCI.yml'
       - 'oas/**'
   pull_request:
-    branches: ['main']
+    branches: ['main', 'mar2024-webinar-prep']
     paths:
       - 'smartbearcoin-payments-ui/**'
       - '.github/workflows/ConsumerCI.yml'
@@ -88,7 +88,7 @@ jobs:
           application_name: ${{ needs.setup.outputs.PACT_CONSUMER }}
 
   deploy-to-acc:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/mar2024-webinar-prep'
     needs: [setup, can-i-deploy-to-acc]
     runs-on: ubuntu-latest
     env:
@@ -123,7 +123,7 @@ jobs:
           application_name: ${{ needs.setup.outputs.PACT_CONSUMER }}
 
   deploy-to-production:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/mar2024-webinar-prep'
     needs: [setup, can-i-deploy-to-production, deploy-to-acc]
     runs-on: ubuntu-latest
     env:
