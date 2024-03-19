@@ -4,7 +4,7 @@ name: Provider-CI-Infra-and-Code-Only
 
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'provider_azure_function'   # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '6.0.402'                                   # set this to the dotnet version to use
+  DOTNET_VERSION: '7.0.302'                                   # set this to the dotnet version to use
 
 jobs:
 
@@ -35,7 +35,7 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ secrets.AZURE_RG }}
         template: ./provider_azure_function/azuredeploy.json
-        parameters: ./provider_azure_function/azuredeploy.acc.parameters.json
+        parameters: ./provider_azure_function/azuredeploy.acc1.parameters.json
   
     # use ARM templates to set up the Azure Infra
   
@@ -66,7 +66,7 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ secrets.AZURE_RG }}
         template: ./provider_azure_function/azuredeploy.json
-        parameters: ./provider_azure_function/azuredeploy.prd.parameters.json
+        parameters: ./provider_azure_function/azuredeploy.prd1.parameters.json
   
 
   # build and deploy our Azure functions for Fintech Webinar
@@ -102,7 +102,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: |
-          6.0.x
+          7.0.x
           ${{ env.DOTNET_VERSION }}
 
     # build project

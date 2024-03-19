@@ -25,7 +25,7 @@ on:
 
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'provider_azure_function' # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '6.0.402' # set this to the dotnet version to use
+  DOTNET_VERSION: '7.0.302' # set this to the dotnet version to use
   oas_file: oas/openapi-transformed.json
   results_file: ReadyAPI_Tests/report.xml
   PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
@@ -53,7 +53,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 7.0.x
       - name: Install core tools
         run: |
           sudo apt-get update
@@ -318,7 +318,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: |
-            6.0.x
+            7.0.x
             ${{ env.DOTNET_VERSION }}
 
       # build project
