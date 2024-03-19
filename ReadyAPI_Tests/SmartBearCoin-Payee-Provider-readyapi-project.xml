@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project id="9cab7dfb-4784-4a51-aee4-dd9f28a7c7ef" created="3.40.2" activeEnvironment="Prod" name="SmartBearCoin-Payee-Provider" updated="3.41.1 2022-09-28T09:40:46Z" encryptionMode="Not encrypted" resourceRoot="" xmlns:con="http://eviware.com/soapui/config">
+<con:soapui-project id="9cab7dfb-4784-4a51-aee4-dd9f28a7c7ef" created="3.40.2" activeEnvironment="Prod" name="SmartBearCoin-Payee-Provider" updated="3.49.0 2023-10-13T06:54:34Z" encryptionMode="Not encrypted" resourceRoot="" projectVersion="" xmlns:con="http://eviware.com/soapui/config">
   <con:settings>
     <con:setting id="com.eviware.soapui.impl.wsdl.actions.iface.tools.soapui.ProTestRunnerUIAction@values-local"><![CDATA[<xml-fragment xmlns:con="http://eviware.com/soapui/config">
   <con:entry key="Settings File Password" value=""/>
@@ -65,6 +65,9 @@ Value exposed through Customer Management capabilities is build upon an API-Firs
         <con:authProfile>Inherit From Parent</con:authProfile>
       </con:entry>
       <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+        <con:authProfile>Inherit From Parent</con:authProfile>
+      </con:entry>
+      <con:entry environmentId="78eb0d98-72b9-4083-ae6b-127eb8299514">
         <con:authProfile>Inherit From Parent</con:authProfile>
       </con:entry>
     </con:environmentSpec>
@@ -212,8 +215,8 @@ Attributes that can be used for sorting are:
           </con:credentials>
           <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
           <con:parameters>
-            <con:entry key="name" value="test"/>
-            <con:entry key="country_of_registration" value="DE"/>
+            <con:entry key="name" value="Eason"/>
+            <con:entry key="country_of_registration" value="IE"/>
           </con:parameters>
           <con:environmentSpec>
             <con:entry environmentId="746474bf-7ed1-4a18-be94-2ab283e16806">
@@ -223,6 +226,9 @@ Attributes that can be used for sorting are:
               <con:authProfile>Inherit From Parent</con:authProfile>
             </con:entry>
             <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+              <con:authProfile>Inherit From Parent</con:authProfile>
+            </con:entry>
+            <con:entry environmentId="78eb0d98-72b9-4083-ae6b-127eb8299514">
               <con:authProfile>Inherit From Parent</con:authProfile>
             </con:entry>
           </con:environmentSpec>
@@ -237,6 +243,9 @@ Attributes that can be used for sorting are:
           <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
             <con:authProfile>Inherit From Parent</con:authProfile>
           </con:entry>
+          <con:entry environmentId="78eb0d98-72b9-4083-ae6b-127eb8299514">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
         </con:environmentSpec>
       </con:method>
       <con:environmentSpec>
@@ -247,6 +256,9 @@ Attributes that can be used for sorting are:
           <con:authProfile>Inherit From Parent</con:authProfile>
         </con:entry>
         <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="78eb0d98-72b9-4083-ae6b-127eb8299514">
           <con:authProfile>Inherit From Parent</con:authProfile>
         </con:entry>
       </con:environmentSpec>
@@ -360,6 +372,9 @@ Attributes that can be used for sorting are:
             <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
               <con:authProfile>Inherit From Parent</con:authProfile>
             </con:entry>
+            <con:entry environmentId="78eb0d98-72b9-4083-ae6b-127eb8299514">
+              <con:authProfile>Inherit From Parent</con:authProfile>
+            </con:entry>
           </con:environmentSpec>
         </con:request>
         <con:environmentSpec>
@@ -372,6 +387,9 @@ Attributes that can be used for sorting are:
           <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
             <con:authProfile>Inherit From Parent</con:authProfile>
           </con:entry>
+          <con:entry environmentId="78eb0d98-72b9-4083-ae6b-127eb8299514">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
         </con:environmentSpec>
       </con:method>
       <con:environmentSpec>
@@ -382,6 +400,9 @@ Attributes that can be used for sorting are:
           <con:authProfile>Inherit From Parent</con:authProfile>
         </con:entry>
         <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="78eb0d98-72b9-4083-ae6b-127eb8299514">
           <con:authProfile>Inherit From Parent</con:authProfile>
         </con:entry>
       </con:environmentSpec>
@@ -491,6 +512,9 @@ Attributes that can be used for sorting are:
             <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
               <con:authProfile>Inherit From Parent</con:authProfile>
             </con:entry>
+            <con:entry environmentId="78eb0d98-72b9-4083-ae6b-127eb8299514">
+              <con:authProfile>Inherit From Parent</con:authProfile>
+            </con:entry>
           </con:environmentSpec>
         </con:request>
         <con:environmentSpec>
@@ -503,6 +527,9 @@ Attributes that can be used for sorting are:
           <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
             <con:authProfile>Inherit From Parent</con:authProfile>
           </con:entry>
+          <con:entry environmentId="78eb0d98-72b9-4083-ae6b-127eb8299514">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
         </con:environmentSpec>
       </con:method>
       <con:environmentSpec>
@@ -513,6 +540,9 @@ Attributes that can be used for sorting are:
           <con:authProfile>Inherit From Parent</con:authProfile>
         </con:entry>
         <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="78eb0d98-72b9-4083-ae6b-127eb8299514">
           <con:authProfile>Inherit From Parent</con:authProfile>
         </con:entry>
       </con:environmentSpec>
@@ -555,6 +585,7 @@ Attributes that can be used for sorting are:
           <con:property>name</con:property>
           <con:completeLastOperation>true</con:completeLastOperation>
           <con:restartOnRun>true</con:restartOnRun>
+          <con:stopDatasourceExhausted>false</con:stopDatasourceExhausted>
         </con:config>
       </con:testStep>
       <con:testStep type="restrequest" name="Get list of all payees" id="9e134db9-f2f9-447c-af58-d35179170767">
@@ -590,6 +621,9 @@ Attributes that can be used for sorting are:
                 <con:authProfile>Inherit From Parent</con:authProfile>
               </con:entry>
               <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+                <con:authProfile>Inherit From Parent</con:authProfile>
+              </con:entry>
+              <con:entry environmentId="78eb0d98-72b9-4083-ae6b-127eb8299514">
                 <con:authProfile>Inherit From Parent</con:authProfile>
               </con:entry>
             </con:environmentSpec>
@@ -636,6 +670,9 @@ Attributes that can be used for sorting are:
               <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
                 <con:authProfile>Inherit From Parent</con:authProfile>
               </con:entry>
+              <con:entry environmentId="78eb0d98-72b9-4083-ae6b-127eb8299514">
+                <con:authProfile>Inherit From Parent</con:authProfile>
+              </con:entry>
             </con:environmentSpec>
           </con:restRequest>
         </con:config>
@@ -674,6 +711,9 @@ Attributes that can be used for sorting are:
               <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
                 <con:authProfile>Inherit From Parent</con:authProfile>
               </con:entry>
+              <con:entry environmentId="78eb0d98-72b9-4083-ae6b-127eb8299514">
+                <con:authProfile>Inherit From Parent</con:authProfile>
+              </con:entry>
             </con:environmentSpec>
           </con:restRequest>
         </con:config>
@@ -698,6 +738,9 @@ Attributes that can be used for sorting are:
         <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
           <con:authProfile>Inherit From Parent</con:authProfile>
         </con:entry>
+        <con:entry environmentId="78eb0d98-72b9-4083-ae6b-127eb8299514">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
       </con:environmentSpec>
     </con:testCase>
     <con:properties/>
@@ -710,6 +753,9 @@ Attributes that can be used for sorting are:
         <con:authProfile>Inherit From Parent</con:authProfile>
       </con:entry>
       <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+        <con:authProfile>Inherit From Parent</con:authProfile>
+      </con:entry>
+      <con:entry environmentId="78eb0d98-72b9-4083-ae6b-127eb8299514">
         <con:authProfile>Inherit From Parent</con:authProfile>
       </con:entry>
     </con:environmentSpec>
@@ -929,14 +975,14 @@ Attributes that can be used for sorting are:
   </con:eventHandlers>
   <con:environment id="746474bf-7ed1-4a18-be94-2ab283e16806" name="Prod" index="0">
     <con:service type="REST" name="SmartBearCoin - Payees API">
-      <con:endpoint authProfile="No Authorization" proxyHost="" proxyPort="" proxyUsername="" proxyPassword="">https://sbdevrel-fua-smartbearcoin-prd.azurewebsites.net/api</con:endpoint>
+      <con:endpoint authProfile="No Authorization" proxyHost="" proxyPort="" proxyUsername="" proxyPassword="" areGlobalProxySettingsIgnored="false">https://sbdevrel-fua-smartbearcoin-prd1.azurewebsites.net/api</con:endpoint>
     </con:service>
     <con:databaseConnectionContainer/>
     <con:jmsConnectionContainer/>
   </con:environment>
   <con:environment id="faa1f4f7-ff9b-4fd6-b870-779a62fe1f4b" name="Acc" index="1">
     <con:service type="REST" name="SmartBearCoin - Payees API">
-      <con:endpoint authProfile="No Authorization" proxyHost="" proxyPort="" proxyUsername="" proxyPassword="">https://sbdevrel-fua-smartbearcoin-acc.azurewebsites.net/api</con:endpoint>
+      <con:endpoint authProfile="No Authorization" proxyHost="" proxyPort="" proxyUsername="" proxyPassword="" areGlobalProxySettingsIgnored="false">https://sbdevrel-fua-smartbearcoin-acc1.azurewebsites.net/api</con:endpoint>
     </con:service>
     <con:databaseConnectionContainer/>
     <con:jmsConnectionContainer/>
@@ -944,6 +990,13 @@ Attributes that can be used for sorting are:
   <con:environment id="9fec74ec-694a-473f-8f54-6dea36261a3f" name="Virtual" index="2">
     <con:service type="REST" name="SmartBearCoin - Payees API">
       <con:endpoint authProfile="No Authorization" proxyHost="" proxyPort="" proxyUsername="" proxyPassword="">http://localhost:8088/</con:endpoint>
+    </con:service>
+    <con:databaseConnectionContainer/>
+    <con:jmsConnectionContainer/>
+  </con:environment>
+  <con:environment id="78eb0d98-72b9-4083-ae6b-127eb8299514" name="local" index="3">
+    <con:service type="REST" name="SmartBearCoin - Payees API">
+      <con:endpoint authProfile="No Authorization" proxyHost="" proxyPort="" proxyUsername="" proxyPassword="" areGlobalProxySettingsIgnored="false">http://localhost:7071/api</con:endpoint>
     </con:service>
     <con:databaseConnectionContainer/>
     <con:jmsConnectionContainer/>
@@ -1103,6 +1156,9 @@ Attributes that can be used for sorting are:
       <con:authProfile>No Authorization</con:authProfile>
     </con:entry>
     <con:entry environmentId="9fec74ec-694a-473f-8f54-6dea36261a3f">
+      <con:authProfile>No Authorization</con:authProfile>
+    </con:entry>
+    <con:entry environmentId="78eb0d98-72b9-4083-ae6b-127eb8299514">
       <con:authProfile>No Authorization</con:authProfile>
     </con:entry>
   </con:environmentSpec>
