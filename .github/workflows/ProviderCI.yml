@@ -105,7 +105,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: acc
     needs: [test-local, can-i-deploy-acc]
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/mar2024-webinar-prep'
 
     # set outputs needed by subsequent jobs
 
@@ -152,7 +152,7 @@ jobs:
     needs: [test-local, can-i-deploy-prd, record-deploy-acc]
     runs-on: ubuntu-latest
     environment: prd
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/mar2024-webinar-prep'
 
     # set outputs needed by subsequent jobs
     outputs:
@@ -270,7 +270,7 @@ jobs:
       application_name: ${{ needs.setup.outputs.application_name }}
     steps:
       - name: record-deployment ${{ env.application_name }} to ${{ env.deployed_env }}
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/mar2024-webinar-prep'
         uses: pactflow/actions/record-deployment@v1.0.1
         env:
           environment: ${{ env.deployed_env }}
@@ -356,7 +356,7 @@ jobs:
       application_name: ${{ needs.setup.outputs.application_name }}
     steps:
       - name: record-deployment ${{ env.application_name }} to ${{ env.deployed_env }}
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/mar2024-webinar-prep'
         uses: pactflow/actions/record-deployment@v1.0.1
         env:
           environment: ${{ env.deployed_env }}
