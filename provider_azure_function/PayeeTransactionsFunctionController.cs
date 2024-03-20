@@ -1,8 +1,8 @@
 using System.Net;
+using System.Text.Json;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using SmartBearCoin.CustomerManagement.Services;
 
 namespace SmartBearCoin.CustomerManagement
@@ -12,12 +12,14 @@ namespace SmartBearCoin.CustomerManagement
         private readonly IValidationService _validationService;
         private readonly IPayeeService _payeeService;
         private readonly ILogger<PayeesFunctionController> _logger;
+        private readonly JsonSerializerOptions _serializerOptions;
 
-        public PayeeTransactionsFunctionController(IValidationService validationService, IPayeeService payeeService, ILogger<PayeesFunctionController> logger)
+        public PayeeTransactionsFunctionController(IValidationService validationService, IPayeeService payeeService, ILogger<PayeesFunctionController> logger, JsonSerializerOptions serializerOptions)   
         {
             _validationService = validationService;
             _payeeService = payeeService;
             _logger = logger;
+            _serializerOptions = serializerOptions;
         }
         
         [Function(nameof(PayeeTransactionsFunctionController))]
@@ -38,7 +40,7 @@ namespace SmartBearCoin.CustomerManagement
             if(_payeeService.IsPayeeKnown(payeeId))
             {
                 var response = req.CreateResponse(HttpStatusCode.OK);
-                await response.WriteAsJsonAsync(_payeeService.GetPayeeTransactions(payeeId));
+                await response.WriteStringAsync(JsonSerializer.Serialize(_payeeService.GetPayeeTransactions(payeeId), _serializerOptions));
                 
                 return response;
             }
