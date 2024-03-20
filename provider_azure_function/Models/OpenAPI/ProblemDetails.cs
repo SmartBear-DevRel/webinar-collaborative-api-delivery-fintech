@@ -127,14 +127,14 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         [Required]
 
         [DataMember(Name="detail")]
-        public string Detail { get; set; }
+        public string Detail { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or Sets ContextData
         /// </summary>
 
         [DataMember(Name="contextData")]
-        public List<ProblemContextData> ContextData { get; set; }
+        public List<ProblemContextData>? ContextData { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -166,7 +166,7 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// </summary>
         /// <param name="obj">Object to be compared</param>
         /// <returns>Boolean</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
@@ -178,31 +178,31 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// </summary>
         /// <param name="other">Instance of ProblemDetails to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(ProblemDetails other)
+        public bool Equals(ProblemDetails? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return 
                 (
-                    Type == other.Type ||
+                    Type == other?.Type ||
                     Type != null &&
-                    Type.Equals(other.Type)
+                    Type.Equals(other?.Type)
                 ) && 
                 (
-                    Title == other.Title ||
+                    Title == other?.Title ||
                     Title != null &&
-                    Title.Equals(other.Title)
+                    Title.Equals(other?.Title)
                 ) && 
                 (
-                    Detail == other.Detail ||
+                    Detail == other?.Detail ||
                     Detail != null &&
-                    Detail.Equals(other.Detail)
+                    Detail.Equals(other?.Detail)
                 ) && 
                 (
-                    ContextData == other.ContextData ||
+                    ContextData == other?.ContextData ||
                     ContextData != null &&
-                    ContextData.SequenceEqual(other.ContextData)
+                    ContextData.SequenceEqual(other?.ContextData ?? new List<ProblemContextData>())
                 );
         }
 

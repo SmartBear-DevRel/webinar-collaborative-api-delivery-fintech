@@ -6,7 +6,7 @@
             "value": "SBDevRel"
         },
         "env": {
-            "value": "prd"
+            "value": "prd1"
         },
         "hostingPlanSkuName": {
             "value": "S1"

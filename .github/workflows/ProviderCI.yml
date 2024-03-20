@@ -25,7 +25,7 @@ on:
 
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'provider_azure_function' # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '6.0.402' # set this to the dotnet version to use
+  DOTNET_VERSION: '7.0.302' # set this to the dotnet version to use
   oas_file: oas/openapi-transformed.json
   results_file: ReadyAPI_Tests/report.xml
   PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
@@ -53,7 +53,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 7.0.x
       - name: Install core tools
         run: |
           sudo apt-get update
@@ -105,7 +105,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: acc
     needs: [test-local, can-i-deploy-acc]
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/mar2024-webinar-prep'
 
     # set outputs needed by subsequent jobs
 
@@ -152,7 +152,7 @@ jobs:
     needs: [test-local, can-i-deploy-prd, record-deploy-acc]
     runs-on: ubuntu-latest
     environment: prd
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/mar2024-webinar-prep'
 
     # set outputs needed by subsequent jobs
     outputs:
@@ -253,7 +253,7 @@ jobs:
           PROJECT_FOLDER: ReadyAPI_Tests
           PROJECT_FILE: 'SmartBearCoin-Payee-Provider-readyapi-project.xml'
           SLM_API_KEY: ${{ secrets.SLM_API_KEY }}
-          ENDPOINT: https://sbdevrel-fua-smartbearcoin-acc.azurewebsites.net/api
+          ENDPOINT: https://sbdevrel-fua-smartbearcoin-acc1.azurewebsites.net/api
 
   record-deploy-acc:
     needs:
@@ -270,7 +270,7 @@ jobs:
       application_name: ${{ needs.setup.outputs.application_name }}
     steps:
       - name: record-deployment ${{ env.application_name }} to ${{ env.deployed_env }}
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/mar2024-webinar-prep'
         uses: pactflow/actions/record-deployment@v1.0.1
         env:
           environment: ${{ env.deployed_env }}
@@ -318,7 +318,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: |
-            6.0.x
+            7.0.x
             ${{ env.DOTNET_VERSION }}
 
       # build project
@@ -356,7 +356,7 @@ jobs:
       application_name: ${{ needs.setup.outputs.application_name }}
     steps:
       - name: record-deployment ${{ env.application_name }} to ${{ env.deployed_env }}
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/mar2024-webinar-prep'
         uses: pactflow/actions/record-deployment@v1.0.1
         env:
           environment: ${{ env.deployed_env }}
@@ -377,4 +377,4 @@ jobs:
           PROJECT_FOLDER: ReadyAPI_Tests
           PROJECT_FILE: 'SmartBearCoin-Payee-Provider-readyapi-project.xml'
           SLM_API_KEY: ${{ secrets.SLM_API_KEY }}
-          ENDPOINT: https://sbdevrel-fua-smartbearcoin-prd.azurewebsites.net/api
+          ENDPOINT: https://sbdevrel-fua-smartbearcoin-prd1.azurewebsites.net/api

@@ -124,6 +124,7 @@ namespace SmartBearCoin.CustomerManagement.Services
             }
         }
 
+        #pragma warning disable 8602
         public PagedResult<Payee> GetPayees(string country_code, string jurisdiction_identifier, string jurisdiction_identifier_type, string name)
         {
             var payees = new List<Payee>();
@@ -144,14 +145,15 @@ namespace SmartBearCoin.CustomerManagement.Services
                     break;
             }
 
-            if(!string.IsNullOrEmpty(name) && payees.Count > 0)
+            if(!string.IsNullOrEmpty(name) && payees?.Count > 0)
             {
-                payees = payees.Where(p => p.Name.Contains(name, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                var filteredPayees = payees?.Where(p => p.Name.Contains(name, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                payees = filteredPayees ?? new List<Payee>();
             }
 
             return new PagedResult<Payee>()
             {
-                Data = payees
+                Data = payees ?? new List<Payee>()
             };
         }
 

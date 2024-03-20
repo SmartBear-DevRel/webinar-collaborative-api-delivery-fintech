@@ -6,7 +6,7 @@
             "value": "SBDevRel"
         },
         "env": {
-            "value": "acc"
+            "value": "acc1"
         },
         "hostingPlanSkuName": {
             "value": "S1"

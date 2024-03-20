@@ -33,7 +33,7 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         [Required]
 
         [DataMember(Name="self")]
-        public string Self { get; set; }
+        public string Self { get; set; } = string.Empty;
 
         /// <summary>
         /// The canonical URL for the next page, if available
@@ -41,7 +41,7 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// <value>The canonical URL for the next page, if available</value>
 
         [DataMember(Name="next")]
-        public string Next { get; set; }
+        public string? Next { get; set; }
 
         /// <summary>
         /// The canonical URL for the previous page, if available
@@ -49,7 +49,7 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// <value>The canonical URL for the previous page, if available</value>
 
         [DataMember(Name="previous")]
-        public string Previous { get; set; }
+        public string? Previous { get; set; }
 
         /// <summary>
         /// The canonical URL for the last page
@@ -58,7 +58,7 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         [Required]
 
         [DataMember(Name="last")]
-        public string Last { get; set; }
+        public string Last { get; set; } = string.Empty;
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -90,7 +90,7 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// </summary>
         /// <param name="obj">Object to be compared</param>
         /// <returns>Boolean</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
@@ -102,31 +102,31 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// </summary>
         /// <param name="other">Instance of PaginationLinks to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(PaginationLinks other)
+        public bool Equals(PaginationLinks? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return 
                 (
-                    Self == other.Self ||
+                    Self == other?.Self ||
                     Self != null &&
-                    Self.Equals(other.Self)
+                    Self.Equals(other?.Self)
                 ) && 
                 (
-                    Next == other.Next ||
+                    Next == other?.Next ||
                     Next != null &&
-                    Next.Equals(other.Next)
+                    Next.Equals(other?.Next)
                 ) && 
                 (
-                    Previous == other.Previous ||
+                    Previous == other?.Previous ||
                     Previous != null &&
-                    Previous.Equals(other.Previous)
+                    Previous.Equals(other?.Previous)
                 ) && 
                 (
-                    Last == other.Last ||
+                    Last == other?.Last ||
                     Last != null &&
-                    Last.Equals(other.Last)
+                    Last.Equals(other?.Last)
                 );
         }
 

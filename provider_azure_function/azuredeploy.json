@@ -84,7 +84,7 @@
             ],
             "tags": {
                 "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', variables('serverFarmName')))]": "Resource",
-                "displayName": "FUA Payee APIs"
+                "displayName": "FUA Payee APIs - new"
             },
             "properties": {
                 "name": "[variables('FunctionsAppName')]",
@@ -103,7 +103,7 @@
                         },
                         {
                             "name": "FUNCTIONS_WORKER_RUNTIME",
-                            "value": "dotnet"
+                            "value": "dotnet-isolated"
                         },
                         {
                             "name": "FUNCTIONS_EXTENSION_VERSION",

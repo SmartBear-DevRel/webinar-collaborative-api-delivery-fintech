@@ -32,35 +32,35 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         [Required]
 
         [DataMember(Name="path")]
-        public string Path { get; set; }
+        public string? Path { get; set; }
 
         /// <summary>
         /// Gets or Sets ProvidedValue
         /// </summary>
 
         [DataMember(Name="providedValue")]
-        public string ProvidedValue { get; set; }
+        public string? ProvidedValue { get; set; }
 
         /// <summary>
         /// Gets or Sets AllowedValues
         /// </summary>
 
         [DataMember(Name="allowedValues")]
-        public List<string> AllowedValues { get; set; }
+        public List<string>? AllowedValues { get; set; }
 
         /// <summary>
         /// Gets or Sets AllowedFormat
         /// </summary>
 
         [DataMember(Name="allowedFormat")]
-        public string AllowedFormat { get; set; }
+        public string? AllowedFormat { get; set; }
 
         /// <summary>
         /// Gets or Sets Condition
         /// </summary>
 
         [DataMember(Name="condition")]
-        public string Condition { get; set; }
+        public string? Condition { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -93,7 +93,7 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// </summary>
         /// <param name="obj">Object to be compared</param>
         /// <returns>Boolean</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
@@ -105,36 +105,36 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// </summary>
         /// <param name="other">Instance of ProblemContextData to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(ProblemContextData other)
+        public bool Equals(ProblemContextData? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return 
                 (
-                    Path == other.Path ||
+                    Path == other?.Path ||
                     Path != null &&
-                    Path.Equals(other.Path)
+                    Path.Equals(other?.Path)
                 ) && 
                 (
-                    ProvidedValue == other.ProvidedValue ||
+                    ProvidedValue == other?.ProvidedValue ||
                     ProvidedValue != null &&
-                    ProvidedValue.Equals(other.ProvidedValue)
+                    ProvidedValue.Equals(other?.ProvidedValue)
                 ) && 
                 (
-                    AllowedValues == other.AllowedValues ||
+                    AllowedValues == other?.AllowedValues ||
                     AllowedValues != null &&
-                    AllowedValues.SequenceEqual(other.AllowedValues)
+                    AllowedValues.SequenceEqual(other?.AllowedValues ?? new List<string>())
                 ) && 
                 (
-                    AllowedFormat == other.AllowedFormat ||
+                    AllowedFormat == other?.AllowedFormat ||
                     AllowedFormat != null &&
-                    AllowedFormat.Equals(other.AllowedFormat)
+                    AllowedFormat.Equals(other?.AllowedFormat)
                 ) && 
                 (
-                    Condition == other.Condition ||
+                    Condition == other?.Condition ||
                     Condition != null &&
-                    Condition.Equals(other.Condition)
+                    Condition.Equals(other?.Condition)
                 );
         }
 

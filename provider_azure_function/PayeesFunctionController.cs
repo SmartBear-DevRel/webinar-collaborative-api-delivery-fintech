@@ -1,36 +1,35 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
+using System.Net;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using SmartBearCoin.CustomerManagement.Services;
-using SmartBearCoin.CustomerManagement.Models;
+using System.Text.Json;
 
 namespace SmartBearCoin.CustomerManagement
 {
-    public class FunctionController
+    public class PayeesFunctionController
     {
         private readonly IValidationService _validationService;
         private readonly IPayeeService _payeeService;
+        private readonly ILogger<PayeesFunctionController> _logger;
+        private readonly JsonSerializerOptions _serializerOptions;
 
-        public FunctionController(IValidationService validationService, IPayeeService payeeService)
+        public PayeesFunctionController(IValidationService validationService, IPayeeService payeeService, ILogger<PayeesFunctionController> logger, JsonSerializerOptions serializerOptions)
         {
             _validationService = validationService;
             _payeeService = payeeService;
+            _logger = logger;
+            _serializerOptions = serializerOptions;
         }
         
-        [FunctionName("payees")]
-        public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "payees")] HttpRequest req,
-            ILogger log)
+        [Function(nameof(PayeesFunctionController))]
+        public async Task<HttpResponseData> Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "payees")] HttpRequestData req)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            _logger.LogInformation("'{msg}'","C# HTTP trigger function processed a request.");
 
-            var validationResult = _validationService.ValidateQueryParameters(req.Query);
+            var queryParameters = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
+            var validationResult = _validationService.ValidateQueryParameters(queryParameters);
 
             //string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             //dynamic data = JsonConvert.DeserializeObject(requestBody);
@@ -38,12 +37,25 @@ namespace SmartBearCoin.CustomerManagement
             if (validationResult.Result == false)
             {
                 var problemResponse = _validationService.GenerateValidationProblem(validationResult, "400");
-                return new BadRequestObjectResult(problemResponse);
+                var errorResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await errorResponse.WriteStringAsync(JsonSerializer.Serialize(problemResponse, _serializerOptions));
+                
+                return errorResponse;
             }
 
-            //string responseMessage = "Payees will soon be returned here!";
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteStringAsync(
+                JsonSerializer.Serialize(
+                    _payeeService.GetPayees(
+                        queryParameters["country_of_registration"] ?? string.Empty, 
+                        queryParameters["jurisdiction_identifier"] ?? string.Empty, 
+                        queryParameters["jurisdiction_identifier_type"] ?? string.Empty, 
+                        queryParameters["name"] ?? string.Empty
+                    ), 
+                    _serializerOptions
+                ));
 
-            return new OkObjectResult(_payeeService.GetPayees(req.Query["country_of_registration"], req.Query["jurisdiction_identifier"], req.Query["jurisdiction_identifier_type"], req.Query["name"]));
+            return response;
         }
     
     }
