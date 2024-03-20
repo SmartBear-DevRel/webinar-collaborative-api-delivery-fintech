@@ -5,7 +5,7 @@
 ## PROD
 # ENDPOINT=https://sbdevrel-fua-smartbearcoin-prd.azurewebsites.net/api/payees
 
-ENDPOINT=${ENDPOINT:-'http://localhost:7071/api/payees'}
+ENDPOINT=${ENDPOINT:-'http://localhost:7071/api'}
 PROJECT_FOLDER=${PROJECT_FOLDER:-'ReadyAPI_Tests'}
 PROJECT_FILE=${PROJECT_FILE:-'SmartBearCoin-Payee-Provider-readyapi-project.xml'}
 
