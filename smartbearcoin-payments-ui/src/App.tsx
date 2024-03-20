@@ -89,7 +89,7 @@ export const App = () => {
       <header className="header">
         <div className="wrapper">
           <div className="logo">
-            <img src="smartbearlogo.png" alt="a logo" />
+            <img src="SmartBearCoin-logo.png" alt="SmartBearCoin logo" />
           </div>
           <div className="header-text">SmartBearCoin | Payments Service</div>
         </div>
