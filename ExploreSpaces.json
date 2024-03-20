@@ -1,0 +1,832 @@
+{
+	"info": {
+		"version": "0.0.1",
+		"exportedAt": "2024-03-20T20:40:14.489Z"
+	},
+	"exploreSpaces": [
+		{
+			"id": "f4467340-e9d1-408d-9ddd-8347b14b0dbe",
+			"name": "Collaborative Webinar - localhost",
+			"apis": [
+				{
+					"connections": [
+						{
+							"id": "e5f9167a-cd71-4cc1-b89b-e394b5455ae6",
+							"type": null,
+							"name": "REST",
+							"schema": "OpenAPI",
+							"schemaVersion": "3.0.1",
+							"connectionDefinition": {
+								"openapi": "3.0.0",
+								"servers": [
+									{
+										"url": "http://localhost:7071"
+									}
+								],
+								"paths": {
+									"/api/payees": {
+										"get": {
+											"responses": [],
+											"parameters": []
+										}
+									}
+								}
+							},
+							"paths": null,
+							"settings": {
+								"type": "RestConnectionSettings",
+								"connectTimeout": 30,
+								"followRedirects": true,
+								"encodeUrl": true
+							},
+							"credentials": null
+						}
+					],
+					"id": "a5a2c1bf-7138-491d-b466-a0cf26a6b85e",
+					"name": "GET Payees - bad request 1",
+					"type": "REST",
+					"description": null,
+					"servers": null
+				},
+				{
+					"connections": [
+						{
+							"id": "3fe5ebe1-d235-49d6-8037-ebfae477b65e",
+							"type": null,
+							"name": "REST",
+							"schema": "OpenAPI",
+							"schemaVersion": "3.0.1",
+							"connectionDefinition": {
+								"openapi": "3.0.0",
+								"servers": [
+									{
+										"url": "http://localhost:7071"
+									}
+								],
+								"paths": {
+									"/api/payees": {
+										"get": {
+											"responses": [],
+											"parameters": [
+												{
+													"in": "query",
+													"name": "country_of_registration",
+													"schema": {
+														"type": "string"
+													},
+													"examples": {
+														"example": {
+															"value": "IE"
+														}
+													}
+												}
+											]
+										}
+									}
+								}
+							},
+							"paths": null,
+							"settings": {
+								"type": "RestConnectionSettings",
+								"connectTimeout": 30,
+								"followRedirects": true,
+								"encodeUrl": true
+							},
+							"credentials": null
+						}
+					],
+					"id": "b0157003-c2a9-4b42-829e-a7545cc2797d",
+					"name": "GET Payees - bad request 2",
+					"type": "REST",
+					"description": null,
+					"servers": null
+				},
+				{
+					"connections": [
+						{
+							"id": "12b5e371-cf3f-4e16-bf8c-9f7c2d09e950",
+							"type": null,
+							"name": "REST",
+							"schema": "OpenAPI",
+							"schemaVersion": "3.0.1",
+							"connectionDefinition": {
+								"openapi": "3.0.0",
+								"servers": [
+									{
+										"url": "http://localhost:7071"
+									}
+								],
+								"paths": {
+									"/api/payees": {
+										"get": {
+											"responses": [],
+											"parameters": [
+												{
+													"in": "query",
+													"name": "country_of_registration",
+													"schema": {
+														"type": "string"
+													},
+													"examples": {
+														"example": {
+															"value": "IE"
+														}
+													}
+												},
+												{
+													"in": "query",
+													"name": "name",
+													"schema": {
+														"type": "string"
+													},
+													"examples": {
+														"example": {
+															"value": "ltd"
+														}
+													}
+												}
+											]
+										}
+									}
+								}
+							},
+							"paths": null,
+							"settings": {
+								"type": "RestConnectionSettings",
+								"connectTimeout": 30,
+								"followRedirects": true,
+								"encodeUrl": true
+							},
+							"credentials": null
+						}
+					],
+					"id": "883b440e-fb65-44be-85d4-de66c76d2cb4",
+					"name": "GET Payees",
+					"type": "REST",
+					"description": null,
+					"servers": null
+				},
+				{
+					"connections": [
+						{
+							"id": "ed3fdf06-b39d-4a99-a4df-964c6505441b",
+							"type": null,
+							"name": "REST",
+							"schema": "OpenAPI",
+							"schemaVersion": "3.0.1",
+							"connectionDefinition": {
+								"openapi": "3.0.0",
+								"servers": [
+									{
+										"url": "http://localhost:7071"
+									}
+								],
+								"paths": {
+									"/api/payees": {
+										"get": {
+											"responses": [],
+											"parameters": [
+												{
+													"in": "query",
+													"name": "country_of_registration",
+													"schema": {
+														"type": "string"
+													},
+													"examples": {
+														"example": {
+															"value": "IT"
+														}
+													}
+												},
+												{
+													"in": "query",
+													"name": "name",
+													"schema": {
+														"type": "string"
+													},
+													"examples": {
+														"example": {
+															"value": "coffee"
+														}
+													}
+												}
+											]
+										}
+									}
+								}
+							},
+							"paths": null,
+							"settings": {
+								"type": "RestConnectionSettings",
+								"connectTimeout": 30,
+								"followRedirects": true,
+								"encodeUrl": true
+							},
+							"credentials": null
+						}
+					],
+					"id": "7bd3d2e4-a577-41a6-8157-5ff54e3a86cf",
+					"name": "GET Payees - Italy",
+					"type": "REST",
+					"description": null,
+					"servers": null
+				},
+				{
+					"connections": [
+						{
+							"id": "f68c1242-9da1-40bf-96b2-e78fdc4eb393",
+							"type": null,
+							"name": "REST",
+							"schema": "OpenAPI",
+							"schemaVersion": "3.0.1",
+							"connectionDefinition": {
+								"openapi": "3.0.0",
+								"servers": [
+									{
+										"url": "http://localhost:7071"
+									}
+								],
+								"paths": {
+									"/api/payees/4eb603f3-e7e7-47b1-a5df-557b6204616e": {
+										"get": {
+											"responses": [],
+											"parameters": []
+										}
+									}
+								}
+							},
+							"paths": null,
+							"settings": {
+								"type": "RestConnectionSettings",
+								"connectTimeout": 30,
+								"followRedirects": true,
+								"encodeUrl": true
+							},
+							"credentials": null
+						}
+					],
+					"id": "586e1e9a-6772-4297-b75b-09b85ecd702f",
+					"name": "GET PayeeById",
+					"type": "REST",
+					"description": null,
+					"servers": null
+				},
+				{
+					"connections": [
+						{
+							"id": "3666cc60-4073-44e3-9fda-ed46f5cd0528",
+							"type": null,
+							"name": "REST",
+							"schema": "OpenAPI",
+							"schemaVersion": "3.0.1",
+							"connectionDefinition": {
+								"openapi": "3.0.0",
+								"servers": [
+									{
+										"url": "http://localhost:7071"
+									}
+								],
+								"paths": {
+									"/api/payees/randomId": {
+										"get": {
+											"responses": [],
+											"parameters": []
+										}
+									}
+								}
+							},
+							"paths": null,
+							"settings": {
+								"type": "RestConnectionSettings",
+								"connectTimeout": 30,
+								"followRedirects": true,
+								"encodeUrl": true
+							},
+							"credentials": null
+						}
+					],
+					"id": "8e6b3967-eac5-4654-80a6-bd69ccb241b2",
+					"name": "GET PayeeById - Not Found",
+					"type": "REST",
+					"description": null,
+					"servers": null
+				},
+				{
+					"connections": [
+						{
+							"id": "7ea20ca0-7333-4a7c-bd2f-6c81afa389d8",
+							"type": null,
+							"name": "REST",
+							"schema": "OpenAPI",
+							"schemaVersion": "3.0.1",
+							"connectionDefinition": {
+								"openapi": "3.0.0",
+								"servers": [
+									{
+										"url": "http://localhost:7071"
+									}
+								],
+								"paths": {
+									"/api/payees/4eb603f3-e7e7-47b1-a5df-557b6204616e/transactions": {
+										"get": {
+											"responses": [],
+											"parameters": []
+										}
+									}
+								}
+							},
+							"paths": null,
+							"settings": {
+								"type": "RestConnectionSettings",
+								"connectTimeout": 30,
+								"followRedirects": true,
+								"encodeUrl": true
+							},
+							"credentials": null
+						}
+					],
+					"id": "ae61d6d6-c0d8-4305-8bcb-f1d18aa4e9dd",
+					"name": "GET Payee Transactions",
+					"type": "REST",
+					"description": null,
+					"servers": null
+				}
+			]
+		},
+		{
+			"id": "a7675c27-db6d-4502-b13d-d6b478af8ea6",
+			"name": "Collaborative Webinar - ACC",
+			"apis": [
+				{
+					"connections": [
+						{
+							"id": "2942155a-d772-4fa0-9081-ab84747649f7",
+							"type": null,
+							"name": "REST",
+							"schema": "OpenAPI",
+							"schemaVersion": "3.0.1",
+							"connectionDefinition": {
+								"openapi": "3.0.0",
+								"servers": [
+									{
+										"url": "https://sbdevrel-fua-smartbearcoin-acc1.azurewebsites.net"
+									}
+								],
+								"paths": {
+									"/api/payees/": {
+										"get": {
+											"responses": [],
+											"parameters": [
+												{
+													"in": "query",
+													"name": "country_of_registration",
+													"schema": {
+														"type": "string"
+													},
+													"examples": {
+														"example": {
+															"value": "IE"
+														}
+													}
+												},
+												{
+													"in": "query",
+													"name": "name",
+													"schema": {
+														"type": "string"
+													},
+													"examples": {
+														"example": {
+															"value": "ltd"
+														}
+													}
+												}
+											]
+										}
+									}
+								}
+							},
+							"paths": null,
+							"settings": {
+								"type": "RestConnectionSettings",
+								"connectTimeout": 30,
+								"followRedirects": true,
+								"encodeUrl": true
+							},
+							"credentials": null
+						}
+					],
+					"id": "5146f1b0-f0a0-4865-8c96-d6e3e7d16807",
+					"name": "GET Payees",
+					"type": "REST",
+					"description": null,
+					"servers": null
+				},
+				{
+					"connections": [
+						{
+							"id": "b0ab2bb7-ff4b-41d5-994a-70ee6744a3d3",
+							"type": null,
+							"name": "REST",
+							"schema": "OpenAPI",
+							"schemaVersion": "3.0.1",
+							"connectionDefinition": {
+								"openapi": "3.0.0",
+								"servers": [
+									{
+										"url": "https://sbdevrel-fua-smartbearcoin-acc1.azurewebsites.net"
+									}
+								],
+								"paths": {
+									"/api/payees": {
+										"get": {
+											"responses": [],
+											"parameters": []
+										}
+									}
+								}
+							},
+							"paths": null,
+							"settings": {
+								"type": "RestConnectionSettings",
+								"connectTimeout": 30,
+								"followRedirects": true,
+								"encodeUrl": true
+							},
+							"credentials": null
+						}
+					],
+					"id": "740cc27a-5164-4a25-8a51-55334f71a9bc",
+					"name": "GET Payees - bad request 1",
+					"type": "REST",
+					"description": null,
+					"servers": null
+				},
+				{
+					"connections": [
+						{
+							"id": "25f761ca-9c3f-4fea-9dab-b7b53ccab67a",
+							"type": null,
+							"name": "REST",
+							"schema": "OpenAPI",
+							"schemaVersion": "3.0.1",
+							"connectionDefinition": {
+								"openapi": "3.0.0",
+								"servers": [
+									{
+										"url": "https://sbdevrel-fua-smartbearcoin-acc1.azurewebsites.net"
+									}
+								],
+								"paths": {
+									"/api/payees/": {
+										"get": {
+											"responses": [],
+											"parameters": [
+												{
+													"in": "query",
+													"name": "country_of_registration",
+													"schema": {
+														"type": "string"
+													},
+													"examples": {
+														"example": {
+															"value": "IE"
+														}
+													}
+												}
+											]
+										}
+									}
+								}
+							},
+							"paths": null,
+							"settings": {
+								"type": "RestConnectionSettings",
+								"connectTimeout": 30,
+								"followRedirects": true,
+								"encodeUrl": true
+							},
+							"credentials": null
+						}
+					],
+					"id": "00369015-fa77-43a1-acb1-00da1bfdcdd7",
+					"name": "GET payees - bad request 2",
+					"type": "REST",
+					"description": null,
+					"servers": null
+				},
+				{
+					"connections": [
+						{
+							"id": "f8020923-a71a-4875-adad-82cc329d37fd",
+							"type": null,
+							"name": "REST",
+							"schema": "OpenAPI",
+							"schemaVersion": "3.0.1",
+							"connectionDefinition": {
+								"openapi": "3.0.0",
+								"servers": [
+									{
+										"url": "https://sbdevrel-fua-smartbearcoin-acc1.azurewebsites.net"
+									}
+								],
+								"paths": {
+									"/api/payees/4eb603f3-e7e7-47b1-a5df-557b6204616e": {
+										"get": {
+											"responses": [],
+											"parameters": []
+										}
+									}
+								}
+							},
+							"paths": null,
+							"settings": {
+								"type": "RestConnectionSettings",
+								"connectTimeout": 30,
+								"followRedirects": true,
+								"encodeUrl": true
+							},
+							"credentials": null
+						}
+					],
+					"id": "843f630d-5322-47fa-b3a2-822f1a1b7dc7",
+					"name": "Get PayeeById",
+					"type": "REST",
+					"description": null,
+					"servers": null
+				},
+				{
+					"connections": [
+						{
+							"id": "b74fd1dc-58d1-4599-94cd-69dbb07763e8",
+							"type": null,
+							"name": "REST",
+							"schema": "OpenAPI",
+							"schemaVersion": "3.0.1",
+							"connectionDefinition": {
+								"openapi": "3.0.0",
+								"servers": [
+									{
+										"url": "https://sbdevrel-fua-smartbearcoin-acc1.azurewebsites.net"
+									}
+								],
+								"paths": {
+									"/api/payees/4eb603f3-e7e7-47b1-a5df-557b6204616e123": {
+										"get": {
+											"responses": [],
+											"parameters": []
+										}
+									}
+								}
+							},
+							"paths": null,
+							"settings": {
+								"type": "RestConnectionSettings",
+								"connectTimeout": 30,
+								"followRedirects": true,
+								"encodeUrl": true
+							},
+							"credentials": null
+						}
+					],
+					"id": "0029260e-b402-4c62-ae19-9842dc0c3eb7",
+					"name": "Get PayeeById - not found",
+					"type": "REST",
+					"description": null,
+					"servers": null
+				},
+				{
+					"connections": [
+						{
+							"id": "fca43297-3dac-44c5-b313-447e434de997",
+							"type": null,
+							"name": "REST",
+							"schema": "OpenAPI",
+							"schemaVersion": "3.0.1",
+							"connectionDefinition": {
+								"openapi": "3.0.0",
+								"servers": [
+									{
+										"url": "https://sbdevrel-fua-smartbearcoin-acc1.azurewebsites.net"
+									}
+								],
+								"paths": {
+									"/api/payees/4eb603f3-e7e7-47b1-a5df-557b6204616e/transactions": {
+										"get": {
+											"responses": [],
+											"parameters": []
+										}
+									}
+								}
+							},
+							"paths": null,
+							"settings": {
+								"type": "RestConnectionSettings",
+								"connectTimeout": 30,
+								"followRedirects": true,
+								"encodeUrl": true
+							},
+							"credentials": null
+						}
+					],
+					"id": "a146bb2d-6208-4d82-ac1f-4bdab579811e",
+					"name": "Get Payee Transactions",
+					"type": "REST",
+					"description": null,
+					"servers": null
+				}
+			]
+		},
+		{
+			"id": "ec761c0b-9bcc-42fc-8c8e-ba8fe585711e",
+			"name": "Collaborative Webinar - PRD",
+			"apis": [
+				{
+					"connections": [
+						{
+							"id": "c341da7d-8907-4756-ab6d-5364ef58e64f",
+							"type": null,
+							"name": "REST",
+							"schema": "OpenAPI",
+							"schemaVersion": "3.0.1",
+							"connectionDefinition": {
+								"openapi": "3.0.0",
+								"servers": [
+									{
+										"url": "https://sbdevrel-fua-smartbearcoin-prd1.azurewebsites.net"
+									}
+								],
+								"paths": {
+									"/api/payees": {
+										"get": {
+											"responses": [],
+											"parameters": [
+												{
+													"in": "query",
+													"name": "country_of_registration",
+													"schema": {
+														"type": "string"
+													},
+													"examples": {
+														"example": {
+															"value": "IT"
+														}
+													}
+												},
+												{
+													"in": "query",
+													"name": "name",
+													"schema": {
+														"type": "string"
+													},
+													"examples": {
+														"example": {
+															"value": "coffee"
+														}
+													}
+												}
+											]
+										}
+									}
+								}
+							},
+							"paths": null,
+							"settings": {
+								"type": "RestConnectionSettings",
+								"connectTimeout": 30,
+								"followRedirects": true,
+								"encodeUrl": true
+							},
+							"credentials": null
+						}
+					],
+					"id": "fe0e8394-eaaf-45b9-b943-b654de566176",
+					"name": "GET payees",
+					"type": "REST",
+					"description": null,
+					"servers": null
+				},
+				{
+					"connections": [
+						{
+							"id": "7aeeb53b-914b-4464-9776-095c14e99065",
+							"type": null,
+							"name": "REST",
+							"schema": "OpenAPI",
+							"schemaVersion": "3.0.1",
+							"connectionDefinition": {
+								"openapi": "3.0.0",
+								"servers": [
+									{
+										"url": "https://sbdevrel-fua-smartbearcoin-prd1.azurewebsites.net"
+									}
+								],
+								"paths": {
+									"/api/payees": {
+										"get": {
+											"responses": [],
+											"parameters": []
+										}
+									}
+								}
+							},
+							"paths": null,
+							"settings": {
+								"type": "RestConnectionSettings",
+								"connectTimeout": 30,
+								"followRedirects": true,
+								"encodeUrl": true
+							},
+							"credentials": null
+						}
+					],
+					"id": "7f2aa315-a37a-4618-af1f-a025afb3b865",
+					"name": "GET payees - bad request",
+					"type": "REST",
+					"description": null,
+					"servers": null
+				},
+				{
+					"connections": [
+						{
+							"id": "ecfe2f18-f6be-44cf-8cfe-03a59c001427",
+							"type": null,
+							"name": "REST",
+							"schema": "OpenAPI",
+							"schemaVersion": "3.0.1",
+							"connectionDefinition": {
+								"openapi": "3.0.0",
+								"servers": [
+									{
+										"url": "https://sbdevrel-fua-smartbearcoin-prd1.azurewebsites.net"
+									}
+								],
+								"paths": {
+									"/api/payees/3057a155-1699-4894-9998-bfa7ab846119": {
+										"get": {
+											"responses": [],
+											"parameters": []
+										}
+									}
+								}
+							},
+							"paths": null,
+							"settings": {
+								"type": "RestConnectionSettings",
+								"connectTimeout": 30,
+								"followRedirects": true,
+								"encodeUrl": true
+							},
+							"credentials": null
+						}
+					],
+					"id": "56f0c9dd-910b-48fe-a32f-9830cc2ee72e",
+					"name": "GET PayeeById",
+					"type": "REST",
+					"description": null,
+					"servers": null
+				},
+				{
+					"connections": [
+						{
+							"id": "4ccc506c-d2e4-4c75-b475-6e78d039f30a",
+							"type": null,
+							"name": "REST",
+							"schema": "OpenAPI",
+							"schemaVersion": "3.0.1",
+							"connectionDefinition": {
+								"openapi": "3.0.0",
+								"servers": [
+									{
+										"url": "https://sbdevrel-fua-smartbearcoin-prd1.azurewebsites.net"
+									}
+								],
+								"paths": {
+									"/api/payees/3057a155-1699-4894-9998-bfa7ab846119/transactions": {
+										"get": {
+											"responses": [],
+											"parameters": []
+										}
+									}
+								}
+							},
+							"paths": null,
+							"settings": {
+								"type": "RestConnectionSettings",
+								"connectTimeout": 30,
+								"followRedirects": true,
+								"encodeUrl": true
+							},
+							"credentials": null
+						}
+					],
+					"id": "331455bc-fa72-4dc4-803b-4c459b86f66d",
+					"name": "GET Payee Transactions",
+					"type": "REST",
+					"description": null,
+					"servers": null
+				}
+			]
+		}
+	]
+}
