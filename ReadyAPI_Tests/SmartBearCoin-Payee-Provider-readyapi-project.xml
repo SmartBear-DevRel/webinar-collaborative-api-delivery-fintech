@@ -1,4 +1,4 @@
-This XML file does not appear to have any style information associated with it. The document tree is shown below.
+<?xml version="1.0" encoding="UTF-8"?>
 <con:soapui-project xmlns:con="http://eviware.com/soapui/config" id="9cab7dfb-4784-4a51-aee4-dd9f28a7c7ef" created="3.40.2" activeEnvironment="Prod" name="SmartBearCoin-Payee-Provider" updated="3.49.0 2023-10-13T06:54:34Z" encryptionMode="Not encrypted" resourceRoot="" projectVersion="">
 <con:settings>
 <con:setting id="com.eviware.soapui.impl.wsdl.actions.iface.tools.soapui.ProTestRunnerUIAction@values-local">
