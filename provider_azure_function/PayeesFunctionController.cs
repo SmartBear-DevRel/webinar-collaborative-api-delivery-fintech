@@ -4,6 +4,9 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using SmartBearCoin.CustomerManagement.Services;
 using System.Text.Json;
+using Azure.Core.Serialization;
+using SmartBearCoin.CustomerManagement.Models.OpenAPI;
+using SmartBearCoin.CustomerManagement.Models;
 
 namespace SmartBearCoin.CustomerManagement
 {
@@ -12,14 +15,14 @@ namespace SmartBearCoin.CustomerManagement
         private readonly IValidationService _validationService;
         private readonly IPayeeService _payeeService;
         private readonly ILogger<PayeesFunctionController> _logger;
-        private readonly JsonSerializerOptions _serializerOptions;
+        private readonly ObjectSerializer _objectSerializer;
 
-        public PayeesFunctionController(IValidationService validationService, IPayeeService payeeService, ILogger<PayeesFunctionController> logger, JsonSerializerOptions serializerOptions)
+        public PayeesFunctionController(IValidationService validationService, IPayeeService payeeService, ILogger<PayeesFunctionController> logger, ObjectSerializer objectSerializer)  
         {
             _validationService = validationService;
             _payeeService = payeeService;
             _logger = logger;
-            _serializerOptions = serializerOptions;
+            _objectSerializer = objectSerializer;
         }
         
         [Function(nameof(PayeesFunctionController))]
@@ -31,29 +34,25 @@ namespace SmartBearCoin.CustomerManagement
             var queryParameters = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
             var validationResult = _validationService.ValidateQueryParameters(queryParameters);
 
-            //string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            //dynamic data = JsonConvert.DeserializeObject(requestBody);
-
             if (validationResult.Result == false)
             {
                 var problemResponse = _validationService.GenerateValidationProblem(validationResult, "400");
+
                 var errorResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await errorResponse.WriteStringAsync(JsonSerializer.Serialize(problemResponse, _serializerOptions));
+                await errorResponse.WriteAsJsonAsync(problemResponse, _objectSerializer);
                 
                 return errorResponse;
             }
 
+            var payees = _payeeService.GetPayees(
+                queryParameters["country_of_registration"] ?? string.Empty, 
+                queryParameters["jurisdiction_identifier"] ?? string.Empty, 
+                queryParameters["jurisdiction_identifier_type"] ?? string.Empty, 
+                queryParameters["name"] ?? string.Empty
+            );
+
             var response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteStringAsync(
-                JsonSerializer.Serialize(
-                    _payeeService.GetPayees(
-                        queryParameters["country_of_registration"] ?? string.Empty, 
-                        queryParameters["jurisdiction_identifier"] ?? string.Empty, 
-                        queryParameters["jurisdiction_identifier_type"] ?? string.Empty, 
-                        queryParameters["name"] ?? string.Empty
-                    ), 
-                    _serializerOptions
-                ));
+            await response.WriteAsJsonAsync(payees, _objectSerializer);    
 
             return response;
         }
