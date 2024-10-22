@@ -26,12 +26,6 @@ on:
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'provider_azure_function' # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '7.0.302' # set this to the dotnet version to use
-  oas_file: oas/openapi-transformed.json
-  results_file: ReadyAPI_Tests/report.xml
-  PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
-  PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
-  application_name: ${{ github.event.inputs.application_name }}
-  application_name_default: SmartBearCoin-Payee-Provider
   demo_deploy: ${{ github.event.inputs.demo_deploy }}
   SWAGGERHUB_API_KEY: ${{ secrets.SWAGGERHUB_API_KEY }}
 
@@ -41,6 +35,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "application_name=${application_name:-${application_name_default}}" >> $GITHUB_ENV
+    env:
+      application_name: ${{ github.event.inputs.application_name }}
+      application_name_default: SmartBearCoin-Payee-Provider     
     outputs:
       application_name: ${{ env.application_name }}
 
@@ -50,9 +47,9 @@ jobs:
     env:
       application_name: ${{ needs.setup.outputs.application_name }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 7.0.x
       - name: Install core tools
@@ -79,12 +76,23 @@ jobs:
           SERVER_COMMAND: 'func start --csharp'
           WAIT_FOR: 'http://localhost:7071'
           ENDPOINT: http://localhost:7071/api
-      - uses: pactflow/actions/publish-provider-contract@v1.0.0
+      - uses: pactflow/actions/publish-provider-contract@v2
         if: success()
-      - uses: pactflow/actions/publish-provider-contract@v1.0.0
+        with:
+          broker_url: https://smartbear.pactflow.io
+          token: ${{ secrets.PACT_BROKER_TOKEN }}
+          application_name: ${{ needs.setup.outputs.application_name }}
+          specification: oas/openapi-transformed.json
+          verification_results: ReadyAPI_Tests/report.xml
+      - uses: pactflow/actions/publish-provider-contract@v2
         if: failure()
-        env:
-          EXIT_CODE: 1
+        with:
+          broker_url: https://smartbear.pactflow.io
+          token: ${{ secrets.PACT_BROKER_TOKEN }}
+          application_name: ${{ needs.setup.outputs.application_name }}
+          specification: oas/openapi-transformed.json
+          verification_results: ReadyAPI_Tests/report.xml
+          verification_exit_code: 1
     outputs:
       version: ${{ env.version }}
 
@@ -93,11 +101,13 @@ jobs:
     runs-on: ubuntu-latest
     env:
       deploy_target: acceptance
-      application_name: ${{ needs.setup.outputs.application_name }}
     steps:
-      - name: can-i-deploy ${{ env.application_name }} to ${{ env.deploy_target }}
-        uses: pactflow/actions/can-i-deploy@v1.0.1
-        env:
+      - name: can-i-deploy ${{ needs.setup.outputs.application_name }} to ${{ env.deploy_target }}
+        uses: pactflow/actions/can-i-deploy@v2
+        with:
+          broker_url: https://smartbear.pactflow.io
+          token: ${{ secrets.PACT_BROKER_TOKEN }}
+          application_name: ${{ needs.setup.outputs.application_name }}
           to_environment: ${{ env.deploy_target }}
           version: ${{ needs.test-local.outputs.version }}
 
@@ -142,12 +152,14 @@ jobs:
     env:
       deploy_target: production
     steps:
-      - name: can-i-deploy ${{ env.application_name }} to ${{ env.deploy_target }}
-        uses: pactflow/actions/can-i-deploy@v1.0.1
-        env:
+      - name: can-i-deploy ${{ needs.setup.outputs.application_name }} to ${{ env.deploy_target }}
+        uses: pactflow/actions/can-i-deploy@v2
+        with:
+          broker_url: https://smartbear.pactflow.io
+          token: ${{ secrets.PACT_BROKER_TOKEN }}
+          application_name: ${{ needs.setup.outputs.application_name }}
           to_environment: ${{ env.deploy_target }}
           version: ${{ needs.test-local.outputs.version }}
-          application_name: ${{ needs.setup.outputs.application_name }}
 
   deploy-infrastructure-prd:
     needs: [test-local, can-i-deploy-prd, record-deploy-acc]
@@ -213,7 +225,7 @@ jobs:
       # setup donet environments
       - name: Setup DotNet Environments
         if: ${{ env.demo_deploy != 'true' }}
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
             6.0.x
@@ -268,14 +280,16 @@ jobs:
     runs-on: ubuntu-latest
     env:
       deployed_env: acceptance
-      application_name: ${{ needs.setup.outputs.application_name }}
     steps:
-      - name: record-deployment ${{ env.application_name }} to ${{ env.deployed_env }}
+      - name: record-deployment ${{ needs.setup.outputs.application_name}} to ${{ env.deployed_env }}
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/mar2024-webinar'
-        uses: pactflow/actions/record-deployment@v1.0.1
-        env:
-          environment: ${{ env.deployed_env }}
+        uses: pactflow/actions/record-deployment@v2
+        with:
+          broker_url: https://smartbear.pactflow.io
+          token: ${{ secrets.PACT_BROKER_TOKEN }}
+          application_name: ${{ needs.setup.outputs.application_name }}
           version: ${{ needs.test-local.outputs.version }}
+          environment: ${{ env.deployed_env }}
 
   # build and deploy our Azure functions for Fintech Webinar
   build-and-deploy-prd:
@@ -316,7 +330,7 @@ jobs:
       # setup donet environments
       - name: Setup DotNet Environments
         if: ${{ env.demo_deploy != 'true' }}
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
             7.0.x
@@ -354,14 +368,16 @@ jobs:
     runs-on: ubuntu-latest
     env:
       deployed_env: production
-      application_name: ${{ needs.setup.outputs.application_name }}
     steps:
-      - name: record-deployment ${{ env.application_name }} to ${{ env.deployed_env }}
+      - name: record-deployment ${{ needs.setup.outputs.application_name }} to ${{ env.deployed_env }}
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/mar2024-webinar'
-        uses: pactflow/actions/record-deployment@v1.0.1
-        env:
-          environment: ${{ env.deployed_env }}
+        uses: pactflow/actions/record-deployment@v2
+        with:
+          broker_url: https://smartbear.pactflow.io
+          token: ${{ secrets.PACT_BROKER_TOKEN }}
+          application_name: ${{ needs.setup.outputs.application_name }}
           version: ${{ needs.test-local.outputs.version }}
+          environment: ${{ env.deployed_env }}
 
   # test our Azure functions for Fintech Webinar
   test-prd:
