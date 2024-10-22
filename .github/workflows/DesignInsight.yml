@@ -33,7 +33,7 @@ jobs:
           broker_url: https://smartbear.pactflow.io
           token: ${{ secrets.PACT_BROKER_TOKEN }}
           application_name: SmartBearCoin-Payee-Provider
-          specification: oas/openapi-transformed.json
+          contract: oas/openapi-transformed.json
           verification_results: oas/openapi-transformed.json
     outputs:
       version: ${{ env.version }}

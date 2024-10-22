@@ -81,7 +81,7 @@ jobs:
           broker_url: https://smartbear.pactflow.io
           token: ${{ secrets.PACT_BROKER_TOKEN }}
           application_name: ${{ needs.setup.outputs.application_name }}
-          specification: oas/openapi-transformed.json
+          contract: oas/openapi-transformed.json
           verification_results: ReadyAPI_Tests/report.xml
       - uses: pactflow/actions/publish-provider-contract@v2
         if: failure()
@@ -89,7 +89,7 @@ jobs:
           broker_url: https://smartbear.pactflow.io
           token: ${{ secrets.PACT_BROKER_TOKEN }}
           application_name: ${{ needs.setup.outputs.application_name }}
-          specification: oas/openapi-transformed.json
+          contract: oas/openapi-transformed.json
           verification_results: ReadyAPI_Tests/report.xml
           verification_exit_code: 1
     outputs:
