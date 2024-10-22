@@ -20,7 +20,7 @@ jobs:
     steps:
 
     # check out code
-    - uses: actions/checkout@main
+    - uses: actions/checkout@v4
 
     # login to Azure
     - uses: azure/login@v1
@@ -51,7 +51,7 @@ jobs:
     steps:
 
     # check out code
-    - uses: actions/checkout@main
+    - uses: actions/checkout@v4
 
     # login to Azure
     - uses: azure/login@v1
@@ -77,7 +77,7 @@ jobs:
     steps:
     # check out code
     - name: 'Checkout code'
-      uses: actions/checkout@main
+      uses: actions/checkout@v4
 
     # login to Azure
     - uses: azure/login@v1
@@ -99,7 +99,7 @@ jobs:
 
     # setup donet environments
     - name: Setup DotNet Environments
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
           6.0.x
@@ -131,7 +131,7 @@ jobs:
     steps:
     # check out code
     - name: 'Checkout code'
-      uses: actions/checkout@main
+      uses: actions/checkout@v4
 
     # login to Azure
     - uses: azure/login@v1
@@ -153,7 +153,7 @@ jobs:
 
     # setup donet environments
     - name: Setup DotNet Environments
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
           6.0.x
