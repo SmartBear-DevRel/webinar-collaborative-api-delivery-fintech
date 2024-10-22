@@ -31,7 +31,7 @@
             "parent": "",
             "name": "Payees API",
             "type": "apiUrl",
-            "slug": "Payees",
+            "slug": "payees",
             "contentUrl": "https://api.swaggerhub.com/apis/smartbear-api-hub/payees-api/1.0.0-prod/swagger.json"
         },        
         {
