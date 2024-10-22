@@ -70,7 +70,7 @@ jobs:
     env:
       deploy_target: acceptance
     steps:
-      - name: can-i-deploy ${{ env.application_name }} to ${{ env.deploy_target }}
+      - name: can-i-deploy ${{ needs.setup.outputs.PACT_CONSUMER }} to ${{ env.deploy_target }}
         uses: pactflow/actions/can-i-deploy@v2
         with:
           broker_url: https://smartbear.pactflow.io
@@ -84,7 +84,7 @@ jobs:
     env:
       deploy_target: production
     steps:
-      - name: can-i-deploy ${{ env.application_name }} to ${{ env.deploy_target }}
+      - name: can-i-deploy ${{ needs.setup.outputs.PACT_CONSUMER }} to ${{ env.deploy_target }}
         uses: pactflow/actions/can-i-deploy@v2
         with:
           broker_url: https://smartbear.pactflow.io
@@ -121,7 +121,7 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         timeout-minutes: 1
-      - name: record-deployment ${{ env.application_name }} to ${{ env.deploy_target }}
+      - name: record-deployment ${{ needs.setup.outputs.PACT_CONSUMER }} to ${{ env.deploy_target }}
         uses: pactflow/actions/record-deployment@v2
         with:
           broker_url: https://smartbear.pactflow.io
@@ -159,7 +159,7 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         timeout-minutes: 1
-      - name: record-deployment ${{ env.application_name }} to ${{ env.deploy_target }}
+      - name: record-deployment ${{ needs.setup.outputs.PACT_CONSUMER }} to ${{ env.deploy_target }}
         uses: pactflow/actions/record-deployment@v2
         with:
           broker_url: https://smartbear.pactflow.io

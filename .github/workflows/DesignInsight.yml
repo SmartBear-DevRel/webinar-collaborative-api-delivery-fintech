@@ -46,7 +46,7 @@ jobs:
     needs: pact-publish-oas-action
     runs-on: ubuntu-latest
     steps:
-      - name: can-i-deploy ${{ env.application_name }} to ${{ matrix.environment }}
+      - name: can-i-deploy SmartBearCoin-Payee-Provider to ${{ matrix.environment }}
         uses: pactflow/actions/can-i-deploy@v2
         with:
           broker_url: https://smartbear.pactflow.io
