@@ -15,16 +15,11 @@ on:
       - 'oas/**'
   workflow_dispatch:
 
-env:
-  application_name: SmartBearCoin-Payee-Provider
-  PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
-  PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
-
 jobs:
   pact-publish-oas-action:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: get version of OAS
         run: |
           sudo snap install yq 
@@ -33,10 +28,13 @@ jobs:
       - name: merge openapi spec
         run: |
           npx -y oas-merge ./oas/openapi.yaml
-      - uses: pactflow/actions/publish-provider-contract@v1.0.1
-        env:
-          oas_file: oas/openapi-transformed.json
-          results_file: oas/openapi-transformed.json
+      - uses: pactflow/actions/publish-provider-contract@v2
+        with:
+          broker_url: https://smartbear.pactflow.io
+          token: ${{ secrets.PACT_BROKER_TOKEN }}
+          application_name: SmartBearCoin-Payee-Provider
+          contract: oas/openapi-transformed.json
+          verification_results: oas/openapi-transformed.json
     outputs:
       version: ${{ env.version }}
 
@@ -48,8 +46,11 @@ jobs:
     needs: pact-publish-oas-action
     runs-on: ubuntu-latest
     steps:
-      - name: can-i-deploy ${{ env.application_name }} to ${{ matrix.environment }}
-        uses: pactflow/actions/can-i-deploy@v1.0.1
-        env:
+      - name: can-i-deploy SmartBearCoin-Payee-Provider to ${{ matrix.environment }}
+        uses: pactflow/actions/can-i-deploy@v2
+        with:
+          broker_url: https://smartbear.pactflow.io
+          token: ${{ secrets.PACT_BROKER_TOKEN }}
+          application_name: SmartBearCoin-Payee-Provider
           to_environment: ${{ matrix.environment }}
           version: ${{ needs.pact-publish-oas-action.outputs.version }}
