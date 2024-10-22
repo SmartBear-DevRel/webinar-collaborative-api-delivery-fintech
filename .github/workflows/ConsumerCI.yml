@@ -29,13 +29,7 @@ on:
 
 env:
   version: ${{ github.sha }}
-  PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
-  PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
   application_folder: smartbearcoin-payments-ui
-  application_name: ${{ github.event.inputs.application_name }}
-  application_name_default: SmartBearCoin-Payments-UI
-  provider_name: ${{ github.event.inputs.provider_name }}
-  provider_name_default: SmartBearCoin-Payee-Provider
 
 jobs:
   setup:
@@ -44,6 +38,11 @@ jobs:
     steps:
       - run: echo "application_name=${application_name:-${application_name_default}}" >> $GITHUB_ENV
       - run: echo "provider_name=${provider_name:-${provider_name_default}}" >> $GITHUB_ENV
+    env:
+      application_name: ${{ github.event.inputs.application_name }}
+      application_name_default: SmartBearCoin-Payments-UI
+      provider_name: ${{ github.event.inputs.provider_name }}
+      provider_name_default: SmartBearCoin-Payee-Provider
     outputs:
       PACT_CONSUMER: ${{ env.application_name }}
       PACT_PROVIDER: ${{ env.provider_name }}
@@ -55,12 +54,14 @@ jobs:
       PACT_CONSUMER: ${{ needs.setup.outputs.PACT_CONSUMER }}
       PACT_PROVIDER: ${{ needs.setup.outputs.PACT_PROVIDER }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
       - run: cd ${{ env.application_folder }} && npm ci
       - run: cd ${{ env.application_folder }} && npm test
-      - uses: pactflow/actions/publish-pact-files@v1.0.1
-        env:
+      - uses: pactflow/actions/publish-pact-files@v2
+        with:
+          broker_url: https://smartbear.pactflow.io
+          token: ${{ secrets.PACT_BROKER_TOKEN }}
           pactfiles: ${{ env.application_folder }}/pacts
 
   can-i-deploy-to-acc:
@@ -70,8 +71,10 @@ jobs:
       deploy_target: acceptance
     steps:
       - name: can-i-deploy ${{ env.application_name }} to ${{ env.deploy_target }}
-        uses: pactflow/actions/can-i-deploy@v1.0.1
-        env:
+        uses: pactflow/actions/can-i-deploy@v2
+        with:
+          broker_url: https://smartbear.pactflow.io
+          token: ${{ secrets.PACT_BROKER_TOKEN }}
           to_environment: ${{ env.deploy_target }}
           application_name: ${{ needs.setup.outputs.PACT_CONSUMER }}
 
@@ -82,8 +85,10 @@ jobs:
       deploy_target: production
     steps:
       - name: can-i-deploy ${{ env.application_name }} to ${{ env.deploy_target }}
-        uses: pactflow/actions/can-i-deploy@v1.0.1
-        env:
+        uses: pactflow/actions/can-i-deploy@v2
+        with:
+          broker_url: https://smartbear.pactflow.io
+          token: ${{ secrets.PACT_BROKER_TOKEN }}
           to_environment: ${{ env.deploy_target }}
           application_name: ${{ needs.setup.outputs.PACT_CONSUMER }}
 
@@ -95,8 +100,8 @@ jobs:
       deploy_target: acceptance
       REACT_APP_API_BASE_URL: https://sbdevrel-fua-smartbearcoin-acc1.azurewebsites.net/api
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
       - name: Build site
         run: |
           cd ${{ env.application_folder }}
@@ -117,8 +122,10 @@ jobs:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         timeout-minutes: 1
       - name: record-deployment ${{ env.application_name }} to ${{ env.deploy_target }}
-        uses: pactflow/actions/record-deployment@v1.0.1
-        env:
+        uses: pactflow/actions/record-deployment@v2
+        with:
+          broker_url: https://smartbear.pactflow.io
+          token: ${{ secrets.PACT_BROKER_TOKEN }}
           environment: ${{ env.deploy_target }}
           application_name: ${{ needs.setup.outputs.PACT_CONSUMER }}
 
@@ -130,8 +137,8 @@ jobs:
       deploy_target: production
       REACT_APP_API_BASE_URL: https://sbdevrel-fua-smartbearcoin-prd1.azurewebsites.net/api
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
       - name: Build site
         run: |
           cd ${{ env.application_folder }}
@@ -153,7 +160,9 @@ jobs:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         timeout-minutes: 1
       - name: record-deployment ${{ env.application_name }} to ${{ env.deploy_target }}
-        uses: pactflow/actions/record-deployment@v1.0.1
-        env:
+        uses: pactflow/actions/record-deployment@v2
+        with:
+          broker_url: https://smartbear.pactflow.io
+          token: ${{ secrets.PACT_BROKER_TOKEN }}
           environment: ${{ env.deploy_target }}
           application_name: ${{ needs.setup.outputs.PACT_CONSUMER }}
