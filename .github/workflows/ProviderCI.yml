@@ -26,12 +26,6 @@ on:
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'provider_azure_function' # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '7.0.302' # set this to the dotnet version to use
-  oas_file: oas/openapi-transformed.json
-  results_file: ReadyAPI_Tests/report.xml
-  PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
-  PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
-  application_name: ${{ github.event.inputs.application_name }}
-  application_name_default: SmartBearCoin-Payee-Provider
   demo_deploy: ${{ github.event.inputs.demo_deploy }}
 
 jobs:
@@ -106,7 +100,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       deploy_target: acceptance
-      application_name: ${{ needs.setup.outputs.application_name }}
     steps:
       - name: can-i-deploy ${{ needs.setup.outputs.application_name }} to ${{ env.deploy_target }}
         uses: pactflow/actions/can-i-deploy@v2
@@ -165,6 +158,7 @@ jobs:
           token: ${{ secrets.PACT_BROKER_TOKEN }}
           application_name: ${{ needs.setup.outputs.application_name }}
           to_environment: ${{ env.deploy_target }}
+          version: ${{ needs.test-local.outputs.version }}
 
   deploy-infrastructure-prd:
     needs: [test-local, can-i-deploy-prd, record-deploy-acc]
@@ -381,8 +375,8 @@ jobs:
           broker_url: https://smartbear.pactflow.io
           token: ${{ secrets.PACT_BROKER_TOKEN }}
           application_name: ${{ needs.setup.outputs.application_name }}
-          environment: ${{ env.deployed_env }}
           version: ${{ needs.test-local.outputs.version }}
+          environment: ${{ env.deployed_env }}
 
   # test our Azure functions for Fintech Webinar
   test-prd:
