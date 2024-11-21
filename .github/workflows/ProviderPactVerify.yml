@@ -1,0 +1,28 @@
+name: Provider-Pact-Verification
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      application_folder_consumer: smartbearcoin-payments-ui
+      application_folder_provider_tests: provider_azure_function_tests
+    steps:
+      - uses: actions/checkout@v4
+      # SETUP CONSUMER
+      - uses: actions/setup-node@v4
+      - run: cd ${{ env.application_folder_consumer }} && npm ci
+      - run: cd ${{ env.application_folder_consumer }} && npm test
+      # SETUP PROVIDER
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 7.0.x
+      - name: Install core tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install azure-functions-core-tools-4
+      - run: cd ${{ env.application_folder_provider_tests }} && dotnet test 
+        env:
+          PACT_URL: ../../../../smartbearcoin-payments-ui/pacts/SmartBearCoin-Payments-UI-SmartBearCoin-Payee-Provider.json
