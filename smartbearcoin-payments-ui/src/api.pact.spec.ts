@@ -31,7 +31,7 @@ describe('test with pact', () => {
       .withRequest({
         method: 'GET',
         path: '/payees',
-        query: { country_of_registration: like('DE'), name: like('test') },
+        query: { country_of_registration: like('IE'), name: like('LTD') },
         headers: {
           'x-Authorization': like('Bearer 1234')
         }
@@ -43,13 +43,13 @@ describe('test with pact', () => {
       });
     return providerWithConsumerA.executeTest((mockserver) => {
       const client = new API(mockserver.url);
-      return client.getPayees('DE', 'foo').then((res) => {
+      return client.getPayees('IE', 'LTD').then((res) => {
         expect(res).toEqual(expectedPayees);
       });
     });
   });
   it('should return a particular payee', () => {
-    const id = '592b4ece-c7a2-46ff-b380-96fd1638852a';
+    const id = '1e331a0f-29bd-4b6b-8b21-8b87ed653c6b';
     const expectedPayee = {
       account_name: 'account_name',
       any_bic: 'VHO7ZKQT',
@@ -57,7 +57,7 @@ describe('test with pact', () => {
       bank_code: 'bank_code',
       bank_name: 'bank_name',
       iban: 'IE01AIBK935955939393',
-      id: '592b4ece-c7a2-46ff-b380-96fd1638852a',
+      id,
       name: 'name'
     };
     providerWithConsumerA
