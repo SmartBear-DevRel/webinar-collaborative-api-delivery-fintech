@@ -23,6 +23,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install azure-functions-core-tools-4
-      - run: cd ${{ env.application_folder_provider_tests }} && dotnet test 
+      - run: |
+          cd provider_azure_function
+          func start --csharp
+      - run: |
+          cd ${{ env.application_folder_provider_tests }}
+          dotnet test 
         env:
           PACT_URL: ../../../../smartbearcoin-payments-ui/pacts/SmartBearCoin-Payments-UI-SmartBearCoin-Payee-Provider.json
