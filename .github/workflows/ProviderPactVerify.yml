@@ -25,7 +25,8 @@ jobs:
           sudo apt-get install azure-functions-core-tools-4
       - run: |
           cd provider_azure_function
-          chmod +x /usr/lib/azure-functions-core-tools-4/in-proc6/func
+          sudo chmod +x /usr/lib/azure-functions-core-tools-4/in-proc6/func
+          dotnet restore
           func start --csharp
       - run: |
           cd ${{ env.application_folder_provider_tests }}
