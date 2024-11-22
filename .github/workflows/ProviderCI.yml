@@ -56,6 +56,18 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install azure-functions-core-tools-4
+      - name: Fix dotnet func perms
+        run: |
+          cd provider_azure_function
+          sudo chmod +x /usr/lib/azure-functions-core-tools-4/in-proc6/func
+          echo '{
+            "IsEncrypted": false,
+            "Values": {
+              "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+            },
+            "ConnectionStrings": {}
+          }' > local.settings.json
+          dotnet restore
       - name: get version of OAS
         run: |
           sudo snap install yq && 
