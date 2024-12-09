@@ -38,7 +38,7 @@ export class API {
       name
     });
     return axios
-      .get(this.withPath('/payees'), {
+      .get(this.withPath('/payee'), {
         headers: {
           'x-Authorization': this.generateAuthToken()
         },
@@ -51,7 +51,7 @@ export class API {
 
   async getPayeeById(id: string) {
     return axios
-      .get(this.withPath('/payees/' + id), {
+      .get(this.withPath('/payee/' + id), {
         headers: {
           'x-Authorization': this.generateAuthToken()
         }
