@@ -27,6 +27,7 @@ public class ProviderApiTests : IDisposable
 
         // Wait for the Azure Functions application to start
         _app.Wait(15000);
+        System.Threading.Thread.Sleep(5000);
 
         // Arrange
         var config = new PactVerifierConfig
@@ -68,6 +69,8 @@ public class ProviderApiTests : IDisposable
 
         if (disposing)
         {
+
+            _app.Result.DisposeAsync().AsTask().Wait();
             _app.Dispose();
         }
 
