@@ -30,7 +30,7 @@ describe('test with pact', () => {
       .uponReceiving('A request to get all payees')
       .withRequest({
         method: 'GET',
-        path: '/payees',
+        path: '/payee',
         query: { country_of_registration: like('IE'), name: like('LTD') },
         headers: {
           'x-Authorization': like('Bearer 1234')
@@ -67,7 +67,7 @@ describe('test with pact', () => {
       .uponReceiving(`A request to get payee with id ${id}`)
       .withRequest({
         method: 'GET',
-        path: '/payees/' + id,
+        path: '/payee/' + id,
         headers: {
           'x-Authorization': like('Bearer 1234')
         }
@@ -94,7 +94,7 @@ describe('test with pact', () => {
       .uponReceiving(`A request to get payee with id ${id}`)
       .withRequest({
         method: 'GET',
-        path: '/payees/' + id,
+        path: '/payee/' + id,
         headers: {
           'x-Authorization': like('Bearer 1234')
         }
