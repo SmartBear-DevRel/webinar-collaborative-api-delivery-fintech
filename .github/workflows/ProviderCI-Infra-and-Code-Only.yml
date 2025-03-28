@@ -20,7 +20,7 @@ jobs:
     steps:
 
     # check out code
-    - uses: actions/checkout@main
+    - uses: actions/checkout@v4
 
     # login to Azure
     - uses: azure/login@v2
@@ -52,7 +52,7 @@ jobs:
     steps:
 
     # check out code
-    - uses: actions/checkout@main
+    - uses: actions/checkout@v4
 
     # login to Azure
     - uses: azure/login@v2
@@ -78,7 +78,7 @@ jobs:
     steps:
     # check out code
     - name: 'Checkout code'
-      uses: actions/checkout@main
+      uses: actions/checkout@v4
 
     # login to Azure
     - uses: azure/login@v2
@@ -132,7 +132,7 @@ jobs:
     steps:
     # check out code
     - name: 'Checkout code'
-      uses: actions/checkout@main
+      uses: actions/checkout@v4
 
     # login to Azure
     - uses: azure/login@v2
