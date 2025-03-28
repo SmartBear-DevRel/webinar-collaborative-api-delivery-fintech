@@ -165,8 +165,9 @@ If you want to run and edit the provider locally, then take note of the followin
 
 #### Prerequisites
 
-- VSCode, Visual Studio or other IDE capable of running .NET 6 projects
-- .NET 6
+- VSCode, Visual Studio or other IDE capable of running .NET 7 projects
+- .NET 7
+- Azure Functions Core Tools (>= v4.0.5571)
 - ngrok
 
 The project was created using VSCode with the following extensions installed:
@@ -194,8 +195,8 @@ Setup your `local.settings.json` file. Here is a sample settings configuration:
 {
   "IsEncrypted": false,
   "Values": {
-    "AzureWebJobsStorage": "",
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet"
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
   },
   "Host": {
     "CORS": "*"
@@ -391,8 +392,8 @@ describe('CustomerManagementPayeesApi', () => {
 3. `npm run test` - Run the Pact tests locally
 4. `npm run start` - Run the website locally
    1. You can update the endpoint used for the provider, by setting the environment variable `REACT_APP_API_BASE_URL`
-      1. <https://sbdevrel-fua-smartbearcoin-prd.azurewebsites.net/api> - Production
-      2. <https://sbdevrel-fua-smartbearcoin-acc.azurewebsites.net/api> - Acceptance
+      1. <https://sbdevrel-fua-smartbearcoin-prd1.azurewebsites.net/api> - Production
+      2. <https://sbdevrel-fua-smartbearcoin-acc1.azurewebsites.net/api> - Acceptance
       3. <https://virtserver.swaggerhub.com/mhiggins-sa/payee-api/1.0.0> - Mock
       4. <http://localhost:7071/api/> - Locally running provider (see provider section for details on how to run locally)
 
@@ -404,7 +405,7 @@ You can utilise [SwaggerHub Explore](https://swagger.io/tools/swaggerhub-explore
 
 1. Visit https://explore.swaggerhub.com/
 2. Copy the following URL and paste it into the address bar
-   1. `https://sbdevrel-fua-smartbearcoin-prd.azurewebsites.net/api/payees?country_of_registration=IE&jurisdiction_identifier=06488522&jurisdiction_identifier_type=chamber-of-commerce-number`
+   1. `https://sbdevrel-fua-smartbearcoin-prd1.azurewebsites.net/api/payees?country_of_registration=IE&jurisdiction_identifier=06488522&jurisdiction_identifier_type=chamber-of-commerce-number`
 3. Press `Send`
 4. Congrats 🎉 you just send your first request in Explore.
 

@@ -33,7 +33,7 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
 
         [StringLength(35, MinimumLength=3)]
         [DataMember(Name="account_name")]
-        public string AccountName { get; set; }
+        public string AccountName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or Sets Iban
@@ -41,7 +41,7 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         [Required]
         [RegularExpression("^[A-Z]{2,2}[0-9]{2,2}[a-zA-Z0-9]{1,30}$")]
         [DataMember(Name="iban")]
-        public string Iban { get; set; }
+        public string Iban { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or Sets AnyBic
@@ -49,7 +49,7 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         [Required]
         [RegularExpression("^[A-Z0-9]{4,4}[A-Z]{2,2}[A-Z0-9]{2,2}([A-Z0-9]{3,3}){0,1}$")]
         [DataMember(Name="any_bic")]
-        public string AnyBic { get; set; }
+        public string AnyBic { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or Sets BankAccountCurrency
@@ -57,15 +57,15 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         [RegularExpression("/^[A-Z]{3,3}$/")]
         [StringLength(3, MinimumLength=3)]
         [DataMember(Name="bank_account_currency")]
-        public string BankAccountCurrency { get; set; }
+        public string? BankAccountCurrency { get; set; }
 
         /// <summary>
         /// Gets or Sets BankName
         /// </summary>
         [Required]
-
+        
         [DataMember(Name="bank_name")]
-        public string BankName { get; set; }
+        public string BankName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or Sets BankCode
@@ -73,14 +73,14 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         [Required]
 
         [DataMember(Name="bank_code")]
-        public string BankCode { get; set; }
+        public string BankCode { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or Sets BankAddress
         /// </summary>
 
         [DataMember(Name="bank_address")]
-        public SWIFTPayeeBankAddress BankAddress { get; set; }
+        public SWIFTPayeeBankAddress? BankAddress { get; set; }
 
         /// <summary>
         /// Gets or Sets PayeeType
@@ -105,28 +105,28 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         [Required]
         [RegularExpression("/^Person|Organization$/")]
         [DataMember(Name="payee_type")]
-        public PayeeTypeEnum? PayeeType { get; set; }
+        public PayeeTypeEnum PayeeType { get; set; }
 
         /// <summary>
         /// Gets or Sets PersonalInformation
         /// </summary>
 
         [DataMember(Name="personal_information")]
-        public SWIFTPayeePersonalInformation PersonalInformation { get; set; }
+        public SWIFTPayeePersonalInformation? PersonalInformation { get; set; }
 
         /// <summary>
         /// Gets or Sets OrganizationName
         /// </summary>
 
         [DataMember(Name="organization_name")]
-        public string OrganizationName { get; set; }
+        public string? OrganizationName { get; set; }
 
         /// <summary>
         /// Gets or Sets PayeeAddress
         /// </summary>
 
         [DataMember(Name="payee_address")]
-        public SWIFTPayeeBankAddress PayeeAddress { get; set; }
+        public SWIFTPayeeBankAddress? PayeeAddress { get; set; }
 
         /// <summary>
         /// Gets or Sets RemittanceEmailAddress
@@ -134,7 +134,7 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         [Required]
         [RegularExpression("/^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$/")]
         [DataMember(Name="remittance_email_address")]
-        public string RemittanceEmailAddress { get; set; }
+        public string RemittanceEmailAddress { get; set; } = string.Empty;
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -174,7 +174,7 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// </summary>
         /// <param name="obj">Object to be compared</param>
         /// <returns>Boolean</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
@@ -186,71 +186,75 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// </summary>
         /// <param name="other">Instance of SWIFTPayee to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(SWIFTPayee other)
+        #pragma warning disable 8625
+        #pragma warning disable 8604
+        public bool Equals(SWIFTPayee? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return 
                 (
-                    AccountName == other.AccountName ||
+                    AccountName == other?.AccountName ||
                     AccountName != null &&
-                    AccountName.Equals(other.AccountName)
+                    AccountName.Equals(other?.AccountName)
                 ) && 
                 (
-                    Iban == other.Iban ||
+                    Iban == other?.Iban ||
                     Iban != null &&
-                    Iban.Equals(other.Iban)
+                    Iban.Equals(other?.Iban)
                 ) && 
                 (
-                    AnyBic == other.AnyBic ||
+                    AnyBic == other?.AnyBic ||
                     AnyBic != null &&
-                    AnyBic.Equals(other.AnyBic)
+                    AnyBic.Equals(other?.AnyBic)
                 ) && 
                 (
-                    BankAccountCurrency == other.BankAccountCurrency ||
+                    BankAccountCurrency == other?.BankAccountCurrency ||
                     BankAccountCurrency != null &&
-                    BankAccountCurrency.Equals(other.BankAccountCurrency)
+                    BankAccountCurrency.Equals(other?.BankAccountCurrency)
                 ) && 
                 (
-                    BankName == other.BankName ||
+                    BankName == other?.BankName ||
                     BankName != null &&
-                    BankName.Equals(other.BankName)
+                    BankName.Equals(other?.BankName)
                 ) && 
                 (
-                    BankCode == other.BankCode ||
+                    BankCode == other?.BankCode ||
                     BankCode != null &&
-                    BankCode.Equals(other.BankCode)
+                    BankCode.Equals(other?.BankCode)
                 ) && 
                 (
-                    BankAddress == other.BankAddress ||
+                    BankAddress == other?.BankAddress ||
                     BankAddress != null &&
-                    BankAddress.Equals(other.BankAddress)
+                    other?.BankAddress != null &&
+                    BankAddress.Equals(other?.BankAddress)
                 ) && 
                 (
-                    PayeeType == other.PayeeType ||
-                    PayeeType != null &&
-                    PayeeType.Equals(other.PayeeType)
+                    PayeeType == other?.PayeeType ||                   
+                    PayeeType.Equals(other?.PayeeType)
                 ) && 
                 (
-                    PersonalInformation == other.PersonalInformation ||
+                    PersonalInformation == other?.PersonalInformation ||
                     PersonalInformation != null &&
-                    PersonalInformation.Equals(other.PersonalInformation)
+                    other?.PersonalInformation != null &&
+                    PersonalInformation.Equals(other?.PersonalInformation)
                 ) && 
                 (
-                    OrganizationName == other.OrganizationName ||
+                    OrganizationName == other?.OrganizationName ||
                     OrganizationName != null &&
-                    OrganizationName.Equals(other.OrganizationName)
+                    OrganizationName.Equals(other?.OrganizationName)
                 ) && 
                 (
-                    PayeeAddress == other.PayeeAddress ||
+                    PayeeAddress == other?.PayeeAddress ||
                     PayeeAddress != null &&
-                    PayeeAddress.Equals(other.PayeeAddress)
+                    other?.PayeeAddress != null &&
+                    PayeeAddress.Equals(other?.PayeeAddress)
                 ) && 
                 (
-                    RemittanceEmailAddress == other.RemittanceEmailAddress ||
+                    RemittanceEmailAddress == other?.RemittanceEmailAddress ||
                     RemittanceEmailAddress != null &&
-                    RemittanceEmailAddress.Equals(other.RemittanceEmailAddress)
+                    RemittanceEmailAddress.Equals(other?.RemittanceEmailAddress)
                 );
         }
 
@@ -258,6 +262,7 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// Gets the hash code
         /// </summary>
         /// <returns>Hash code</returns>
+        #pragma warning disable 8604
         public override int GetHashCode()
         {
             unchecked // Overflow is fine, just wrap
@@ -278,16 +283,15 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
                     hashCode = hashCode * 59 + BankCode.GetHashCode();
                     if (BankAddress != null)
                     hashCode = hashCode * 59 + BankAddress.GetHashCode();
-                    if (PayeeType != null)
                     hashCode = hashCode * 59 + PayeeType.GetHashCode();
                     if (PersonalInformation != null)
-                    hashCode = hashCode * 59 + PersonalInformation.GetHashCode();
+                    hashCode = hashCode * 59 + (PersonalInformation?.GetHashCode() ?? 0);
                     if (OrganizationName != null)
-                    hashCode = hashCode * 59 + OrganizationName.GetHashCode();
+                    hashCode = hashCode * 59 + (OrganizationName?.GetHashCode() ?? 0);
                     if (PayeeAddress != null)
-                    hashCode = hashCode * 59 + PayeeAddress.GetHashCode();
+                    hashCode = hashCode * 59 + (PayeeAddress?.GetHashCode() ?? 0);                    
                     if (RemittanceEmailAddress != null)
-                    hashCode = hashCode * 59 + RemittanceEmailAddress.GetHashCode();
+                    hashCode = hashCode * 59 + (RemittanceEmailAddress?.GetHashCode() ?? 0);
                 return hashCode;
             }
         }

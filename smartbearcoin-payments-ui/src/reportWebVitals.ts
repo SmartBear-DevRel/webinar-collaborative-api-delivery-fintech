@@ -14,3 +14,4 @@ const reportWebVitals = (onPerfEntry?: (metric: MetricType) => void) => {
  };
 
 export default reportWebVitals;
+

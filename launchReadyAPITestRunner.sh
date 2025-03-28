@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ## ACC
-# ENDPOINT=https://sbdevrel-fua-smartbearcoin-acc.azurewebsites.net/api/payees
+# ENDPOINT=https://sbdevrel-fua-smartbearcoin-acc1.azurewebsites.net/api/payees
 ## PROD
-# ENDPOINT=https://sbdevrel-fua-smartbearcoin-prd.azurewebsites.net/api/payees
+# ENDPOINT=https://sbdevrel-fua-smartbearcoin-prd1.azurewebsites.net/api/payees
 
 ENDPOINT=${ENDPOINT:-'http://localhost:7071/api'}
 PROJECT_FOLDER=${PROJECT_FOLDER:-'ReadyAPI_Tests'}

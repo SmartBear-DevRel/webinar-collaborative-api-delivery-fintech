@@ -25,8 +25,9 @@ on:
 
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'provider_azure_function' # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '6.0.402' # set this to the dotnet version to use
+  DOTNET_VERSION: '7.0.302' # set this to the dotnet version to use
   demo_deploy: ${{ github.event.inputs.demo_deploy }}
+  SWAGGERHUB_API_KEY: ${{ secrets.SWAGGERHUB_API_KEY }}
 
 jobs:
   setup:
@@ -50,11 +51,23 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 7.0.x
       - name: Install core tools
         run: |
           sudo apt-get update
           sudo apt-get install azure-functions-core-tools-4
+      - name: Fix dotnet func perms
+        run: |
+          cd provider_azure_function
+          sudo chmod +x /usr/lib/azure-functions-core-tools-4/in-proc6/func
+          echo '{
+            "IsEncrypted": false,
+            "Values": {
+              "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+            },
+            "ConnectionStrings": {}
+          }' > local.settings.json
+          dotnet restore
       - name: get version of OAS
         run: |
           sudo snap install yq && 
@@ -100,7 +113,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       deploy_target: acceptance
-      application_name: ${{ needs.setup.outputs.application_name }}
     steps:
       - name: can-i-deploy ${{ needs.setup.outputs.application_name }} to ${{ env.deploy_target }}
         uses: pactflow/actions/can-i-deploy@v2
@@ -128,7 +140,7 @@ jobs:
       - uses: actions/checkout@v4
 
       # login to Azure
-      - uses: azure/login@v1
+      - uses: azure/login@v2
         if: ${{ env.demo_deploy != 'true' }}
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -137,12 +149,13 @@ jobs:
       - name: Run ARM deploy
         if: ${{ env.demo_deploy != 'true' }}
         id: armdeploy
-        uses: azure/arm-deploy@v1
+        uses: azure/arm-deploy@v2
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: ${{ secrets.AZURE_RG }}
           template: ./provider_azure_function/azuredeploy.json
           parameters: ./provider_azure_function/azuredeploy.acc.parameters.json
+          scope: resourcegroup
 
     # use ARM templates to set up the Azure Infra
 
@@ -159,6 +172,7 @@ jobs:
           token: ${{ secrets.PACT_BROKER_TOKEN }}
           application_name: ${{ needs.setup.outputs.application_name }}
           to_environment: ${{ env.deploy_target }}
+          version: ${{ needs.test-local.outputs.version }}
 
   deploy-infrastructure-prd:
     needs: [test-local, can-i-deploy-prd, record-deploy-acc]
@@ -175,7 +189,7 @@ jobs:
       - uses: actions/checkout@v4
 
       # login to Azure
-      - uses: azure/login@v1
+      - uses: azure/login@v2
         if: ${{ env.demo_deploy != 'true' }}
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -184,12 +198,13 @@ jobs:
       - name: Run ARM deploy
         if: ${{ env.demo_deploy != 'true' }}
         id: armdeploy
-        uses: azure/arm-deploy@v1
+        uses: azure/arm-deploy@v2
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: ${{ secrets.AZURE_RG }}
           template: ./provider_azure_function/azuredeploy.json
           parameters: ./provider_azure_function/azuredeploy.prd.parameters.json
+          scope: resourcegroup
 
   # build and deploy our Azure functions for Fintech Webinar
   build-and-deploy-acc:
@@ -202,7 +217,7 @@ jobs:
         uses: actions/checkout@v4
 
       # login to Azure
-      - uses: azure/login@v1
+      - uses: azure/login@v2
         if: ${{ env.demo_deploy != 'true' }}
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -265,7 +280,7 @@ jobs:
           PROJECT_FOLDER: ReadyAPI_Tests
           PROJECT_FILE: 'SmartBearCoin-Payee-Provider-readyapi-project.xml'
           SLM_API_KEY: ${{ secrets.SLM_API_KEY }}
-          ENDPOINT: https://sbdevrel-fua-smartbearcoin-acc.azurewebsites.net/api
+          ENDPOINT: https://sbdevrel-fua-smartbearcoin-acc1.azurewebsites.net/api
 
   record-deploy-acc:
     needs:
@@ -307,7 +322,7 @@ jobs:
         uses: actions/checkout@v4
 
       # login to Azure
-      - uses: azure/login@v1
+      - uses: azure/login@v2
         if: ${{ env.demo_deploy != 'true' }}
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -332,7 +347,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
-            6.0.x
+            7.0.x
             ${{ env.DOTNET_VERSION }}
 
       # build project
@@ -375,8 +390,8 @@ jobs:
           broker_url: https://smartbear.pactflow.io
           token: ${{ secrets.PACT_BROKER_TOKEN }}
           application_name: ${{ needs.setup.outputs.application_name }}
-          environment: ${{ env.deployed_env }}
           version: ${{ needs.test-local.outputs.version }}
+          environment: ${{ env.deployed_env }}
 
   # test our Azure functions for Fintech Webinar
   test-prd:
@@ -393,4 +408,38 @@ jobs:
           PROJECT_FOLDER: ReadyAPI_Tests
           PROJECT_FILE: 'SmartBearCoin-Payee-Provider-readyapi-project.xml'
           SLM_API_KEY: ${{ secrets.SLM_API_KEY }}
-          ENDPOINT: https://sbdevrel-fua-smartbearcoin-prd.azurewebsites.net/api
+          ENDPOINT: https://sbdevrel-fua-smartbearcoin-prd1.azurewebsites.net/api
+
+  publish-to-portal:
+    runs-on: ubuntu-latest
+    environment: prd
+    needs: [test-prd]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Iterate over product folders
+        shell: bash
+        run: |
+          for product in ./products/*; do
+            echo "Product: $product"
+            if [[ -d "$product" ]]; then
+              echo "Product is a directory"
+              product_name=${product#./products/}
+              echo "Product name: $product_name"
+              manifest="./products/$product_name/manifest.json"
+              echo "Manifest: $manifest"
+              if [[ -f "$manifest" ]]; then
+                echo "Manifest is a file"
+                . ./scripts/publish-portal-content.sh && portal_product_upsert "$manifest" "$product_name"
+                . ./scripts/publish-portal-content.sh && load_and_process_product_manifest_content_metadata "$manifest" "$product_name"
+              else
+                echo "Manifest is not a file"
+              fi
+            else
+              echo "Product is not a directory"
+            fi
+          done
+        env:
+            SWAGGERHUB_PORTAL_SUBDOMAIN: ${{ vars.SWAGGERHUB_PORTAL_SUBDOMAIN }}            

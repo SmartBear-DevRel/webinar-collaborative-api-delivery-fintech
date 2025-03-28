@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "axios": "^1.7.7",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "axios": "^1.8.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-scripts": "5.0.1",
-    "styled-components": "^6.1.13",
-    "web-vitals": "^4.2.3"
+    "styled-components": "^6.1.16",
+    "web-vitals": "^4.2.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -40,16 +40,16 @@
     ]
   },
   "devDependencies": {
-    "@pact-foundation/pact": "^13.1.4",
+    "@pact-foundation/pact": "^15.0.1",
     "@types/styled-components": "^5.1.34",
-    "@testing-library/jest-dom": "^6.6.2",
-    "@testing-library/react": "^16.0.1",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@testing-library/user-event": "^14.5.2",
-    "@types/jest": "^29.5.13",
-    "@types/node": "^22.7.8",
-    "@types/react": "^18.3.11",
-    "@types/react-dom": "^18.3.1",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.14",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.5",
     "typescript": "^4.9.5"
   }
 }

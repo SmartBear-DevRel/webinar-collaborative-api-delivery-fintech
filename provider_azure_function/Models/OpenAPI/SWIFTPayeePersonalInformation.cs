@@ -31,14 +31,14 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// </summary>
 
         [DataMember(Name="family_name")]
-        public string FamilyName { get; set; }
+        public string? FamilyName { get; set; }
 
         /// <summary>
         /// Gets or Sets FirstName
         /// </summary>
 
         [DataMember(Name="first_name")]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -68,7 +68,7 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// </summary>
         /// <param name="obj">Object to be compared</param>
         /// <returns>Boolean</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
@@ -80,21 +80,21 @@ namespace SmartBearCoin.CustomerManagement.Models.OpenAPI
         /// </summary>
         /// <param name="other">Instance of SWIFTPayeePersonalInformation to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(SWIFTPayeePersonalInformation other)
+        public bool Equals(SWIFTPayeePersonalInformation? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return 
                 (
-                    FamilyName == other.FamilyName ||
+                    FamilyName == other?.FamilyName ||
                     FamilyName != null &&
-                    FamilyName.Equals(other.FamilyName)
+                    FamilyName.Equals(other?.FamilyName)
                 ) && 
                 (
-                    FirstName == other.FirstName ||
+                    FirstName == other?.FirstName ||
                     FirstName != null &&
-                    FirstName.Equals(other.FirstName)
+                    FirstName.Equals(other?.FirstName)
                 );
         }
 

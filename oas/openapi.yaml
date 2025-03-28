@@ -11,11 +11,17 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.0
+  version: 1.0.0-prod
 servers:
-  - url: https://virtserver.swaggerhub.com/mhiggins-sa/payee-api/1.0.0
+  # Added by API Auto Mocking Plugin
+  - url: https://virtserver.swaggerhub.com/smartbear-api-hub/payees-api/1.0.0-prod
     description: SwaggerHub API Auto Mocking
-  - url: https://api.smartbearcoin.com/customer-management/v1
+  - url: http://localhost:7071/api
+    description: localhost    
+  - url: https://sbdevrel-fua-smartbearcoin-acc1.azurewebsites.net/api
+    description: SmartBearCoin - ACC
+  - url: https://sbdevrel-fua-smartbearcoin-prd1.azurewebsites.net/api
+    description: SmartBearCoin - PRD
 tags:
   - name: Customer Management - Payees
     description: Customer Management Payee Capability APIs
