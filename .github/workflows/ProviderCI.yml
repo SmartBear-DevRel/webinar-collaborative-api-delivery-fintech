@@ -140,7 +140,7 @@ jobs:
       - uses: actions/checkout@v4
 
       # login to Azure
-      - uses: azure/login@v1
+      - uses: azure/login@v2
         if: ${{ env.demo_deploy != 'true' }}
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -149,12 +149,13 @@ jobs:
       - name: Run ARM deploy
         if: ${{ env.demo_deploy != 'true' }}
         id: armdeploy
-        uses: azure/arm-deploy@v1
+        uses: azure/arm-deploy@v2
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: ${{ secrets.AZURE_RG }}
           template: ./provider_azure_function/azuredeploy.json
           parameters: ./provider_azure_function/azuredeploy.acc.parameters.json
+          scope: resourcegroup
 
     # use ARM templates to set up the Azure Infra
 
@@ -188,7 +189,7 @@ jobs:
       - uses: actions/checkout@v4
 
       # login to Azure
-      - uses: azure/login@v1
+      - uses: azure/login@v2
         if: ${{ env.demo_deploy != 'true' }}
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -197,12 +198,13 @@ jobs:
       - name: Run ARM deploy
         if: ${{ env.demo_deploy != 'true' }}
         id: armdeploy
-        uses: azure/arm-deploy@v1
+        uses: azure/arm-deploy@v2
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: ${{ secrets.AZURE_RG }}
           template: ./provider_azure_function/azuredeploy.json
           parameters: ./provider_azure_function/azuredeploy.prd.parameters.json
+          scope: resourcegroup
 
   # build and deploy our Azure functions for Fintech Webinar
   build-and-deploy-acc:
@@ -215,7 +217,7 @@ jobs:
         uses: actions/checkout@v4
 
       # login to Azure
-      - uses: azure/login@v1
+      - uses: azure/login@v2
         if: ${{ env.demo_deploy != 'true' }}
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -320,7 +322,7 @@ jobs:
         uses: actions/checkout@v4
 
       # login to Azure
-      - uses: azure/login@v1
+      - uses: azure/login@v2
         if: ${{ env.demo_deploy != 'true' }}
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}

@@ -23,19 +23,20 @@ jobs:
     - uses: actions/checkout@main
 
     # login to Azure
-    - uses: azure/login@v1
+    - uses: azure/login@v2
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     # deploy ARM template to setup azure resources (group & sub defined in credentials)
     - name: Run ARM deploy
       id: armdeploy
-      uses: azure/arm-deploy@v1
+      uses: azure/arm-deploy@v2
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ secrets.AZURE_RG }}
         template: ./provider_azure_function/azuredeploy.json
         parameters: ./provider_azure_function/azuredeploy.acc.parameters.json
+        scope: resourcegroup
   
     # use ARM templates to set up the Azure Infra
   
@@ -54,20 +55,20 @@ jobs:
     - uses: actions/checkout@main
 
     # login to Azure
-    - uses: azure/login@v1
+    - uses: azure/login@v2
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     # deploy ARM template to setup azure resources (group & sub defined in credentials)
     - name: Run ARM deploy
       id: armdeploy
-      uses: azure/arm-deploy@v1
+      uses: azure/arm-deploy@v2
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ secrets.AZURE_RG }}
         template: ./provider_azure_function/azuredeploy.json
         parameters: ./provider_azure_function/azuredeploy.prd.parameters.json
-  
+        scope: resourcegroup
 
   # build and deploy our Azure functions for Fintech Webinar
   build-and-deploy-acc:
@@ -80,7 +81,7 @@ jobs:
       uses: actions/checkout@main
 
     # login to Azure
-    - uses: azure/login@v1
+    - uses: azure/login@v2
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         enable-AzPSSession: true      
@@ -134,7 +135,7 @@ jobs:
       uses: actions/checkout@main
 
     # login to Azure
-    - uses: azure/login@v1
+    - uses: azure/login@v2
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         enable-AzPSSession: true      
