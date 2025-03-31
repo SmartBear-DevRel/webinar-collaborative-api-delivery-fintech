@@ -13,14 +13,14 @@ namespace SmartBearCoin.CustomerManagement
         private readonly IValidationService _validationService;
         private readonly IPayeeService _payeeService;
         private readonly ILogger<PayeesFunctionController> _logger;
-        private readonly ObjectSerializer _objectSerializer;
+        private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-        public PayeeFunctionController(IValidationService validationService, IPayeeService payeeService, ILogger<PayeesFunctionController> logger, ObjectSerializer objectSerializer)  
+        public PayeeFunctionController(IValidationService validationService, IPayeeService payeeService, ILogger<PayeesFunctionController> logger, JsonSerializerOptions jsonSerializerOptions)  
         {
             _validationService = validationService;
             _payeeService = payeeService;
             _logger = logger;
-            _objectSerializer = objectSerializer;
+            _jsonSerializerOptions = jsonSerializerOptions;
         }
         
         [Function(nameof(PayeeFunctionController))]
@@ -43,7 +43,7 @@ namespace SmartBearCoin.CustomerManagement
             if(_payeeService.IsPayeeKnown(payeeId))
             {
                 var response = req.CreateResponse(HttpStatusCode.OK);
-                await response.WriteAsJsonAsync(_payeeService.GetPayeeDetails(payeeId), _objectSerializer);
+                await response.WriteAsJsonAsync(_payeeService.GetPayeeDetails(payeeId), new JsonObjectSerializer(_jsonSerializerOptions));
                 
                 return response;                
             }

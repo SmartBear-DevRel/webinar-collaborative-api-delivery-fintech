@@ -19,14 +19,6 @@ var host = new HostBuilder()
             return new PayeeService();
         });
 
-        /*services.AddControllers().AddJsonOptions(options =>
-        {
-            options.JsonSerializerOptions.PropertyNamingPolicy = SnakeCaseNamingPolicy.Instance;
-            options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
-        });  
-        */
-
         var jsonSerializerOptions = new JsonSerializerOptions
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
@@ -34,9 +26,7 @@ var host = new HostBuilder()
         };
         jsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
 
-        services.AddSingleton(jsonSerializerOptions);
-        services.AddSingleton<ObjectSerializer>(new JsonObjectSerializer(jsonSerializerOptions));      
-  
+        services.AddSingleton(jsonSerializerOptions);   
     })
     .Build();
 

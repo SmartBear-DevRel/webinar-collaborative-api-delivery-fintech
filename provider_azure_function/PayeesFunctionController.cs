@@ -15,14 +15,14 @@ namespace SmartBearCoin.CustomerManagement
         private readonly IValidationService _validationService;
         private readonly IPayeeService _payeeService;
         private readonly ILogger<PayeesFunctionController> _logger;
-        private readonly ObjectSerializer _objectSerializer;
+        private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-        public PayeesFunctionController(IValidationService validationService, IPayeeService payeeService, ILogger<PayeesFunctionController> logger, ObjectSerializer objectSerializer)  
+        public PayeesFunctionController(IValidationService validationService, IPayeeService payeeService, ILogger<PayeesFunctionController> logger, JsonSerializerOptions jsonSerializerOptions)  
         {
             _validationService = validationService;
             _payeeService = payeeService;
             _logger = logger;
-            _objectSerializer = objectSerializer;
+            _jsonSerializerOptions = jsonSerializerOptions;
         }
         
         [Function(nameof(PayeesFunctionController))]
@@ -36,10 +36,14 @@ namespace SmartBearCoin.CustomerManagement
 
             if (validationResult.Result == false)
             {
+                _logger.LogInformation("'{msg}'","Validation result is false.");
                 var problemResponse = _validationService.GenerateValidationProblem(validationResult, "400");
 
                 var errorResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await errorResponse.WriteAsJsonAsync(problemResponse, _objectSerializer);
+                var json = JsonSerializer.Serialize(problemResponse, _jsonSerializerOptions);
+                await errorResponse.WriteStringAsync(json);                
+
+                 _logger.LogInformation("'{msg}'","Error response created..." + errorResponse.StatusCode);
                 
                 return errorResponse;
             }
@@ -52,7 +56,7 @@ namespace SmartBearCoin.CustomerManagement
             );
 
             var response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteAsJsonAsync(payees, _objectSerializer);    
+            await response.WriteAsJsonAsync(payees, new JsonObjectSerializer(_jsonSerializerOptions));    
 
             return response;
         }
