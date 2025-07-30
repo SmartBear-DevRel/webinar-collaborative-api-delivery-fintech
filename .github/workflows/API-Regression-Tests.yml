@@ -1,0 +1,20 @@
+name: PR-Tests
+on:
+  pull_request:
+    branches: [ main ]
+
+env:
+  KEY_HEADER: "X-API-KEY: ${{secrets.API_HUB_FOR_TEST_TOKEN}}"
+  PAYLOAD: "{ \"gitHub\": { \"owner\": \"smartbear-devrel\", \"repo\": \"webinar-collaborative-api-delivery-fintech\", \"sha\": \"${{ github.event.pull_request.head.sha }}\" } }"
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Reflect tests
+        run: curl
+             -X POST
+             -H "$KEY_HEADER"
+             -d "$PAYLOAD"
+             -s
+             https://api.reflect.run/v1/suites/smartbear-coin-api-regression-tests/executions
