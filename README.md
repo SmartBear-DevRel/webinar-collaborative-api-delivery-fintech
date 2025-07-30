@@ -10,6 +10,7 @@ In this guide, you'll learn how to use the SmartBear API Platform, to add improv
 - [SwaggerHub](https://swaggerhub.com/)
 - [ReadyAPI](https://smartbear.com/product/ready-api/)
 - [SwaggerHub Explore](https://swagger.io/tools/swaggerhub-explore/)
+- [API Hub for Test](https://smartbear.com/api-hub/test/)
 <!-- - [AlertSite]() -->
 <!-- - [BugSnag]() -->
 
