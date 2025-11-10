@@ -3,7 +3,7 @@ import { Payee } from './Payee';
 import axios from "axios";
 
 const defaultBaseUrl =
-  process.env.REACT_APP_API_BASE_URL ||
+  process.env.VITE_APP_API_BASE_URL ||
   // 'https://sbdevrel-fua-smartbearcoin-prd1.azurewebsites.net/api';
   // 'https://sbdevrel-fua-smartbearcoin-acc1.azurewebsites.net/api';
   'https://virtserver.swaggerhub.com/mhiggins-sa/payee-api/1.0.0';
