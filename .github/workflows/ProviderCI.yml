@@ -28,7 +28,9 @@ env:
   DOTNET_VERSION: '7.0.302' # set this to the dotnet version to use
   demo_deploy: ${{ github.event.inputs.demo_deploy }}
   SWAGGERHUB_API_KEY: ${{ secrets.SWAGGERHUB_API_KEY }}
-
+  swaggerhub_api_name: smartbearcoin-payees-api 
+  swaggerhub_owner: smartbear-api-hub
+  
 jobs:
   setup:
     name: 🏗️ setup
@@ -41,8 +43,43 @@ jobs:
     outputs:
       application_name: ${{ env.application_name }}
 
-  test-local:
+  read-openapi-version:
+    runs-on: ubuntu-latest
     needs: setup
+    steps:
+      - uses: actions/checkout@v4
+      # Run yq as an action to read the field
+      - name: Install yq
+        run: |
+          sudo snap install yq && 
+          OAS_VERSION=$(yq '.info.version' oas/openapi.yaml)
+          echo "OAS_VERSION=${OAS_VERSION}" >> $GITHUB_ENV 
+    outputs:
+      openapi_version: ${{ env.OAS_VERSION }}
+   
+      
+  validate-openapi-against-rules:
+    runs-on: ubuntu-latest
+    needs: read-openapi-version
+    steps:
+      - name: Echo API Version
+        run:  echo ${{ needs.read-openapi-version.outputs.openapi_version }}
+      - name: Install SwaggerHub CLI
+        run: |
+          npm install swaggerhub-cli -g
+      - name: Check the API definition exists
+        env:
+          SWAGGERHUB_API_KEY: ${{secrets.SWAGGERHUB_API_KEY}}
+        run: |
+          swaggerhub api:get $swaggerhub_owner/$swaggerhub_api_name/${{ needs.read-openapi-version.outputs.openapi_version }}
+      - name: Validate definition
+        env:
+          SWAGGERHUB_API_KEY: ${{secrets.SWAGGERHUB_API_KEY}}      
+        run: |
+          swaggerhub api:validate $swaggerhub_owner/$swaggerhub_api_name/${{ needs.read-openapi-version.outputs.openapi_version }} -c
+  
+  test-local:
+    needs: [setup, validate-openapi-against-rules]
     runs-on: ubuntu-latest
     env:
       application_name: ${{ needs.setup.outputs.application_name }}
