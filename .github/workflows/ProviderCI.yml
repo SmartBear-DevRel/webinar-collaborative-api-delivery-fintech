@@ -28,7 +28,7 @@ env:
   DOTNET_VERSION: '7.0.302' # set this to the dotnet version to use
   demo_deploy: ${{ github.event.inputs.demo_deploy }}
   SWAGGERHUB_API_KEY: ${{ secrets.SWAGGERHUB_API_KEY }}
-  swaggerhub_api_name: smartbearcoin-payees-api 
+  swaggerhub_api_name: payees-api 
   swaggerhub_owner: smartbear-api-hub
   
 jobs:
