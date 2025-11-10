@@ -3,7 +3,7 @@ on:
   push:
 
 jobs:
-  test:
+  test-via-pact-file:
     runs-on: ubuntu-latest
     env:
       application_folder_consumer: smartbearcoin-payments-ui
@@ -36,6 +36,53 @@ jobs:
           dotnet restore
       - run: |
           cd ${{ env.application_folder_provider_tests }}
-          dotnet test 
+          dotnet test
         env:
-          PACT_URL: ../../../../smartbearcoin-payments-ui/pacts/SmartBearCoin-Payments-UI-SmartBearCoin-Payee-Provider.json
+          PACT_FILE: ../../../../smartbearcoin-payments-ui/pacts/SmartBearCoin-Payments-UI-SmartBearCoin-Payee-Provider.json
+  test-via-pact-broker-selectors:
+    runs-on: ubuntu-latest
+    env:
+      application_folder_consumer: smartbearcoin-payments-ui
+      application_folder_provider_tests: provider_azure_function_tests
+          
+    steps:
+      - uses: actions/checkout@v4
+      # SETUP CONSUMER
+      - uses: actions/setup-node@v4
+      - run: cd ${{ env.application_folder_consumer }} && npm ci
+      - run: cd ${{ env.application_folder_consumer }} && npm test
+      - uses: pactflow/actions/publish-pact-files@v2
+        with:
+          broker_url: https://smartbear.pactflow.io
+          token: ${{ secrets.PACT_BROKER_TOKEN }}
+          pactfiles: ${{ env.application_folder_consumer }}/pacts
+
+      # SETUP PROVIDER
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 7.0.x
+      - name: Install core tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install azure-functions-core-tools-4
+      - run: |
+          cd provider_azure_function
+          sudo chmod +x /usr/lib/azure-functions-core-tools-4/in-proc6/func
+          echo '{
+            "IsEncrypted": false,
+            "Values": {
+              "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+            },
+            "ConnectionStrings": {}
+          }' > local.settings.json
+          dotnet restore
+      - run: |
+          cd ${{ env.application_folder_provider_tests }}
+          GIT_BRANCH=${GITHUB_REF:11} dotnet test
+        env:
+          PACT_BROKER_PUBLISH_VERIFICATION_RESULTS: false
+          GIT_COMMIT: ${{ github.sha }}
+          GITHUB_REF: ${{ github.ref }}
+          PACT_BROKER_BASE_URL: https://smartbear.pactflow.io
+          PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
