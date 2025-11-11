@@ -20,7 +20,7 @@ jobs:
         - name: Checkout repository
           uses: actions/checkout@v4
 
-        - uses: smartbear-devrel/swaggerhub-portal-management@main
+        - uses: smartbear-devrel/swaggerhub-portal-management@test/publish-docs-action
           with:
               swaggerhub-api-key: ${{ secrets.SWAGGERHUB_API_KEY }}
               swaggerhub-portal-subdomain: ${{ vars.SWAGGERHUB_PORTAL_SUBDOMAIN }}
