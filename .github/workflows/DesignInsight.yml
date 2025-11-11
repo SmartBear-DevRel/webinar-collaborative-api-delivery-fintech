@@ -54,3 +54,5 @@ jobs:
           application_name: SmartBearCoin-Payee-Provider
           to_environment: ${{ matrix.environment }}
           version: ${{ needs.pact-publish-oas-action.outputs.version }}
+          retry_while_unknown: 5
+          retry_interval: 10

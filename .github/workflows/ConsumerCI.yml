@@ -76,6 +76,8 @@ jobs:
           token: ${{ secrets.PACT_BROKER_TOKEN }}
           to_environment: ${{ env.deploy_target }}
           application_name: ${{ needs.setup.outputs.PACT_CONSUMER }}
+          retry_while_unknown: 5
+          retry_interval: 10
 
   can-i-deploy-to-production:
     needs: [setup, test]
@@ -90,6 +92,8 @@ jobs:
           token: ${{ secrets.PACT_BROKER_TOKEN }}
           to_environment: ${{ env.deploy_target }}
           application_name: ${{ needs.setup.outputs.PACT_CONSUMER }}
+          retry_while_unknown: 5
+          retry_interval: 10
 
   deploy-to-acc:
     if: github.ref == 'refs/heads/main'

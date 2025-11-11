@@ -159,6 +159,8 @@ jobs:
           application_name: ${{ needs.setup.outputs.application_name }}
           to_environment: ${{ env.deploy_target }}
           version: ${{ needs.test-local.outputs.version }}
+          retry_while_unknown: 5
+          retry_interval: 10
 
   # use ARM templates to set up the Azure Infra
   deploy-infrastructure-acc:
@@ -210,6 +212,8 @@ jobs:
           application_name: ${{ needs.setup.outputs.application_name }}
           to_environment: ${{ env.deploy_target }}
           version: ${{ needs.test-local.outputs.version }}
+          retry_while_unknown: 5
+          retry_interval: 10
 
   deploy-infrastructure-prd:
     needs: [test-local, can-i-deploy-prd, record-deploy-acc]
