@@ -20,10 +20,11 @@ jobs:
         - name: Checkout repository
           uses: actions/checkout@v4
 
-        - uses: smartbear-devrel/swaggerhub-portal-management@test/publish-docs-action
+        - uses: smartbear-devrel/swaggerhub-portal-management@main
           with:
               swaggerhub-api-key: ${{ secrets.SWAGGERHUB_API_KEY }}
               swaggerhub-portal-subdomain: ${{ vars.SWAGGERHUB_PORTAL_SUBDOMAIN }}
               swaggerhub-org-name: ${{ vars.SWAGGERHUB_ORG_NAME }}
               log-level: ${{ github.event.inputs.log_level || '2' }}
               publish: true
+              custom-words-file: products/custom-words.txt

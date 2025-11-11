@@ -1,5 +1,5 @@
 
-👋 The **Customer Managment - Payees API** allows retrieval of payees and payee transactions. 
+👋 The **Customer Management - Payees API** allows retrieval of payees and payee transactions. 
 
 Utilizing this API, consumers can search, identify and retrieve payee information in one specified country. Customer centricity is part of the DNA of SmartBearCoin. 
 
