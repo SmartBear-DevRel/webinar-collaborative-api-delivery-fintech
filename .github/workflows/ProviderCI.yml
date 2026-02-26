@@ -128,7 +128,7 @@ jobs:
       - uses: pactflow/actions/publish-provider-contract@v2
         if: success()
         with:
-          broker_url: https://smartbear.pactflow.io
+          broker_url: https://smartbear-api-hub.pactflow.io
           token: ${{ secrets.PACT_BROKER_TOKEN }}
           application_name: ${{ needs.setup.outputs.application_name }}
           contract: oas/openapi-transformed.json
@@ -136,7 +136,7 @@ jobs:
       - uses: pactflow/actions/publish-provider-contract@v2
         if: failure()
         with:
-          broker_url: https://smartbear.pactflow.io
+          broker_url: https://smartbear-api-hub.pactflow.io
           token: ${{ secrets.PACT_BROKER_TOKEN }}
           application_name: ${{ needs.setup.outputs.application_name }}
           contract: oas/openapi-transformed.json
@@ -154,7 +154,7 @@ jobs:
       - name: can-i-deploy ${{ needs.setup.outputs.application_name }} to ${{ env.deploy_target }}
         uses: pactflow/actions/can-i-deploy@v2
         with:
-          broker_url: https://smartbear.pactflow.io
+          broker_url: https://smartbear-api-hub.pactflow.io
           token: ${{ secrets.PACT_BROKER_TOKEN }}
           application_name: ${{ needs.setup.outputs.application_name }}
           to_environment: ${{ env.deploy_target }}
@@ -207,7 +207,7 @@ jobs:
       - name: can-i-deploy ${{ needs.setup.outputs.application_name }} to ${{ env.deploy_target }}
         uses: pactflow/actions/can-i-deploy@v2
         with:
-          broker_url: https://smartbear.pactflow.io
+          broker_url: https://smartbear-api-hub.pactflow.io
           token: ${{ secrets.PACT_BROKER_TOKEN }}
           application_name: ${{ needs.setup.outputs.application_name }}
           to_environment: ${{ env.deploy_target }}
@@ -340,7 +340,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         uses: pactflow/actions/record-deployment@v2
         with:
-          broker_url: https://smartbear.pactflow.io
+          broker_url: https://smartbear-api-hub.pactflow.io
           token: ${{ secrets.PACT_BROKER_TOKEN }}
           application_name: ${{ needs.setup.outputs.application_name }}
           environment: ${{ env.deployed_env }}
@@ -428,7 +428,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         uses: pactflow/actions/record-deployment@v2
         with:
-          broker_url: https://smartbear.pactflow.io
+          broker_url: https://smartbear-api-hub.pactflow.io
           token: ${{ secrets.PACT_BROKER_TOKEN }}
           application_name: ${{ needs.setup.outputs.application_name }}
           version: ${{ needs.test-local.outputs.version }}
