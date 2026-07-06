@@ -1,11 +1,19 @@
-name: PR-Tests
+# This workflow initiates our API Functional Test Suite against the deployed version of Swagger AutoMock 
+# that correlates to the provided version
+
+name: AutoMock API Tests
 on:
   pull_request:
     branches: [ main ]
-
+  workflow_dispatch:
+    inputs:
+      api-version:
+        description: 'Version of API to test'
+        required: false
+        type: string
 env:
   KEY_HEADER: "X-API-KEY: ${{secrets.API_HUB_FOR_TEST_TOKEN}}"
-  PAYLOAD: "{ \"gitHub\": { \"owner\": \"smartbear-devrel\", \"repo\": \"webinar-collaborative-api-delivery-fintech\", \"sha\": \"${{ github.event.pull_request.head.sha }}\" } }"
+  PAYLOAD: "{ \"gitHub\": { \"owner\": \"smartbear-devrel\", \"repo\": \"webinar-collaborative-api-delivery-fintech\", \"sha\": \"${{ github.event.pull_request.head.sha || github.sha }}\" }, \"variables\":{\"api-version\":\"${{ github.event.inputs.api-version || '1.0.0-prod' }}\"} }"
 
 jobs:
   run-tests:
@@ -13,6 +21,7 @@ jobs:
     steps:
       - name: Run Reflect tests
         run: curl
+             --no-fail
              -X POST
              -H "$KEY_HEADER"
              -d "$PAYLOAD"

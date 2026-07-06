@@ -1,0 +1,64 @@
+# This workflow initiates our API Functional Test Suite against a local version of our application
+# We install and authenticate the Swagger Functional Test Tunnel, start our application
+# and then call the Swagger Functional Test Suites Execution API with overrides for variables
+# to control the endpoint / version and test data used, and an override for the named tunnel agent.
+
+name: Local API Tests
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+env:
+  KEY_HEADER: "X-API-KEY: ${{secrets.API_HUB_FOR_TEST_TOKEN}}"
+  PAYLOAD: "{ \"gitHub\": { \"owner\": \"smartbear-devrel\", \"repo\": \"webinar-collaborative-api-delivery-fintech\", \"sha\": \"${{ github.event.pull_request.head.sha || github.sha }}\" }, \"variables\":{\"api-version\":\"api\",\"baseURLSmartBearCoinPayeesAPI\":\"http://localhost:7071\",\"payeeId\":\"4eb603f3-e7e7-47b1-a5df-557b6204616e\"},\"overrides\": {\"agent\": {\"name\":\"github-actions-runner\"}} }"
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 7.0.x
+      - name: Install core tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install azure-functions-core-tools-4
+      - name: Fix dotnet func perms
+        run: |
+          cd provider_azure_function
+          sudo chmod +x /usr/lib/azure-functions-core-tools-4/in-proc6/func
+          echo '{
+            "IsEncrypted": false,
+            "Values": {
+              "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+            },
+            "ConnectionStrings": {}
+          }' > local.settings.json
+          dotnet restore
+      - name: Run Server
+        run: |
+          cd provider_azure_function
+          func start --csharp &
+          export server_pid=$!
+          echo "SERVER_PID=$server_pid" >> $GITHUB_ENV
+      - name: Setup Reflect tunnel
+        run: |
+          curl -LO https://reflect.run/downloads/tunnel/reflect_tunnel
+          chmod +x ./reflect_tunnel
+          echo '{"apiKey":"${{secrets.API_HUB_FOR_TEST_TOKEN}}","deviceName":"github-actions-runner"}' > reflect.settings
+          ./reflect_tunnel -settings $PWD/reflect.settings &
+      - name: Run Reflect tests
+        run: curl
+             --no-fail
+             -X POST
+             -H "$KEY_HEADER"
+             -d "$PAYLOAD"
+             -s
+             https://api.reflect.run/v1/suites/smartbear-coin-api-regression-tests/executions
+      - name: Wait for test completion
+      # ideally we would poll for the test execution completion, then kill our server
+        run: |
+          sleep 120
+          kill -9 $SERVER_PID
