@@ -50,15 +50,115 @@ jobs:
           echo '{"apiKey":"${{secrets.API_HUB_FOR_TEST_TOKEN}}","deviceName":"github-actions-runner"}' > reflect.settings
           ./reflect_tunnel -settings $PWD/reflect.settings &
       - name: Run Reflect tests
-        run: curl
-             --no-fail
-             -X POST
-             -H "$KEY_HEADER"
-             -d "$PAYLOAD"
-             -s
-             https://api.reflect.run/v1/suites/smartbear-coin-api-regression-tests/executions
-      - name: Wait for test completion
-      # ideally we would poll for the test execution completion, then kill our server
+        id: run_tests
         run: |
-          sleep 120
-          kill -9 $SERVER_PID
+          response=$(curl \
+            -X POST \
+            -H "$KEY_HEADER" \
+            -d "$PAYLOAD" \
+            -s \
+            https://api.reflect.run/v1/suites/smartbear-coin-api-regression-tests/executions)
+          
+          echo "$response" | jq .
+          
+          suite_id=$(echo "$response" | jq -r '.suiteId')
+          execution_id=$(echo "$response" | jq -r '.executionId')
+          
+          echo "suite_id=$suite_id" >> $GITHUB_OUTPUT
+          echo "execution_id=$execution_id" >> $GITHUB_OUTPUT
+          
+          if [ "$suite_id" = "null" ] || [ "$execution_id" = "null" ]; then
+            echo "Failed to extract suiteId or executionId"
+            exit 1
+          fi
+      
+      - name: Poll for test completion
+        id: poll_tests
+        run: |
+          suite_id="${{ steps.run_tests.outputs.suite_id }}"
+          execution_id="${{ steps.run_tests.outputs.execution_id }}"
+          max_attempts=120
+          attempt=0
+          poll_interval=5
+          
+          echo "Polling for test execution completion..."
+          echo "Suite ID: $suite_id"
+          echo "Execution ID: $execution_id"
+          
+          while [ $attempt -lt $max_attempts ]; do
+            response=$(curl \
+              -H "$KEY_HEADER" \
+              -s \
+              "https://api.reflect.run/v1/suites/$suite_id/executions/$execution_id")
+            
+            status=$(echo "$response" | jq -r '.status')
+            is_finished=$(echo "$response" | jq -r '.isFinished')
+            
+            echo "Attempt $((attempt + 1))/$max_attempts - Status: $status, Finished: $is_finished"
+            
+            if [ "$is_finished" = "true" ]; then
+              echo "Tests finished with status: $status"
+              echo "Full response:"
+              echo "$response" | jq .
+              
+              echo "test_response<<EOF" >> $GITHUB_OUTPUT
+              echo "$response" >> $GITHUB_OUTPUT
+              echo "EOF" >> $GITHUB_OUTPUT
+              
+              if [ "$status" = "passed" ]; then
+                echo "test_status=passed" >> $GITHUB_OUTPUT
+                exit 0
+              else
+                echo "test_status=failed" >> $GITHUB_OUTPUT
+                exit 1
+              fi
+            fi
+            
+            attempt=$((attempt + 1))
+            sleep $poll_interval
+          done
+          
+          echo "Test polling timed out after $((max_attempts * poll_interval)) seconds"
+          echo "test_status=timeout" >> $GITHUB_OUTPUT
+          exit 1
+      
+      - name: Generate test summary
+        if: always()
+        run: |
+          echo "## Reflect Test Execution Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          suite_id="${{ steps.run_tests.outputs.suite_id }}"
+          execution_id="${{ steps.run_tests.outputs.execution_id }}"
+          test_status="${{ steps.poll_tests.outputs.test_status }}"
+          
+          if [ -n "$suite_id" ] && [ "$suite_id" != "null" ]; then
+            echo "**Execution URL:** https://app.reflect.run/suites/$suite_id/executions/$execution_id" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "**Status:** $test_status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.poll_tests.outcome }}" = "failure" ]; then
+            echo "### ❌ Tests Failed or Timed Out" >> $GITHUB_STEP_SUMMARY
+            test_response='${{ steps.poll_tests.outputs.test_response }}'
+            if [ -n "$test_response" ]; then
+              echo '```json' >> $GITHUB_STEP_SUMMARY
+              echo "$test_response" | jq . >> $GITHUB_STEP_SUMMARY || true
+              echo '```' >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "### ✅ Tests Passed" >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Cleanup server
+        if: always()
+        run: |
+          if [ -n "$SERVER_PID" ]; then
+            echo "Cleaning up server process: $SERVER_PID"
+            kill -9 $SERVER_PID 2>/dev/null || true
+          else
+            echo "No server PID found"
+          fi
+          killall func 2>/dev/null || true
+          killall reflect_tunnel 2>/dev/null || true
